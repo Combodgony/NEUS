@@ -1,5 +1,6 @@
 package com.segvek.terminal.interactiv;
 
+import com.segvek.terminal.interactiv.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,6 +11,7 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JPanel;
 
@@ -30,7 +32,8 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
     private int indent=10;
     
     
-    int estacad[] = {4,4,2,6,4,2,3,5};
+    private ArrayList<Estakada> estakads;
+    
     private Date start=new Date(2017,07,20);
     private Date end=new Date(2017,07,21,12,30);
     
@@ -39,18 +42,12 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
     private LeftZona lz;
     private TimeZona timeZona;
     private Content content;
-
-    public InteractivGrafic() {
-        calc();
-    }
-    
-    
-    
+  
     public void init(){ 
         calc();
         Point beginLeftZona = new Point(0, heightTimeZone);
         Point endLeftZona = new Point(weigthLeftZona, getHeight()-weigthScroll);
-        lz = new LeftZona(beginLeftZona,endLeftZona,heigthLine,indent,estacad);
+        lz = new LeftZona(beginLeftZona,endLeftZona,heigthLine,indent,estakads);
         
         Point beginVerticalScroll = new Point(getWidth()-weigthScroll,heightTimeZone);
         Point endVertacalScroll = new Point(getWidth(),getHeight()-weigthScroll);
@@ -63,7 +60,7 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         Point beginContent = new Point(weigthLeftZona,heightTimeZone);
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
-        content = new Content(beginContent, endContent, heigthLine, indent, estacad,weidthMinut,start,end,20);
+        content = new Content(beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,20);
         
         Point beginTimeZona = new Point(weigthLeftZona,0);
         Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
@@ -85,9 +82,9 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
     
     private void calc(){
         heigthContent=0;
-        for(int i=0; i<estacad.length; i++){
+        for(int i=0; i<estakads.size(); i++){
             heigthContent+=indent;
-            heigthContent+=(estacad[i]+1)*heigthLine;
+            heigthContent+=(estakads.get(i).getDrainLocations().size()+1)*heigthLine;
         }
         
         int minut = (int) ((end.getTime()-start.getTime())/60000);
@@ -164,5 +161,9 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
         timeZona.resize(beginTimeZona, endTimeZona);
     } 
+
+    void setEstakads(ArrayList<Estakada> estakads) {
+        this.estakads=estakads;
+    }
 }
 

@@ -5,6 +5,11 @@
  */
 package com.segvek.terminal.interactiv;
 
+import com.segvek.terminal.interactiv.model.DrainLocation;
+import com.segvek.terminal.interactiv.model.Estakada;
+import com.segvek.terminal.interactiv.model.TypeEstakada;
+import java.util.ArrayList;
+
 /**
  *
  * @author Panas
@@ -16,6 +21,30 @@ public class NewJFrame extends javax.swing.JFrame {
      */
     public NewJFrame() {
         initComponents();
+        TypeEstakada t1=new TypeEstakada(1L,"Авто");
+        TypeEstakada t2=new TypeEstakada(2L,"ж/д");
+        ArrayList<Estakada> estakads = new ArrayList<>();
+        
+        ArrayList<DrainLocation> dll1 = new ArrayList<>();
+        dll1.add(new DrainLocation(1L, 1));
+        dll1.add(new DrainLocation(2L, 2));
+        dll1.add(new DrainLocation(3L, 3));
+        dll1.add(new DrainLocation(4L, 4));
+        estakads.add(new Estakada(1L, t1, "1",dll1));
+        
+        ArrayList<DrainLocation> dll2 = new ArrayList<>();
+        dll2.add(new DrainLocation(5L, 1));
+        dll2.add(new DrainLocation(6L, 2));
+        dll2.add(new DrainLocation(7L, 3));
+        dll2.add(new DrainLocation(8L, 4));
+        estakads.add(new Estakada(2L, t1, "2",dll2));
+        
+        ArrayList<DrainLocation> dll3 = new ArrayList<>();
+        dll3.add(new DrainLocation(9L, 1));
+        dll3.add(new DrainLocation(10L, 2));
+        estakads.add(new Estakada(3L, t2, "1",dll3));
+        
+        ((InteractivGrafic)jPanel1).setEstakads(estakads);
         ((InteractivGrafic)jPanel1).init();
     }
 

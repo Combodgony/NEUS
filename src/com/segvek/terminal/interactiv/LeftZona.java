@@ -5,11 +5,13 @@
  */
 package com.segvek.terminal.interactiv;
 
+import com.segvek.terminal.interactiv.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 class LeftZona implements ScrollListener{
     private int weidth, heigth;
@@ -17,7 +19,7 @@ class LeftZona implements ScrollListener{
     private int indent;
     private int bias=0;
     
-    private int estacad[];
+    private ArrayList<Estakada> estakads;
     
     
     private Point begin;
@@ -26,19 +28,19 @@ class LeftZona implements ScrollListener{
 
     private BufferedImage image;
     
-    public LeftZona(Point begin, Point end,int heigthLine, int indent,int estacad[]) {
+    public LeftZona(Point begin, Point end,int heigthLine, int indent,ArrayList<Estakada> estakads) {
         this.begin = begin;
         this.end = end;
-        this.estacad=estacad;
+        this.estakads=estakads;
         this.heigthLine=heigthLine;
         this.indent=indent;
         createImage();
     }
     private void createImage(){
         int h=0;
-        for(int i=0; i<estacad.length; i++){
+        for(int i=0; i<estakads.size(); i++){
             h+=indent;
-            h+=(estacad[i]+1)*heigthLine;
+            h+=(estakads.get(i).getDrainLocations().size()+1)*heigthLine;
         }
         int ht=end.y-begin.y;
         h=h<ht?ht:h;
@@ -54,14 +56,14 @@ class LeftZona implements ScrollListener{
         g.setColor(new Color(75,75,75));
         g.fillRect(0, 0, weidth-1, heigth-1);
         g.setColor(new Color(150,150,150));
-        for(int i=0,y=0; i<estacad.length; i++){
+        for(int i=0,y=0; i<estakads.size(); i++){
             y+=indent+heigthLine;
             g.drawLine(0, y, weidth, y);
-            g.drawString("естакада:"+i, 20, y-5);
-            for(int j=0; j<estacad[i]; j++){
+            g.drawString(estakads.get(i).getTypeEstakada().getName()+" естакада:"+estakads.get(i).getName(), 20, y-5);
+            for(int j=0; j<estakads.get(i).getDrainLocations().size(); j++){
                 y+=heigthLine;
                 g.drawLine(20, y, weidth, y);
-                g.drawString("место:"+j, 40, y-5);
+                g.drawString("место:"+estakads.get(i).getDrainLocations().get(j).getNumber(), 40, y-5);
             }
         }
         return image.getSubimage(0,bias, end.x-begin.x, end.y-begin.y);
