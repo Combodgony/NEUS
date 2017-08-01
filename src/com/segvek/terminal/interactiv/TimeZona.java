@@ -69,20 +69,16 @@ class TimeZona implements ScrollListener{
         
         for(int x=0,m=0; m<min; m+=frequencyTime, x=m*weidthMinut){
             g.drawLine(x, 0, x, heigth);
-            
             AffineTransform orig = g.getTransform();
             g.rotate(-Math.PI/2);
             StringBuilder b=new StringBuilder();
-            b.append(c.get(GregorianCalendar.HOUR)).append(":");
+            b.append(c.get(GregorianCalendar.HOUR_OF_DAY)).append(":");
             b.append(c.get(GregorianCalendar.MINUTE));
             g.drawString(b.toString(),-heigth+3,x+13);
             g.setTransform(orig);
             
             c.add(GregorianCalendar.MINUTE, frequencyTime);
         }
-        
-            
-        
         return image.getSubimage(bias,0, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
     }
    

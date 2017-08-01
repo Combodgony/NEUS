@@ -5,10 +5,14 @@
  */
 package com.segvek.terminal.interactiv;
 
+import com.segvek.terminal.interactiv.model.Admission;
 import com.segvek.terminal.interactiv.model.DrainLocation;
 import com.segvek.terminal.interactiv.model.Estakada;
+import com.segvek.terminal.interactiv.model.Tank;
 import com.segvek.terminal.interactiv.model.TypeEstakada;
+import com.segvek.terminal.interactiv.model.TypeTank;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -45,6 +49,19 @@ public class NewJFrame extends javax.swing.JFrame {
         estakads.add(new Estakada(3L, t2, "1",dll3));
         
         ((InteractivGrafic)jPanel1).setEstakads(estakads);
+        
+        
+        
+        TypeTank tt1 = new TypeTank(1L, 50, 30);
+        TypeTank tt2 = new TypeTank(2L, 70, 60);
+        ArrayList<Admission> admissions = new ArrayList<>();
+        
+        Tank ta1 = new Tank(1L, "AB 4573 BK", tt1);
+        
+        admissions.add(new Admission(ta1, new Date(2017,07,20,6,20), new Date(2017,07,20,7,10), new DrainLocation(5L, 1)));
+        
+        
+        ((InteractivGrafic)jPanel1).setAdmissions(admissions);
         ((InteractivGrafic)jPanel1).init();
     }
 

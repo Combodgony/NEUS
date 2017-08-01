@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.segvek.terminal.interactiv;
 
+import com.segvek.terminal.interactiv.model.Admission;
 import com.segvek.terminal.interactiv.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -22,7 +18,7 @@ class Content implements ScrollListener{
     private int biasX=0;
     
     private ArrayList<Estakada> estakads;
-    
+    private ArrayList<Admission> admissions;
     
     private Point beginPoint,endPoint; 
     private Date begin, end;
@@ -30,18 +26,10 @@ class Content implements ScrollListener{
     int frequencyTime=60;
     private BufferedImage image;
     
-    public Content(Point beginPoint, Point endPoint,int heigthLine, int indent,ArrayList<Estakada> estakads,int weidthMinut,Date begin, Date end) {
-        this.begin=begin;
-        this.end=end;
-        this.weidthMinut=weidthMinut;
-        this.beginPoint = beginPoint;
-        this.endPoint = endPoint;
-        this.estakads=estakads;
-        this.heigthLine=heigthLine;
-        this.indent=indent;
-        createImage();
-    }
-    public Content(Point beginPoint, Point endPoint,int heigthLine, int indent,ArrayList<Estakada> estakads,int weidthMinut,Date begin, Date end,int frequencyTime) {
+    public Content(  Point beginPoint,               Point endPoint,  int heigthLine, int indent
+                    ,ArrayList<Estakada> estakads,   int weidthMinut,  Date begin,     Date end
+                    ,ArrayList<Admission> admissions,int frequencyTime) {
+        this.admissions=admissions;
         this.frequencyTime=frequencyTime;
         this.begin=begin;
         this.end=end;
@@ -51,10 +39,10 @@ class Content implements ScrollListener{
         this.estakads=estakads;
         this.heigthLine=heigthLine;
         this.indent=indent;
-        createImage();
+        init();
     }
    
-    private void createImage(){
+    private void init(){
         int h=0;
         for(int i=0; i<estakads.size(); i++){
             h+=indent;
@@ -78,9 +66,9 @@ class Content implements ScrollListener{
         for(int i=0,y=0; i<estakads.size(); i++){
             y+=indent+heigthLine;
             g.drawLine(0, y, weidth, y);
-            for(int j=0; j<estakads.get(i).getDrainLocations().size(); j++){
+            for(int j=0; j<estakads.get(i).getDrainLocations().size(); j++){           
+                g.fillRect(0, y, weidth, heigthLine-2);
                 y+=heigthLine;
-                g.drawLine(0, y, weidth, y);
             }
         }
         int min = (int) ((end.getTime()-begin.getTime())/60000);
@@ -90,6 +78,7 @@ class Content implements ScrollListener{
         return image.getSubimage(biasX,biasY, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
     }
    
+    
     public void verticalScroll(int count) {
         biasY=count;
     }
@@ -99,7 +88,7 @@ class Content implements ScrollListener{
     public void resize(Point begin, Point end) {
         this.beginPoint = begin;
         this.endPoint = end;
-        createImage();
+        init();
     }
 
 }

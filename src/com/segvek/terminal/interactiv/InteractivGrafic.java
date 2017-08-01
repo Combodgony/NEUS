@@ -1,5 +1,6 @@
 package com.segvek.terminal.interactiv;
 
+import com.segvek.terminal.interactiv.model.Admission;
 import com.segvek.terminal.interactiv.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -33,6 +34,7 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
     
     
     private ArrayList<Estakada> estakads;
+    private ArrayList<Admission> admissions;
     
     private Date start=new Date(2017,07,20);
     private Date end=new Date(2017,07,21,12,30);
@@ -60,7 +62,7 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         Point beginContent = new Point(weigthLeftZona,heightTimeZone);
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
-        content = new Content(beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,20);
+        content = new Content(beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,20);
         
         Point beginTimeZona = new Point(weigthLeftZona,0);
         Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
@@ -164,6 +166,10 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
 
     void setEstakads(ArrayList<Estakada> estakads) {
         this.estakads=estakads;
+    }
+
+    void setAdmissions(ArrayList<Admission> admissions) {
+        this.admissions=admissions;
     }
 }
 
