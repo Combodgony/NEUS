@@ -34,7 +34,6 @@ public class Scroll extends MouseAdapter{
     
 
     private BufferedImage image;
-//    private BufferedImage arrow;
     
     private Color colorBackground = new Color(75,75,75);
     private Color colorActiv = new Color(150,150,150);

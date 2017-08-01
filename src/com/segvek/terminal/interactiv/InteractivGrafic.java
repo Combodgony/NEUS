@@ -16,32 +16,32 @@ import javax.swing.JPanel;
 
 public class InteractivGrafic extends JPanel implements MouseMotionListener, MouseListener,ComponentListener{
     private int heigthContent=0; //calc variable
-    private int weidthContent=800; //calc variable
+    private int weidthContent=0; //calc variable
     
   
     private int heightTimeZone = 50;
+    private int weidthMinut=2;
+    
     private int weigthLeftZona=200;
     private int weigthScroll=15;
     
     
     private int heigthLine=20;
     private int indent=10;
-    int estacad[] = {4,4,2};
     
     
-    private Date start;
-    private Date end;
+    int estacad[] = {4,4,2,6,4,2,3,5};
+    private Date start=new Date(2017,07,20);
+    private Date end=new Date(2017,07,21,12,30);
     
     boolean verticalScrollVisible,horizontalScrollVisible;
     private Scroll verticalScroll, horizontalScroll;
     private LeftZona lz;
-    Content content;
+    private TimeZona timeZona;
+    private Content content;
 
     public InteractivGrafic() {
-        for(int i=0; i<estacad.length; i++){
-            heigthContent+=indent;
-            heigthContent+=(estacad[i]+2)*heigthLine;
-        }
+        calc();
     }
     
     
@@ -63,12 +63,17 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         Point beginContent = new Point(weigthLeftZona,heightTimeZone);
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
+        content = new Content(beginContent, endContent, heigthLine, indent, estacad,weidthMinut,start,end,20);
         
-        content = new Content(beginContent, endContent, heigthLine, indent, estacad);
+        Point beginTimeZona = new Point(weigthLeftZona,0);
+        Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
+        timeZona = new TimeZona(beginTimeZona,endTimeZona,weidthMinut,start,end,20);
         
         
         verticalScroll.addListener(lz);
         verticalScroll.addListener(content);
+        horizontalScroll.addListener(content);
+        horizontalScroll.addListener(timeZona);
         addMouseMotionListener(verticalScroll);
         addMouseMotionListener(horizontalScroll);
         addMouseListener(verticalScroll);
@@ -84,7 +89,10 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
             heigthContent+=indent;
             heigthContent+=(estacad[i]+1)*heigthLine;
         }
-        System.out.println("lenghtPanel: "+heigthContent);
+        
+        int minut = (int) ((end.getTime()-start.getTime())/60000);
+        weidthContent = minut*weidthMinut;
+        
         verticalScrollVisible=heigthContent>getHeight()-heightTimeZone-(horizontalScrollVisible?weigthScroll:0);
         horizontalScrollVisible=weidthContent>getWidth()-weigthLeftZona-(verticalScrollVisible?weigthScroll:0);
     }
@@ -97,24 +105,15 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         g = (Graphics2D)g;
         g.setColor(new Color(50,50,50));
         g.fillRect(0, 0, getWidth(),getHeight());
-        
         g.drawImage(lz.getImage(),0, heightTimeZone,this);    
-        
-        //time zona
-        g.setColor(Color.blue);
-        g.drawRect(weigthLeftZona, 0, getWidth()-weigthLeftZona-1-(verticalScrollVisible?weigthScroll:0), heightTimeZone);
-            
-        //verticalScroll
+        g.drawImage(timeZona.getImage(), weigthLeftZona, 0,this);
         if(verticalScrollVisible){
             g.drawImage(verticalScroll.getImage(), getWidth()-weigthScroll, heightTimeZone,this);
         }
-        //bottom scroll
         if(horizontalScrollVisible){
             g.drawImage(horizontalScroll.getImage(), weigthLeftZona, getHeight()-weigthScroll,this);
         }
-        
         g.drawImage(content.getImage(), weigthLeftZona, heightTimeZone,this);
-        
     }  
 
    
@@ -160,6 +159,10 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
         content.resize(beginContent,endContent);
+        
+        Point beginTimeZona = new Point(weigthLeftZona,0);
+        Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
+        timeZona.resize(beginTimeZona, endTimeZona);
     } 
 }
 
