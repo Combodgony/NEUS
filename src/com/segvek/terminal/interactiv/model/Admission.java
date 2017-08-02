@@ -5,7 +5,9 @@
  */
 package com.segvek.terminal.interactiv.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -16,9 +18,12 @@ public class Admission {
     private Long id;
     private Tank tank;
     private Date begin;
-    private Date end;
+    private Date end; //todo: нужно только фактический конец 
     private DrainLocation drainLocation;
     private String status="План";
+    
+    private ArrayList<Admission> indepented = new ArrayList<>();
+    private ArrayList<Admission> depend = new ArrayList<>();
 
     public Admission(Long id,Tank tank, Date begin, Date end, DrainLocation drainLocation) {
         this.id=id;
@@ -70,13 +75,13 @@ public class Admission {
         this.begin = begin;
     }
 
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
+//    public Date getEnd() {
+//        return end;
+//    }
+//
+//    public void setEnd(Date end) {
+//        this.end = end;
+//    }
 
     public String getStatus() {
         return status;
@@ -85,4 +90,63 @@ public class Admission {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public ArrayList<Admission> getIndepented() {
+        return indepented;
+    }
+
+    public void setIndepented(ArrayList<Admission> indepented) {
+        this.indepented = indepented;
+    }
+
+    public ArrayList<Admission> getDepend() {
+        return depend;
+    }
+
+    public void setDepend(ArrayList<Admission> depend) {
+        this.depend = depend;
+    }
+    
+    
+    @Override
+    public int hashCode() {
+        return id.intValue(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean addTime(int TypeTime, int time) {
+        boolean result=true;
+        Date now = new Date();
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTime(getBegin());
+        c.add(TypeTime, time);
+        if(time<0 && c.getTime().getTime()<now.getTime())
+            return false;
+        begin =c.getTime();
+        if(time>0){           
+            c.add(GregorianCalendar.MINUTE, tank.getTypeTank().getTime());
+            for(Admission a:indepented){
+                if(a.getBegin().getTime()<c.getTime().getTime()){
+                    result &=a.addTime(TypeTime, time);
+                }
+            }
+        }else{
+            for(Admission a:depend){
+                c.setTime(a.getBegin());
+                c.add(GregorianCalendar.MINUTE, a.getTank().getTypeTank().getTime());
+                if(begin.getTime()<c.getTime().getTime()){
+                    result &=a.addTime(TypeTime, time);
+                }
+            }
+            
+        } 
+        if(!result){
+            c.setTime(getBegin());
+            c.add(TypeTime, -time);
+            begin =c.getTime();
+        }
+            
+        return result;
+    }
+    
+    
 }

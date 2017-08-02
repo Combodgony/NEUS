@@ -42,14 +42,12 @@ class LeftZona implements ScrollListener{
             h+=indent;
             h+=(estakads.get(i).getDrainLocations().size()+1)*heigthLine;
         }
+        h+=3*indent;
         int ht=end.y-begin.y;
         h=h<ht?ht:h;
         weidth=end.x-begin.x;
         heigth=h;
         image = new BufferedImage(weidth, h, BufferedImage.TYPE_INT_ARGB);
-    }
-    
-    public Image getImage(){
         Graphics2D g = (Graphics2D)image.getGraphics();
         g.setColor(Color.BLACK);
         g.drawRect(0, 0, weidth-1, heigth-1);
@@ -66,6 +64,9 @@ class LeftZona implements ScrollListener{
                 g.drawString("место:"+estakads.get(i).getDrainLocations().get(j).getNumber(), 40, y-5);
             }
         }
+    }
+    
+    public Image getImage(){
         return image.getSubimage(0,bias, end.x-begin.x, end.y-begin.y);
     }
    

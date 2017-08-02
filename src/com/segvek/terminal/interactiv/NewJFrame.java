@@ -6,6 +6,7 @@
 package com.segvek.terminal.interactiv;
 
 import com.segvek.terminal.interactiv.model.Admission;
+import com.segvek.terminal.interactiv.model.DependencyAdmission;
 import com.segvek.terminal.interactiv.model.DrainLocation;
 import com.segvek.terminal.interactiv.model.Estakada;
 import com.segvek.terminal.interactiv.model.Tank;
@@ -66,11 +67,29 @@ public class NewJFrame extends javax.swing.JFrame {
         Tank ta2 = new Tank(1L, "AX 4825 PO", tt1);
         Tank ta3 = new Tank(1L, "KE 2953 TW", tt1);
         
-        admissions.add(new Admission(1L,ta1, new Date(2017,07,20,6,20), new Date(2017,07,20,7,10), new DrainLocation(6L, 2,e2)));
-        admissions.add(new Admission(2L,ta2, new Date(2017,07,20,20,20), new Date(2017,07,20,21,10), new DrainLocation(3L, 3,e1),"Виконано"));
-        admissions.add(new Admission(3L,ta3, new Date(2017,07,20,8,20), new Date(2017,07,20,9,10), new DrainLocation(6L, 2,e2)));
+        Admission a1 = new Admission(1L,ta1, new Date(117,7,3,6,20), new Date(117,7,2,7,10), new DrainLocation(6L, 2,e2));
+        Admission a2 = new Admission(2L,ta2, new Date(117,7,3,15,20), new Date(117,7,2,16,10), new DrainLocation(3L, 3,e1),"Виконано");
+        Admission a3 = new Admission(3L,ta3, new Date(117,7,3,8,20), new Date(117,7,2,9,10), new DrainLocation(6L, 2,e2));       
+        
+        admissions.add(a1);
+        admissions.add(a2);
+        admissions.add(a3);
         
         
+        
+        ArrayList<Admission> indepa1 = new ArrayList<>();
+        indepa1.add(a3);
+        a1.setIndepented(indepa1);
+        
+        ArrayList<Admission> depa3 = new ArrayList<>();
+        depa3.add(a1);
+        a3.setDepend(depa3);
+        
+        ArrayList<DependencyAdmission> das = new ArrayList<>();
+        das.add(new DependencyAdmission(a1, a3));
+        
+        
+        ((InteractivGrafic)jPanel1).setDependencyAdmissions(das);
         ((InteractivGrafic)jPanel1).setAdmissions(admissions);
         ((InteractivGrafic)jPanel1).init();
         addKeyListener(((InteractivGrafic)jPanel1).getContent());

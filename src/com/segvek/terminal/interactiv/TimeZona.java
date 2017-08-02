@@ -79,6 +79,15 @@ class TimeZona implements ScrollListener{
             
             c.add(GregorianCalendar.MINUTE, frequencyTime);
         }
+        
+        Date now = new Date();
+        if(begin.getTime()<now.getTime() && end.getTime()>now.getTime()){
+            long minut = (now.getTime()-begin.getTime())/60000;
+            g.setColor(Color.red);
+            g.drawLine((int)minut*weidthMinut, 0, (int)minut*weidthMinut, heigth);
+        }
+        
+        
         return image.getSubimage(bias,0, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
     }
    

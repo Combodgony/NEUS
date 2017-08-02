@@ -1,11 +1,14 @@
 package com.segvek.terminal.interactiv;
 
 import com.segvek.terminal.interactiv.model.Admission;
+import com.segvek.terminal.interactiv.model.DependencyAdmission;
 import com.segvek.terminal.interactiv.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -14,13 +17,16 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 
-public class InteractivGrafic extends JPanel implements MouseListener,ComponentListener{
+public class InteractivGrafic extends JPanel implements MouseListener,ComponentListener,ActionListener{
     private int heigthContent=0; //calc variable
     private int weidthContent=0; //calc variable
 
-  
+    private Color backgroundColor = new Color(50,50,50);
+    
+    
     private int heightTimeZone = 50;
     private int weidthMinut=2;
     
@@ -34,16 +40,25 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     
     private ArrayList<Estakada> estakads;
     private ArrayList<Admission> admissions;
+    ArrayList<DependencyAdmission> das = new ArrayList<>();
     
-    private Date start=new Date(2017,07,20);
-    private Date end=new Date(2017,7,21,12,30);
+    private Date start=new Date(117,7,3,5,0);
+    private Date end=  new Date(117,7,3,20,30);
     
     boolean verticalScrollVisible,horizontalScrollVisible;
     private Scroll verticalScroll, horizontalScroll;
     private LeftZona lz;
     private TimeZona timeZona;
     private Content content;
+
+    public InteractivGrafic() {
+        Timer tim = new Timer(60000, this);
+        tim.start();
+    }
   
+    
+    
+    
     public void init(){ 
         calc();
         Point beginLeftZona = new Point(0, heightTimeZone);
@@ -61,7 +76,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         Point beginContent = new Point(weigthLeftZona,heightTimeZone);
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
-        content = new Content(this,beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,60);
+        content = new Content(this,beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,60,das);
         
         Point beginTimeZona = new Point(weigthLeftZona,0);
         Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
@@ -89,7 +104,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
             heigthContent+=indent;
             heigthContent+=(estakads.get(i).getDrainLocations().size()+1)*heigthLine;
         }
-        
+        heigthContent+=3*indent;
         int minut = (int) ((end.getTime()-start.getTime())/60000);
         weidthContent = minut*weidthMinut;
         
@@ -103,7 +118,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     public void paint(Graphics g) {
         super.paint(g); 
         g = (Graphics2D)g;
-        g.setColor(new Color(50,50,50));
+        g.setColor(backgroundColor);
         g.fillRect(0, 0, getWidth(),getHeight());
         g.drawImage(lz.getImage(),0, heightTimeZone,this);    
         g.drawImage(timeZona.getImage(), weigthLeftZona, 0,this);
@@ -168,6 +183,15 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
 
     public Content getContent() {
         return content;
+    }
+
+    void setDependencyAdmissions(ArrayList<DependencyAdmission> das) {
+        this.das=das;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
     }
 
 }
