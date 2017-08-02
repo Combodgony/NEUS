@@ -15,8 +15,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.JPanel;
 
 class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyListener{
+    private JPanel ig; //необходимо для оптимизации работы
     private int weidth, heigth;
     private int heigthLine;
     private int indent;
@@ -35,9 +37,10 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
     private BufferedImage image;
     
     private boolean jump = false;
-    public Content(  Point beginPoint,               Point endPoint,  int heigthLine, int indent
+    public Content( JPanel ig, Point beginPoint,               Point endPoint,  int heigthLine, int indent
                     ,ArrayList<Estakada> estakads,   int weidthMinut,  Date begin,     Date end
                     ,ArrayList<Admission> admissions,int frequencyTime) {
+        this.ig=ig;
         this.admissions=admissions;
         this.frequencyTime=frequencyTime;
         this.begin=begin;
@@ -52,8 +55,10 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
     }
    
     private void init(){
-        if(image!=null)
+        if(image!=null){
             image.getGraphics().dispose();
+            System.gc();
+        }
         int h=0;
         for(int i=0; i<estakads.size(); i++){
             h+=indent;
@@ -136,10 +141,8 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
             int sx = e.getX()-pressPoint.x;
             GregorianCalendar c = new GregorianCalendar();
             c.setTime(activAdmission.getBegin());
-            c.add(GregorianCalendar.MINUTE, sx/weidthMinut);
+            c.add(GregorianCalendar.SECOND, (sx*60)/weidthMinut);
             activAdmission.setBegin(c.getTime());
-            
-            
             int pY = e.getY()-beginPoint.y+biasY;
 
             //jump
@@ -159,6 +162,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
                 }
             }
             pressPoint=e.getPoint();
+            ig.repaint();
             init();
         }
     }
@@ -169,11 +173,11 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
             pressPoint=e.getPoint();
         }
     }
+    
     @Override
     public void mouseMoved(MouseEvent e) {
         if(e.getX()<beginPoint.x || e.getX()>endPoint.x || e.getY()<beginPoint.y || e.getY()>endPoint.y)
             return;
-       
         int pX = e.getX()-beginPoint.x+biasX;
         int pY = e.getY()-beginPoint.y+biasY;
         
@@ -188,22 +192,27 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
                             int addMinBegin =(int)((a.getBegin().getTime()-begin.getTime())/60000);
                             int colMin = a.getTank().getTypeTank().getTime();
                             if(pX>addMinBegin*weidthMinut && pX < (addMinBegin+colMin)*weidthMinut){
-                                activAdmission=a;
+                                if(activAdmission==null || activAdmission!=a){
+                                    activAdmission=a;
+                                    ig.repaint();
+                                }
                                 return;
                             }
                         }
                     }
-                    
                 }
                 y+=heigthLine;
             }
         }
-        activAdmission=null;
+        if(activAdmission!=null){
+            activAdmission=null;
+            ig.repaint();
+        }
     }
     
     @Override
     public void keyPressed(KeyEvent e) {
-        jump = e.getKeyChar()=='j';
+        jump = e.getKeyChar()=='j' || e.getKeyChar()=='о';
     }
 
     @Override

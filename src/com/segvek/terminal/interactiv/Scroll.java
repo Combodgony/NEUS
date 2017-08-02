@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import javax.swing.JPanel;
 
 /**
  *
@@ -28,6 +29,9 @@ public class Scroll extends MouseAdapter{
     private int bias=0; //calc field
     private double sliderLength=0; //calc field
     
+    private JPanel ig;
+    
+    
     int sizeScroll=15;
     int weidth, height;
     private int lengthPanel=0;
@@ -38,11 +42,13 @@ public class Scroll extends MouseAdapter{
     private Color colorBackground = new Color(75,75,75);
     private Color colorActiv = new Color(150,150,150);
     private Color colorMove = new Color(200,200,200);
+    private Color colorPasive = new Color(100,100,100);
     private Color colorScroll = new Color(100,100,100);
     
     private Point begin;
     private Point end;
-    Scroll(Point begin,Point end,int lengthPanel,boolean scrollType){
+    Scroll(JPanel ig,Point begin,Point end,int lengthPanel,boolean scrollType){
+        this.ig=ig;
         this.begin=begin;
         this.end=end;
         this.lengthPanel=lengthPanel;
@@ -129,18 +135,21 @@ public class Scroll extends MouseAdapter{
     
     @Override
     public void mouseMoved(MouseEvent e) {
-        if(vertical && e.getX()>begin.x+1 && e.getX()<end.x-2 && e.getY() > begin.y+bias 
-                && e.getY()<begin.y+bias+sliderLength){
-            colorScroll = colorActiv;
-        }else{
-            if(!vertical && e.getX()>begin.x+bias && e.getX()<begin.x+sliderLength+bias 
-                    &&e.getY()>begin.y+1 && e.getY()<end.y-2){
+        //проверка надохится ли мишь на позунке вертикального или горизонтального скрола
+        if((vertical && e.getX()>begin.x+1 && e.getX()<end.x-2 && e.getY() > begin.y+bias && e.getY()<begin.y+bias+sliderLength) 
+            || (!vertical && e.getX()>begin.x+bias && e.getX()<begin.x+sliderLength+bias &&e.getY()>begin.y+1 && e.getY()<end.y-2)){
+            if(colorScroll!=colorActiv){
                 colorScroll = colorActiv;
-            }else{
-                colorScroll=new Color(100,100,100);
-            }  
-        }
+                ig.repaint();
+            }
+        }else{
+            if(colorScroll==colorActiv){
+                colorScroll=colorPasive;
+                ig.repaint();
+            }
+        }  
     }
+    
     @Override
     public void mousePressed(MouseEvent e) {
         if(vertical && e.getX()>begin.x+1 && e.getX()<end.x-2 && e.getY() > begin.y+bias 
@@ -154,7 +163,7 @@ public class Scroll extends MouseAdapter{
                 colorScroll = colorMove;
             }else{
                 pressedPoint=null;
-                colorScroll=new Color(100,100,100);
+                colorScroll=colorPasive;
             }  
         }
     }
@@ -168,7 +177,7 @@ public class Scroll extends MouseAdapter{
                     &&e.getY()>begin.y+1 && e.getY()<end.y-2){
                 colorScroll = colorActiv;
             }else{
-                colorScroll=new Color(100,100,100);
+                colorScroll=colorPasive;
             }  
         }
         pressedPoint=null;
@@ -188,6 +197,7 @@ public class Scroll extends MouseAdapter{
                     return;
                 }
                 pressedPoint.y=e.getY();
+                ig.repaint();
             }else{
                 bias+=e.getX()-pressedPoint.x;
                 int biasClient=(lengthPanel*bias)/(weidth);
@@ -199,7 +209,8 @@ public class Scroll extends MouseAdapter{
                     bias-=e.getX()-pressedPoint.x;
                     return;
                 }
-                pressedPoint.x=e.getX(); 
+                pressedPoint.x=e.getX();
+                ig.repaint();
             }
             notifyCustomers();
         }
