@@ -13,17 +13,38 @@ import java.util.Date;
  */
 public class Admission {
     
+    private Long id;
     private Tank tank;
     private Date begin;
     private Date end;
     private DrainLocation drainLocation;
+    private String status="План";
 
-    public Admission(Tank tank, Date begin, Date end, DrainLocation drainLocation) {
+    public Admission(Long id,Tank tank, Date begin, Date end, DrainLocation drainLocation) {
+        this.id=id;
         this.tank = tank;
         this.begin = begin;
         this.end = end;
         this.drainLocation = drainLocation;
     }
+
+    public Admission(Long id,Tank tank, Date begin, Date end, DrainLocation drainLocation, String status) {
+        this.id=id;
+        this.tank = tank;
+        this.begin = begin;
+        this.end = end;
+        this.drainLocation = drainLocation;
+        this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
 
     public DrainLocation getDrainLocation() {
         return drainLocation;
@@ -55,5 +76,13 @@ public class Admission {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

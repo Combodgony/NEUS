@@ -9,10 +9,12 @@ package com.segvek.terminal.interactiv.model;
 public class DrainLocation {
     Long id;
     int number;
+    Estakada estakada;
 
-    public DrainLocation(Long id, int number) {
+    public DrainLocation(Long id, int number, Estakada estakada) {
         this.id = id;
         this.number = number;
+        this.estakada = estakada;
     }
 
     public Long getId() {
@@ -30,6 +32,16 @@ public class DrainLocation {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public Estakada getEstakada() {
+        return estakada;
+    }
+
+    public void setEstakada(Estakada estakada) {
+        this.estakada = estakada;
+    }
+
+    
     
     
 }

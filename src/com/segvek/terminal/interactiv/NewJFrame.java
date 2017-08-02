@@ -30,23 +30,29 @@ public class NewJFrame extends javax.swing.JFrame {
         ArrayList<Estakada> estakads = new ArrayList<>();
         
         ArrayList<DrainLocation> dll1 = new ArrayList<>();
-        dll1.add(new DrainLocation(1L, 1));
-        dll1.add(new DrainLocation(2L, 2));
-        dll1.add(new DrainLocation(3L, 3));
-        dll1.add(new DrainLocation(4L, 4));
-        estakads.add(new Estakada(1L, t1, "1",dll1));
-        
-        ArrayList<DrainLocation> dll2 = new ArrayList<>();
-        dll2.add(new DrainLocation(5L, 1));
-        dll2.add(new DrainLocation(6L, 2));
-        dll2.add(new DrainLocation(7L, 3));
-        dll2.add(new DrainLocation(8L, 4));
-        estakads.add(new Estakada(2L, t1, "2",dll2));
+        Estakada e1 = new Estakada(1L, t1, "1",dll1); 
+        dll1.add(new DrainLocation(1L, 1,e1));
+        dll1.add(new DrainLocation(2L, 2,e1));
+        dll1.add(new DrainLocation(3L, 3,e1));
+        dll1.add(new DrainLocation(4L, 4,e1));
+        estakads.add(e1);
         
         ArrayList<DrainLocation> dll3 = new ArrayList<>();
-        dll3.add(new DrainLocation(9L, 1));
-        dll3.add(new DrainLocation(10L, 2));
-        estakads.add(new Estakada(3L, t2, "1",dll3));
+        Estakada e3 = new Estakada(3L, t2, "1",dll3);
+        dll3.add(new DrainLocation(9L, 1,e3));
+        dll3.add(new DrainLocation(10L, 2,e3));
+        estakads.add(e3);
+        
+        
+        ArrayList<DrainLocation> dll2 = new ArrayList<>();
+        Estakada e2 = new Estakada(2L, t1, "2",dll2);
+        dll2.add(new DrainLocation(5L, 1,e2));
+        dll2.add(new DrainLocation(6L, 2,e2));
+        dll2.add(new DrainLocation(7L, 3,e2));
+        dll2.add(new DrainLocation(8L, 4,e2));
+        estakads.add(e2);
+        
+        
         
         ((InteractivGrafic)jPanel1).setEstakads(estakads);
         
@@ -57,12 +63,17 @@ public class NewJFrame extends javax.swing.JFrame {
         ArrayList<Admission> admissions = new ArrayList<>();
         
         Tank ta1 = new Tank(1L, "AB 4573 BK", tt1);
+        Tank ta2 = new Tank(1L, "AX 4825 PO", tt1);
+        Tank ta3 = new Tank(1L, "KE 2953 TW", tt1);
         
-        admissions.add(new Admission(ta1, new Date(2017,07,20,6,20), new Date(2017,07,20,7,10), new DrainLocation(5L, 1)));
+        admissions.add(new Admission(1L,ta1, new Date(2017,07,20,6,20), new Date(2017,07,20,7,10), new DrainLocation(6L, 2,e2)));
+        admissions.add(new Admission(2L,ta2, new Date(2017,07,20,20,20), new Date(2017,07,20,21,10), new DrainLocation(3L, 3,e1),"Виконано"));
+        admissions.add(new Admission(3L,ta3, new Date(2017,07,20,8,20), new Date(2017,07,20,9,10), new DrainLocation(6L, 2,e2)));
         
         
         ((InteractivGrafic)jPanel1).setAdmissions(admissions);
         ((InteractivGrafic)jPanel1).init();
+        addKeyListener(((InteractivGrafic)jPanel1).getContent());
     }
 
     /**
@@ -99,7 +110,7 @@ public class NewJFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();

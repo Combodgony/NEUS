@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -20,7 +19,7 @@ import javax.swing.JPanel;
 public class InteractivGrafic extends JPanel implements MouseMotionListener, MouseListener,ComponentListener{
     private int heigthContent=0; //calc variable
     private int weidthContent=0; //calc variable
-    
+
   
     private int heightTimeZone = 50;
     private int weidthMinut=2;
@@ -37,7 +36,7 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
     private ArrayList<Admission> admissions;
     
     private Date start=new Date(2017,07,20);
-    private Date end=new Date(2017,07,21,12,30);
+    private Date end=new Date(2017,7,21,12,30);
     
     boolean verticalScrollVisible,horizontalScrollVisible;
     private Scroll verticalScroll, horizontalScroll;
@@ -62,7 +61,7 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         Point beginContent = new Point(weigthLeftZona,heightTimeZone);
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
-        content = new Content(beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,20);
+        content = new Content(beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,60);
         
         Point beginTimeZona = new Point(weigthLeftZona,0);
         Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
@@ -77,6 +76,8 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
         addMouseMotionListener(horizontalScroll);
         addMouseListener(verticalScroll);
         addMouseListener(horizontalScroll);
+        addMouseListener(content);
+        addMouseMotionListener(content);
         addComponentListener(this);
         addMouseMotionListener(this);
         addMouseListener(this);
@@ -171,5 +172,10 @@ public class InteractivGrafic extends JPanel implements MouseMotionListener, Mou
     void setAdmissions(ArrayList<Admission> admissions) {
         this.admissions=admissions;
     }
+
+    public Content getContent() {
+        return content;
+    }
+
 }
 
