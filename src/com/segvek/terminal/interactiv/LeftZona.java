@@ -37,6 +37,10 @@ class LeftZona implements ScrollListener{
         createImage();
     }
     private void createImage(){
+        if(image!=null){
+            image.getGraphics().dispose();
+            System.gc();
+        }
         int h=0;
         for(int i=0; i<estakads.size(); i++){
             h+=indent;

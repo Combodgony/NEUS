@@ -18,26 +18,29 @@ public class Admission {
     private Long id;
     private Tank tank;
     private Date begin;
-    private Date end; //todo: нужно только фактический конец 
+    private Date factBegin;
+    private Date factEnd;  
     private DrainLocation drainLocation;
     private String status="План";
     
     private ArrayList<Admission> indepented = new ArrayList<>();
     private ArrayList<Admission> depend = new ArrayList<>();
 
-    public Admission(Long id,Tank tank, Date begin, Date end, DrainLocation drainLocation) {
+    public Admission(Long id,Tank tank, Date begin, Date factBegin, Date factEnd, DrainLocation drainLocation) {
         this.id=id;
         this.tank = tank;
         this.begin = begin;
-        this.end = end;
+        this.factBegin=factBegin;
+        this.factEnd = factEnd;
         this.drainLocation = drainLocation;
     }
 
-    public Admission(Long id,Tank tank, Date begin, Date end, DrainLocation drainLocation, String status) {
+    public Admission(Long id,Tank tank, Date begin, Date factBegin, Date factEnd, DrainLocation drainLocation, String status) {
         this.id=id;
         this.tank = tank;
         this.begin = begin;
-        this.end = end;
+        this.factBegin=factBegin;
+        this.factEnd = factEnd;
         this.drainLocation = drainLocation;
         this.status = status;
     }
@@ -75,13 +78,7 @@ public class Admission {
         this.begin = begin;
     }
 
-//    public Date getEnd() {
-//        return end;
-//    }
-//
-//    public void setEnd(Date end) {
-//        this.end = end;
-//    }
+  
 
     public String getStatus() {
         return status;
@@ -146,6 +143,22 @@ public class Admission {
         }
             
         return result;
+    }
+
+    public Date getFactBegin() {
+        return factBegin;
+    }
+
+    public void setFactBegin(Date factBegin) {
+        this.factBegin = factBegin;
+    }
+
+    public Date getFactEnd() {
+        return factEnd;
+    }
+
+    public void setFactEnd(Date factEnd) {
+        this.factEnd = factEnd;
     }
     
     

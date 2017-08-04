@@ -110,7 +110,7 @@ public class Scroll extends MouseAdapter{
 
 
     void resize(Point begin,Point end,int lengthPanel) {
-        bias=0;
+        bias=0; 
         notifyCustomers();
         this.lengthPanel=lengthPanel;
         this.end=end;
@@ -215,4 +215,8 @@ public class Scroll extends MouseAdapter{
             notifyCustomers();
         }
     }    
+
+    void removeAllListener() {
+        clients.clear();
+    }
 }

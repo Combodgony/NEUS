@@ -28,7 +28,15 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     
     
     private int heightTimeZone = 50;
-    private int weidthMinut=2;
+    private double weidthMinut=0.5;
+
+    public double getWeidthMinut() {
+        return weidthMinut;
+    }
+
+    public void setWeidthMinut(double weidthMinut) {
+        this.weidthMinut = weidthMinut;
+    }
     
     private int weigthLeftZona=200;
     private int weigthScroll=15;
@@ -42,6 +50,8 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     private ArrayList<Admission> admissions;
     ArrayList<DependencyAdmission> das = new ArrayList<>();
     
+    
+    private Timer tim = new Timer(500, this);
     private Date start=new Date(117,7,3,5,0);
     private Date end=  new Date(117,7,3,20,30);
     
@@ -50,16 +60,41 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     private LeftZona lz;
     private TimeZona timeZona;
     private Content content;
+    
+    private boolean editable=false;
 
-    public InteractivGrafic() {
-        Timer tim = new Timer(60000, this);
+    public InteractivGrafic(boolean editable) {
+        this.editable=editable;
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+        
         tim.start();
     }
-  
-    
-    
+
+    public void setStartDate(Date start) {
+        this.start = start;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
+    }    
     
     public void init(){ 
+        removeAll();
+        
+        if(verticalScroll!=null)
+            verticalScroll.removeAllListener();
+        if(horizontalScroll!=null)
+            horizontalScroll.removeAllListener();
+        removeMouseListener(verticalScroll);
+        removeMouseListener(horizontalScroll);
+        removeMouseListener(content);
+        removeMouseListener(this);
+        removeMouseMotionListener(verticalScroll);
+        removeMouseMotionListener(horizontalScroll);
+        removeMouseMotionListener(content);
+        
+        
         calc();
         Point beginLeftZona = new Point(0, heightTimeZone);
         Point endLeftZona = new Point(weigthLeftZona, getHeight()-weigthScroll);
@@ -77,12 +112,13 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
         content = new Content(this,beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,60,das);
+        content.setEditable(editable);
         
         Point beginTimeZona = new Point(weigthLeftZona,0);
         Point endTimeZona = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0),heightTimeZone);
         timeZona = new TimeZona(beginTimeZona,endTimeZona,weidthMinut,start,end,20);
         
-        
+
         verticalScroll.addListener(lz);
         verticalScroll.addListener(content);
         horizontalScroll.addListener(content);
@@ -96,6 +132,9 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         
         addComponentListener(this);
         addMouseListener(this);
+        
+        if(!tim.isRunning())
+            tim.start();
     }
     
     private void calc(){
@@ -105,8 +144,8 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
             heigthContent+=(estakads.get(i).getDrainLocations().size()+1)*heigthLine;
         }
         heigthContent+=3*indent;
-        int minut = (int) ((end.getTime()-start.getTime())/60000);
-        weidthContent = minut*weidthMinut;
+        double minut = (end.getTime()-start.getTime())/60000;
+        weidthContent = (int)(minut*weidthMinut);
         
         verticalScrollVisible=heigthContent>getHeight()-heightTimeZone-(horizontalScrollVisible?weigthScroll:0);
         horizontalScrollVisible=weidthContent>getWidth()-weigthLeftZona-(verticalScrollVisible?weigthScroll:0);
@@ -149,6 +188,8 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     }
     @Override
     public void componentResized(ComponentEvent e) {
+        if(getWidth()<200)
+            return;
         calc();
         Point beginLeftZona = new Point(0, heightTimeZone);
         Point endLeftZona = new Point(weigthLeftZona, getHeight()-(horizontalScrollVisible?weigthScroll:0));
@@ -173,11 +214,11 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         timeZona.resize(beginTimeZona, endTimeZona);
     } 
 
-    void setEstakads(ArrayList<Estakada> estakads) {
+    public void setEstakads(ArrayList<Estakada> estakads) {
         this.estakads=estakads;
     }
 
-    void setAdmissions(ArrayList<Admission> admissions) {
+    public void setAdmissions(ArrayList<Admission> admissions) {
         this.admissions=admissions;
     }
 
@@ -185,7 +226,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         return content;
     }
 
-    void setDependencyAdmissions(ArrayList<DependencyAdmission> das) {
+    public void setDependencyAdmissions(ArrayList<DependencyAdmission> das) {
         this.das=das;
     }
 
@@ -193,6 +234,32 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     public void actionPerformed(ActionEvent e) {
         repaint();
     }
+    
+    
+    public void setJump(boolean jump){
+        content.setJump(jump);
+    }
 
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+    
+    
 }
 

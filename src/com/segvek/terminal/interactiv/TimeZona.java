@@ -22,10 +22,10 @@ class TimeZona implements ScrollListener{
     private Point beginPoint,endPoint;
     private Date begin ,end;
     private BufferedImage image;
-    private int weidthMinut;
+    private double weidthMinut;
     private int frequencyTime=60;
     
-    public TimeZona(Point beginPoint, Point endPoint,int weidthMinut,Date begin, Date end) {
+    public TimeZona(Point beginPoint, Point endPoint,double weidthMinut,Date begin, Date end) {
         this.weidthMinut = weidthMinut;
         this.beginPoint = beginPoint;
         this.endPoint = endPoint;
@@ -35,7 +35,7 @@ class TimeZona implements ScrollListener{
         heigth=endPoint.y-beginPoint.y;
         createImage();
     }
-    public TimeZona(Point beginPoint, Point endPoint,int weidthMinut,Date begin, Date end,int frequencyTime) {
+    public TimeZona(Point beginPoint, Point endPoint,double weidthMinut,Date begin, Date end,int frequencyTime) {
         this.weidthMinut = weidthMinut;
         this.frequencyTime=frequencyTime;
         this.beginPoint = beginPoint;
@@ -47,8 +47,8 @@ class TimeZona implements ScrollListener{
         createImage();
     }
     private void createImage(){
-        int min = (int) ((end.getTime()-begin.getTime())/60000);
-        int w = min*weidthMinut;
+        double min =(end.getTime()-begin.getTime())/60000;
+        int w = (int)(min*weidthMinut);
         int wt=endPoint.x-beginPoint.x;
         w=w<wt?wt:w;   
         heigth=endPoint.y-beginPoint.y;
@@ -67,7 +67,7 @@ class TimeZona implements ScrollListener{
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(begin);
         
-        for(int x=0,m=0; m<min; m+=frequencyTime, x=m*weidthMinut){
+        for(int x=0,m=0; m<min; m+=frequencyTime, x=(int)(m*weidthMinut)){
             g.drawLine(x, 0, x, heigth);
             AffineTransform orig = g.getTransform();
             g.rotate(-Math.PI/2);
@@ -84,7 +84,7 @@ class TimeZona implements ScrollListener{
         if(begin.getTime()<now.getTime() && end.getTime()>now.getTime()){
             long minut = (now.getTime()-begin.getTime())/60000;
             g.setColor(Color.red);
-            g.drawLine((int)minut*weidthMinut, 0, (int)minut*weidthMinut, heigth);
+            g.drawLine((int)(minut*weidthMinut), 0, (int)(minut*weidthMinut), heigth);
         }
         
         

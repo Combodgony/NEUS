@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
 
-class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyListener{
+class Content implements ScrollListener, MouseListener,MouseMotionListener{
     private JPanel ig; //необходимо для оптимизации работы
     private int weidth, heigth;
     private int heigthLine;
@@ -29,6 +29,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
     private int biasY=0;
     private int biasX=0;
     private Color backgroundColor = new Color(50,50,50);
+    private boolean editable;
     
     private ArrayList<Estakada> estakads;
     private ArrayList<Admission> admissions;
@@ -39,13 +40,13 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
     
     private Point beginPoint,endPoint; 
     private Date begin, end;
-    private int weidthMinut;
+    private double weidthMinut;
     int frequencyTime=60;
     private BufferedImage image;
     
     private boolean jump = false;
     public Content( JPanel ig, Point beginPoint,               Point endPoint,  int heigthLine, int indent
-                    ,ArrayList<Estakada> estakads,   int weidthMinut,  Date begin,     Date end
+                    ,ArrayList<Estakada> estakads,   double weidthMinut,  Date begin,     Date end
                     ,ArrayList<Admission> admissions,int frequencyTime,ArrayList<DependencyAdmission> das) {
         this.das=das;
         this.ig=ig;
@@ -78,10 +79,10 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
         h=h<ht?ht:h;
         heigth=h;
         int min = (int) ((end.getTime()-begin.getTime())/60000);
-        int w = min*weidthMinut;
+        double w = min*weidthMinut;
         int wt=endPoint.x-beginPoint.x;
         w=w<wt?wt:w;   
-        weidth=w;
+        weidth=(int)w;
         image = new BufferedImage(weidth, heigth, BufferedImage.TYPE_INT_ARGB);
     }
     private void clacPositionAdmission(){
@@ -94,8 +95,12 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
             for(int j=0; j<estakads.get(i).getDrainLocations().size(); j++){ 
                 for(Admission a:admissions){
                     if(estakads.get(i).getDrainLocations().get(j).getId()==a.getDrainLocation().getId()){
-                        int addMinBegin =(int)((a.getBegin().getTime()-begin.getTime())/60000);
-                        Point t = new Point(addMinBegin*weidthMinut, y+1);
+                        int addMinBegin=0;
+                        if(a.getStatus().equals("План"))
+                            addMinBegin =(int)((a.getBegin().getTime()-begin.getTime())/60000);
+                        else
+                            addMinBegin =(int)((a.getFactBegin().getTime()-begin.getTime())/60000);
+                        Point t = new Point((int)(addMinBegin*weidthMinut), y+1);
                         posAdmission.put(a, t);
                     }
                 }
@@ -111,7 +116,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
         
         g.setColor(new Color(85,85,85));
         int min = (int) ((end.getTime()-begin.getTime())/60000);
-        for(int x=0,m=0; m<min; m+=frequencyTime, x=m*weidthMinut){
+        for(int x=0,m=0; m<min; m+=frequencyTime, x=(int)(m*weidthMinut)){
             g.drawLine(x, 0, x, heigth);
         }
         for(int i=0,y=0; i<estakads.size(); i++){
@@ -130,7 +135,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
         if(begin.getTime()<now.getTime() && end.getTime()>now.getTime()){
             long minut = (now.getTime()-begin.getTime())/60000;
             g.setColor(Color.red);
-            g.drawLine((int)minut*weidthMinut, 0, (int)minut*weidthMinut, heigth);
+            g.drawLine((int)(minut*weidthMinut), 0, (int)(minut*weidthMinut), heigth);
         }
         return image.getSubimage(biasX,biasY, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
     }
@@ -140,6 +145,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
         GregorianCalendar c = new GregorianCalendar();
         for(Admission a: posAdmission.keySet()){
             Point p = posAdmission.get(a);
+            int colMin=0;
             if(a.getStatus().equals("План")){
                 c.setTime(a.getBegin());
                 c.add(GregorianCalendar.MINUTE, a.getTank().getTypeTank().getTime());
@@ -147,16 +153,17 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
                     g.setColor(new Color(181, 47, 47));
                 else
                     g.setColor(new Color(77, 139, 209, 200));
+                colMin = a.getTank().getTypeTank().getTime();
             }else{
                 g.setColor(new Color(26, 129, 15, 200));
+                colMin = (int)((a.getFactEnd().getTime()-a.getFactBegin().getTime())/60000);
             }
-            int colMin = a.getTank().getTypeTank().getTime();
-            g.fillRoundRect(p.x+1, p.y+1, colMin*weidthMinut-2, heigthLine-2,10, 10);
+            g.fillRoundRect(p.x+1, p.y+1, (int)(colMin*weidthMinut)-2, heigthLine-2,10, 10);
             g.setColor(Color.BLACK);
             g.drawString(a.getTank().getNumber(), p.x+5, p.y+heigthLine-5);
             if(activAdmission!=null && activAdmission.getId()==a.getId() && a.getStatus().equals("План")){
                 g.setColor(Color.WHITE);
-                g.drawRoundRect(p.x+2, p.y+2, colMin*weidthMinut-4, heigthLine-4,10, 10);
+                g.drawRoundRect(p.x+2, p.y+2, (int)(colMin*weidthMinut)-4, heigthLine-4,10, 10);
             }
         }
     }
@@ -170,7 +177,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
             
             Point p2 = posAdmission.get(d.getIndependet());
             g.setColor(new Color(118, 15, 128));
-            g.drawLine(p.x+(colMin*weidthMinut), p.y+heigthLine/2, p2.x, p2.y+heigthLine/2);
+            g.drawLine(p.x+(int)(colMin*weidthMinut), p.y+heigthLine/2, p2.x, p2.y+heigthLine/2);
             g.fill(new Ellipse2D.Double(p.x+(colMin*weidthMinut)-4, p.y+heigthLine/2-4, 8, 8));
             g.fill(new Ellipse2D.Double(p2.x-4, p2.y+heigthLine/2-4, 8, 8));
             
@@ -198,9 +205,9 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
     public void keyTyped(KeyEvent e) {}  
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(activAdmission!=null && activAdmission.getStatus().equals("План")){
+        if(editable && activAdmission!=null && activAdmission.getStatus().equals("План")){
             int sx = e.getX()-pressPoint.x;
-            if(activAdmission.addTime(GregorianCalendar.SECOND, (sx*60)/weidthMinut))
+            if(activAdmission.addTime(GregorianCalendar.SECOND, (int)((sx*60)/weidthMinut)))
                 pressPoint=e.getPoint();
             int pY = e.getY()-beginPoint.y+biasY;
             
@@ -227,7 +234,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
     }
     @Override
     public void mousePressed(MouseEvent e) {
-        if(activAdmission!=null){
+        if(editable && activAdmission!=null){
             pressPoint=e.getPoint();
         }
     }
@@ -266,13 +273,15 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener,KeyLi
             ig.repaint();
         }
     }
-    @Override
-    public void keyPressed(KeyEvent e) {
-        jump = e.getKeyChar()=='j' || e.getKeyChar()=='о';
+
+    public void setJump(boolean jump) {
+        this.jump = jump;
     }
-    @Override
-    public void keyReleased(KeyEvent e) {
-        jump = false;
+
+    void setEditable(boolean editable) {
+        this.editable=editable;
     }
+
+    
 }
 
