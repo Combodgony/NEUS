@@ -67,7 +67,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
     private void init(){
         if(image!=null){
             image.getGraphics().dispose();
-            System.gc();
+//            System.gc();
         }
         int h=0;
         for(int i=0; i<estakads.size(); i++){

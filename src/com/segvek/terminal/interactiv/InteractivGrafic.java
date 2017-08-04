@@ -80,6 +80,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     }    
     
     public void init(){ 
+        System.gc();
         removeAll();
         
         if(verticalScroll!=null)
