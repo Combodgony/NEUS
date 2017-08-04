@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
 
-class Content implements ScrollListener, MouseListener,MouseMotionListener{
+class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyListener{
     private JPanel ig; //необходимо для оптимизации работы
     private int weidth, heigth;
     private int heigthLine;
@@ -29,6 +30,9 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
     private int biasX=0;
     private Color backgroundColor = new Color(50,50,50);
     private boolean editable;
+    private boolean showInfoBlock=false;
+    Point pointInfoBlock;//сомнительная переменная 
+    
     
     private ArrayList<Estakada> estakads;
     private ArrayList<Admission> admissions;
@@ -66,7 +70,6 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
     private void init(){
         if(image!=null){
             image.getGraphics().dispose();
-//            System.gc();
         }
         int h=0;
         for(int i=0; i<estakads.size(); i++){
@@ -138,6 +141,10 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
             g.setColor(Color.red);
             g.drawLine((int)(minut*weidthMinut)-biasX, 0, (int)(minut*weidthMinut)-biasX, heigth);
         }
+        if(showInfoBlock){
+            showInfoBlock(activAdmission,pointInfoBlock);
+//            showInfoBlock=false;
+        }
         return image.getSubimage(0,biasY, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
     }
     private void drawAdmission() {
@@ -165,7 +172,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
             g.fillRoundRect(p.x+1, p.y+1, (int)(colMin*weidthMinut)-2, heigthLine-2,10, 10);
             g.setColor(Color.BLACK);
             g.drawString(a.getTank().getNumber(), p.x+5, p.y+heigthLine-5);
-            if(activAdmission!=null && activAdmission.getId()==a.getId() && a.getStatus().equals("План")){
+            if(activAdmission!=null && activAdmission.getId()==a.getId() /*&& a.getStatus().equals("План")*/){
                 g.setColor(Color.WHITE);
                 g.drawRoundRect(p.x+2, p.y+2, (int)(colMin*weidthMinut)-4, heigthLine-4,10, 10);
             }
@@ -190,6 +197,19 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
             
         }
     }
+    private void showInfoBlock(Admission a,Point p){
+        if(a==null || p==null)
+            return;
+        
+        Graphics2D g = (Graphics2D)image.getGraphics();   
+        g.setColor(Color.PINK);
+        g.fillRoundRect(p.x-beginPoint.x, p.y-beginPoint.y, 100, 50,5,5); 
+        g.setColor(Color.BLACK);
+        String nom = a.getTank().getNumber();
+        g.drawString(nom, p.x-beginPoint.x+3, p.y-beginPoint.y+20);
+        String est = a.getDrainLocation().getEstakada().getTypeEstakada().getName();
+        g.drawString(est, p.x-beginPoint.x+3, p.y-beginPoint.y+40);
+    }
     
     public void verticalScroll(int count) {
         biasY=count;
@@ -206,10 +226,12 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
     
     Point pressPoint=null;
     public void mouseClicked(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void keyTyped(KeyEvent e) {}  
+    public void mouseReleased(MouseEvent e) {
+        showInfoBlock=false;
+    }
     @Override
     public void mouseDragged(MouseEvent e) {
         if(editable && activAdmission!=null && activAdmission.getStatus().equals("План")){
@@ -241,12 +263,23 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
     }
     @Override
     public void mousePressed(MouseEvent e) {
+        if(e.getButton()==MouseEvent.BUTTON3 && activAdmission!=null){
+            showInfoBlock=true;
+            pointInfoBlock=e.getPoint();
+            ig.repaint();
+        }else{
+            showInfoBlock=false;
+        }
+            
+        
         if(editable && activAdmission!=null){
             pressPoint=e.getPoint();
         }
     }
     @Override
     public void mouseMoved(MouseEvent e) {
+        ig.setFocusable(true);
+        ig.requestFocus();
         if(e.getX()<beginPoint.x || e.getX()>endPoint.x || e.getY()<beginPoint.y || e.getY()>endPoint.y)
             return;
         int pX = e.getX()-beginPoint.x+biasX;
@@ -260,8 +293,15 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
                 if(pY>y && pY<y1){
                     for(Admission a :admissions){
                         if(a.getDrainLocation().getId()==estakads.get(i).getDrainLocations().get(j).getId()){
-                            int addMinBegin =(int)((a.getBegin().getTime()-begin.getTime())/60000);
-                            int colMin = a.getTank().getTypeTank().getTime();
+                            int addMinBegin;
+                            int colMin;
+                            if(a.getStatus().equals("План")){
+                                addMinBegin=(int)((a.getBegin().getTime()-begin.getTime())/60000);
+                                colMin = a.getTank().getTypeTank().getTime();
+                            }else{
+                                addMinBegin=(int)((a.getFactBegin().getTime()-begin.getTime())/60000);
+                                colMin = (int)((a.getFactEnd().getTime()-begin.getTime())/60000)-addMinBegin;
+                            }
                             if(pX>addMinBegin*weidthMinut && pX < (addMinBegin+colMin)*weidthMinut){
                                 if(activAdmission==null || activAdmission!=a){
                                     activAdmission=a;
@@ -287,6 +327,17 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
 
     void setEditable(boolean editable) {
         this.editable=editable;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode()==KeyEvent.VK_J)
+            jump=true;
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        jump=false;
     }
 
     

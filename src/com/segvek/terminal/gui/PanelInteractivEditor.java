@@ -28,7 +28,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
     JSpinner.DateEditor timeEditor, timeEditor1;
     
     private boolean editableData=false;
-    private double weidthMinute=0.2;
+    private double weidthMinute=2;
     InteractivGrafic gi;
     public PanelInteractivEditor() {
         initComponents();
@@ -195,7 +195,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
 
         jSlider1.setMaximum(50);
         jSlider1.setMinimum(2);
-        jSlider1.setValue(2);
+        jSlider1.setValue(20);
         jSlider1.setFocusable(false);
         jSlider1.setOpaque(false);
         jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {

@@ -94,7 +94,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         removeMouseMotionListener(verticalScroll);
         removeMouseMotionListener(horizontalScroll);
         removeMouseMotionListener(content);
-        
+        removeKeyListener(content);
         
         calc();
         Point beginLeftZona = new Point(0, heightTimeZone);
@@ -130,7 +130,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         addMouseListener(verticalScroll);
         addMouseListener(horizontalScroll);
         addMouseListener(content);
-        
+        addKeyListener(content);
         addComponentListener(this);
         addMouseListener(this);
         
