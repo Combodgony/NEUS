@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -83,7 +82,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
         int wt=endPoint.x-beginPoint.x;
         w=w<wt?wt:w;   
         weidth=(int)w;
-        image = new BufferedImage(weidth, heigth, BufferedImage.TYPE_INT_ARGB);
+        image = new BufferedImage(endPoint.x-beginPoint.x,heigth, BufferedImage.TYPE_INT_ARGB);
     }
     private void clacPositionAdmission(){
         if(posAdmission==null)
@@ -116,8 +115,10 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
         
         g.setColor(new Color(85,85,85));
         int min = (int) ((end.getTime()-begin.getTime())/60000);
+        //todo оптимизация перебора всего отображаемого поля н
         for(int x=0,m=0; m<min; m+=frequencyTime, x=(int)(m*weidthMinut)){
-            g.drawLine(x, 0, x, heigth);
+            if(x>biasX && x<biasX+(endPoint.x-beginPoint.x))
+                g.drawLine(x-(int)(biasX%(m*weidthMinut)), 0, x-(int)(biasX%(m*weidthMinut)), heigth);
         }
         for(int i=0,y=0; i<estakads.size(); i++){
             y+=indent+heigthLine;
@@ -135,17 +136,20 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
         if(begin.getTime()<now.getTime() && end.getTime()>now.getTime()){
             long minut = (now.getTime()-begin.getTime())/60000;
             g.setColor(Color.red);
-            g.drawLine((int)(minut*weidthMinut), 0, (int)(minut*weidthMinut), heigth);
+            g.drawLine((int)(minut*weidthMinut)-biasX, 0, (int)(minut*weidthMinut)-biasX, heigth);
         }
-        return image.getSubimage(biasX,biasY, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
+        return image.getSubimage(0,biasY, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
     }
     private void drawAdmission() {
         Graphics2D g = (Graphics2D)image.getGraphics();
         Date now = new Date();
         GregorianCalendar c = new GregorianCalendar();
         for(Admission a: posAdmission.keySet()){
-            Point p = posAdmission.get(a);
+            Point p = (Point) posAdmission.get(a).clone();
+            p.x-=biasX;
+            p.y-=biasY;
             int colMin=0;
+            
             if(a.getStatus().equals("План")){
                 c.setTime(a.getBegin());
                 c.add(GregorianCalendar.MINUTE, a.getTank().getTypeTank().getTime());
@@ -173,9 +177,12 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener{
         for(DependencyAdmission d:das){
             Admission a = d.getAdmission();
             int colMin = a.getTank().getTypeTank().getTime();
-            Point p = posAdmission.get(a);
-            
-            Point p2 = posAdmission.get(d.getIndependet());
+            Point p = (Point) posAdmission.get(a).clone();
+            p.x-=biasX;
+            p.y-=biasY;
+            Point p2 = (Point) posAdmission.get(d.getIndependet()).clone();
+            p2.x-=biasX;
+            p2.y-=biasY;
             g.setColor(new Color(118, 15, 128));
             g.drawLine(p.x+(int)(colMin*weidthMinut), p.y+heigthLine/2, p2.x, p2.y+heigthLine/2);
             g.fill(new Ellipse2D.Double(p.x+(colMin*weidthMinut)-4, p.y+heigthLine/2-4, 8, 8));

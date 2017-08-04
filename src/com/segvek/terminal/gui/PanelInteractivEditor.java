@@ -187,9 +187,9 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         jCheckBox1.setForeground(new java.awt.Color(204, 204, 204));
         jCheckBox1.setText("Редактирование");
         jCheckBox1.setOpaque(false);
-        jCheckBox1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox1StateChanged(evt);
+        jCheckBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBox1MouseClicked(evt);
             }
         });
 
@@ -350,19 +350,19 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         gi.repaint();
     }//GEN-LAST:event_timeSpinner1StateChanged
 
-    private void jCheckBox1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox1StateChanged
-        editableData=jCheckBox1.isSelected();
-        gi.setEditable(editableData);
-        gi.init();
-        gi.repaint();
-    }//GEN-LAST:event_jCheckBox1StateChanged
-
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
         weidthMinute=jSlider1.getValue()/10.0;
         gi.setWeidthMinut(weidthMinute);
         gi.init();
         gi.repaint();
     }//GEN-LAST:event_jSlider1StateChanged
+
+    private void jCheckBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseClicked
+        editableData=jCheckBox1.isSelected();
+        gi.setEditable(editableData);
+        gi.init();
+        gi.repaint();
+    }//GEN-LAST:event_jCheckBox1MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
