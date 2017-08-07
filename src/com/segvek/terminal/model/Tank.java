@@ -1,4 +1,4 @@
-package com.segvek.terminal.interactiv.model;
+package com.segvek.terminal.model;
 
 
 public class Tank {

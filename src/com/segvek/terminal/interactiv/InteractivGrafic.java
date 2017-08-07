@@ -1,8 +1,8 @@
 package com.segvek.terminal.interactiv;
 
-import com.segvek.terminal.interactiv.model.Admission;
-import com.segvek.terminal.interactiv.model.DependencyAdmission;
-import com.segvek.terminal.interactiv.model.Estakada;
+import com.segvek.terminal.model.Admission;
+import com.segvek.terminal.model.DependencyAdmission;
+import com.segvek.terminal.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -29,14 +29,6 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     
     private int heightTimeZone = 50;
     private double weidthMinut=0.5;
-
-    public double getWeidthMinut() {
-        return weidthMinut;
-    }
-
-    public void setWeidthMinut(double weidthMinut) {
-        this.weidthMinut = weidthMinut;
-    }
     
     private int weigthLeftZona=200;
     private int weigthScroll=15;
@@ -80,6 +72,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     }    
     
     public void init(){ 
+        calc();
         System.gc();
         removeAll();
         
@@ -261,6 +254,12 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         this.editable = editable;
     }
     
-    
+    public double getWeidthMinut() {
+        return weidthMinut;
+    }
+
+    public void setWeidthMinut(double weidthMinut) {
+        this.weidthMinut = weidthMinut;
+    }
 }
 

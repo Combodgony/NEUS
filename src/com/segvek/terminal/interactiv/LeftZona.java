@@ -5,7 +5,7 @@
  */
 package com.segvek.terminal.interactiv;
 
-import com.segvek.terminal.interactiv.model.Estakada;
+import com.segvek.terminal.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;

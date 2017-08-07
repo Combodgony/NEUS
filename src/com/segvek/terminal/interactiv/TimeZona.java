@@ -17,8 +17,7 @@ import java.util.GregorianCalendar;
 class TimeZona implements ScrollListener{
     private int weidth, heigth;
     private int bias=0;
-   
-    int width,heoght;
+    private int k=6; //коефициент необходм для регулировки частоты отображаемых линий времени
     private Point beginPoint,endPoint;
     private Date begin ,end;
     private BufferedImage image;
@@ -33,7 +32,7 @@ class TimeZona implements ScrollListener{
         this.endPoint = endPoint;
         this.begin=begin;
         this.end=end;
-        width=endPoint.x-beginPoint.x;
+        weidth=endPoint.x-beginPoint.x;
         heigth=endPoint.y-beginPoint.y;
         createImage();
     }
@@ -45,6 +44,10 @@ class TimeZona implements ScrollListener{
         heigth=endPoint.y-beginPoint.y;
         weidth=w;
         image = new BufferedImage(endPoint.x-beginPoint.x, heigth, BufferedImage.TYPE_INT_ARGB);
+        
+        if(weidthMinut>1) k=1;
+        else if(weidthMinut>0.3) k=3;
+        else k=6;
     }
     
     public Image getImage(){
@@ -58,12 +61,15 @@ class TimeZona implements ScrollListener{
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(begin);
         
+        g.drawLine(0, 14, weidth, 14);
+        
+        GregorianCalendar t = new GregorianCalendar();
         //todo нужна оптимизаци, здесь происходит перебор всез значений времени на указом периоде 
         //и отображаються только те которіе попадают в оботражаемій отрезок.
         //необходимо создать формулу подсч'та начала отображение и избавиться от полного перебора 
-        for(int x=0,m=0; m<min; m+=frequencyTime, x=(int)(m*weidthMinut)){
+        for(int x=0,m=0; m<min; m+=frequencyTime*k, x=(int)(m*weidthMinut)){
             if(x>bias && x<bias+(endPoint.x-beginPoint.x)){
-                g.drawLine(x-bias%(int)(m*weidthMinut), 0, x-bias%(int)(m*weidthMinut), heigth);
+                g.drawLine(x-bias%(int)(m*weidthMinut), 14, x-bias%(int)(m*weidthMinut), heigth);
                 AffineTransform orig = g.getTransform();
                 g.rotate(-Math.PI/2);
                 StringBuilder b=new StringBuilder();
@@ -71,15 +77,25 @@ class TimeZona implements ScrollListener{
                 b.append(c.get(GregorianCalendar.MINUTE));
                 g.drawString(b.toString(),-heigth+3,x+13-bias%(int)(m*weidthMinut));
                 g.setTransform(orig); 
+                
+                t.setTime(c.getTime());
+                t.add(GregorianCalendar.MINUTE, frequencyTime*k);
+                if(c.get(GregorianCalendar.DATE)!=t.get(GregorianCalendar.DATE)){
+                    StringBuilder sb = new StringBuilder().append(t.get(GregorianCalendar.DAY_OF_MONTH))
+                            .append(".").append(t.get(GregorianCalendar.MONTH)+1)
+                            .append(".").append(t.get(GregorianCalendar.YEAR));
+                    g.drawString(sb.toString(), (int)(x+(frequencyTime*k*weidthMinut)-bias%(int)((m)*weidthMinut)+20), 12);
+                }
             }
-            c.add(GregorianCalendar.MINUTE, frequencyTime);
+            
+            c.add(GregorianCalendar.MINUTE, frequencyTime*k);
         }
         
         Date now = new Date();
         if(begin.getTime()<now.getTime() && end.getTime()>now.getTime()){
             long minut = (now.getTime()-begin.getTime())/60000;
             g.setColor(Color.red);
-            g.drawLine((int)(minut*weidthMinut), 0, (int)(minut*weidthMinut), heigth);
+            g.drawLine((int)(minut*weidthMinut)-bias, 0, (int)(minut*weidthMinut)-bias, heigth);
         }
         
         

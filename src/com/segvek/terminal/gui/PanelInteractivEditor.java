@@ -6,13 +6,13 @@
 package com.segvek.terminal.gui;
 
 import com.segvek.terminal.interactiv.InteractivGrafic;
-import com.segvek.terminal.interactiv.model.Admission;
-import com.segvek.terminal.interactiv.model.DependencyAdmission;
-import com.segvek.terminal.interactiv.model.DrainLocation;
-import com.segvek.terminal.interactiv.model.Estakada;
-import com.segvek.terminal.interactiv.model.Tank;
-import com.segvek.terminal.interactiv.model.TypeEstakada;
-import com.segvek.terminal.interactiv.model.TypeTank;
+import com.segvek.terminal.model.Admission;
+import com.segvek.terminal.model.DependencyAdmission;
+import com.segvek.terminal.model.DrainLocation;
+import com.segvek.terminal.model.Estakada;
+import com.segvek.terminal.model.Tank;
+import com.segvek.terminal.model.TypeEstakada;
+import com.segvek.terminal.model.TypeTank;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -143,7 +143,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         jPanel1.setMinimumSize(new java.awt.Dimension(100, 30));
         jPanel1.setPreferredSize(new java.awt.Dimension(450, 30));
 
-        timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm");
+        timeEditor = new JSpinner.DateEditor(timeSpinner, "HH");
         timeSpinner.setEditor(timeEditor);
         timeSpinner.setValue(new Date());
         timeSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -166,7 +166,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
             }
         });
 
-        timeEditor1 = new JSpinner.DateEditor(timeSpinner1, "HH:mm");
+        timeEditor1 = new JSpinner.DateEditor(timeSpinner1, "HH");
         timeSpinner1.setEditor(timeEditor1);
         timeSpinner1.setValue(new Date());
         timeSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -279,7 +279,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 693, Short.MAX_VALUE)
+            .addGap(0, 777, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,8 +292,8 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 884, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 884, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -21,8 +21,8 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" pref="800" max="32767" attributes="0"/>
-          <Component id="jSplitPane1" alignment="1" max="32767" attributes="0"/>
+          <Component id="jPanel1" pref="884" max="32767" attributes="0"/>
+          <Component id="jSplitPane1" alignment="1" pref="884" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -117,7 +117,7 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JSpinner( new SpinnerDateModel() )"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="timeEditor = new JSpinner.DateEditor(timeSpinner, &quot;HH:mm&quot;);&#xa;timeSpinner.setEditor(timeEditor);&#xa;timeSpinner.setValue(new Date());"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="timeEditor = new JSpinner.DateEditor(timeSpinner, &quot;HH&quot;);&#xa;timeSpinner.setEditor(timeEditor);&#xa;timeSpinner.setValue(new Date());"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
@@ -153,7 +153,7 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new JSpinner( new SpinnerDateModel() )"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="timeEditor1 = new JSpinner.DateEditor(timeSpinner1, &quot;HH:mm&quot;);&#xa;timeSpinner1.setEditor(timeEditor1);&#xa;timeSpinner1.setValue(new Date());"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="timeEditor1 = new JSpinner.DateEditor(timeSpinner1, &quot;HH&quot;);&#xa;timeSpinner1.setEditor(timeEditor1);&#xa;timeSpinner1.setValue(new Date());"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="jButton1">
@@ -247,7 +247,7 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="693" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="777" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

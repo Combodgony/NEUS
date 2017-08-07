@@ -1,4 +1,4 @@
-package com.segvek.terminal.interactiv.model;
+package com.segvek.terminal.model;
 
 import java.util.ArrayList;
 import java.util.List;

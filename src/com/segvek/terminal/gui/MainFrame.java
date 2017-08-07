@@ -19,11 +19,22 @@ import javax.swing.UIManager;
  */
 public class MainFrame extends javax.swing.JFrame{
     
+    PanelHello helloPanel;
+    PanelInteractivEditor interactivEditorPanel;
+    PanelCcontractList contractListPanel;
+    PanelClientList clientListPanel;
+    
     public MainFrame() {
         initComponents();
-        jTabbedPane1.addTab("Приветствие", new PanelHello());
-        jTabbedPane1.addTab("Интерактивный редактор", new PanelInteractivEditor());
-
+        helloPanel=new PanelHello();
+        interactivEditorPanel = new PanelInteractivEditor();
+        contractListPanel=new PanelCcontractList();
+        clientListPanel= new PanelClientList();
+        
+        jTabbedPane1.addTab("Приветствие", helloPanel);
+        jTabbedPane1.addTab("Интерактивный редактор", interactivEditorPanel);
+        jTabbedPane1.addTab("Договора", contractListPanel);
+        jTabbedPane1.addTab("Клиенты", clientListPanel);
     }
     
  
@@ -39,6 +50,7 @@ public class MainFrame extends javax.swing.JFrame{
         jLabel1 = new javax.swing.JLabel();
         popupMenu1 = new java.awt.PopupMenu();
         insptumentPanel = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         contentPanel = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         statusPanel = new javax.swing.JPanel();
@@ -47,6 +59,8 @@ public class MainFrame extends javax.swing.JFrame{
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         interactivRedactor = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
 
         jLabel1.setText("jLabel1");
 
@@ -65,18 +79,27 @@ public class MainFrame extends javax.swing.JFrame{
         insptumentPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(null, new javax.swing.border.MatteBorder(null)));
         insptumentPanel.setMaximumSize(new java.awt.Dimension(32767, 50));
         insptumentPanel.setName(""); // NOI18N
-        insptumentPanel.setPreferredSize(new java.awt.Dimension(800, 20));
+        insptumentPanel.setPreferredSize(new java.awt.Dimension(800, 50));
         insptumentPanel.setRequestFocusEnabled(false);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/savePasive.png"))); // NOI18N
+        jButton1.setFocusable(false);
 
         javax.swing.GroupLayout insptumentPanelLayout = new javax.swing.GroupLayout(insptumentPanel);
         insptumentPanel.setLayout(insptumentPanelLayout);
         insptumentPanelLayout.setHorizontalGroup(
             insptumentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(insptumentPanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         insptumentPanelLayout.setVerticalGroup(
             insptumentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 18, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, insptumentPanelLayout.createSequentialGroup()
+                .addGap(2, 2, 2)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
         contentPanel.setBackground(new java.awt.Color(51, 51, 51));
@@ -130,12 +153,30 @@ public class MainFrame extends javax.swing.JFrame{
         interactivRedactor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
         interactivRedactor.setSelected(true);
         interactivRedactor.setText("Интерактивный редактор");
-        interactivRedactor.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                interactivRedactorStateChanged(evt);
+        interactivRedactor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                interactivRedactorMouseReleased(evt);
             }
         });
         jMenu5.add(interactivRedactor);
+
+        jCheckBoxMenuItem1.setSelected(true);
+        jCheckBoxMenuItem1.setText("Договора");
+        jCheckBoxMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jCheckBoxMenuItem1);
+
+        jCheckBoxMenuItem2.setSelected(true);
+        jCheckBoxMenuItem2.setText("Страница приветствия");
+        jCheckBoxMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jCheckBoxMenuItem2);
 
         jMenuBar2.add(jMenu5);
 
@@ -152,7 +193,7 @@ public class MainFrame extends javax.swing.JFrame{
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(insptumentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(insptumentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
@@ -162,10 +203,6 @@ public class MainFrame extends javax.swing.JFrame{
         setSize(new java.awt.Dimension(813, 463));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void interactivRedactorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_interactivRedactorStateChanged
-        
-    }//GEN-LAST:event_interactivRedactorStateChanged
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
@@ -178,6 +215,30 @@ public class MainFrame extends javax.swing.JFrame{
             else
                 setExtendedState(NORMAL);
     }//GEN-LAST:event_formKeyReleased
+
+    private void jCheckBoxMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem1ActionPerformed
+        if(!jCheckBoxMenuItem1.getState()){
+            jTabbedPane1.remove(contractListPanel);
+        }else{
+            jTabbedPane1.addTab("Договора", contractListPanel);
+        }
+    }//GEN-LAST:event_jCheckBoxMenuItem1ActionPerformed
+
+    private void interactivRedactorMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_interactivRedactorMouseReleased
+        if(!interactivRedactor.getState()){
+            jTabbedPane1.remove(interactivEditorPanel);
+        }else{
+            jTabbedPane1.addTab("Интерактивный редактор", interactivEditorPanel);
+        }
+    }//GEN-LAST:event_interactivRedactorMouseReleased
+
+    private void jCheckBoxMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItem2ActionPerformed
+        if(!jCheckBoxMenuItem2.getState()){
+            jTabbedPane1.remove(helloPanel);
+        }else{
+            jTabbedPane1.addTab("Приветствие", helloPanel);
+        }
+    }//GEN-LAST:event_jCheckBoxMenuItem2ActionPerformed
 
     boolean f = false;
     
@@ -231,6 +292,9 @@ public class MainFrame extends javax.swing.JFrame{
     private javax.swing.JPanel contentPanel;
     private javax.swing.JPanel insptumentPanel;
     private javax.swing.JCheckBoxMenuItem interactivRedactor;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;

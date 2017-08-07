@@ -1,8 +1,8 @@
 package com.segvek.terminal.interactiv;
 
-import com.segvek.terminal.interactiv.model.Admission;
-import com.segvek.terminal.interactiv.model.DependencyAdmission;
-import com.segvek.terminal.interactiv.model.Estakada;
+import com.segvek.terminal.model.Admission;
+import com.segvek.terminal.model.DependencyAdmission;
+import com.segvek.terminal.model.Estakada;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -170,8 +170,10 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
                 colMin = (int)((a.getFactEnd().getTime()-a.getFactBegin().getTime())/60000);
             }
             g.fillRoundRect(p.x+1, p.y+1, (int)(colMin*weidthMinut)-2, heigthLine-2,10, 10);
-            g.setColor(Color.BLACK);
-            g.drawString(a.getTank().getNumber(), p.x+5, p.y+heigthLine-5);
+            if(weidthMinut>1.5){
+                g.setColor(Color.BLACK);
+                g.drawString(a.getTank().getNumber(), p.x+5, p.y+heigthLine-5);
+            }
             if(activAdmission!=null && activAdmission.getId()==a.getId() /*&& a.getStatus().equals("План")*/){
                 g.setColor(Color.WHITE);
                 g.drawRoundRect(p.x+2, p.y+2, (int)(colMin*weidthMinut)-4, heigthLine-4,10, 10);
