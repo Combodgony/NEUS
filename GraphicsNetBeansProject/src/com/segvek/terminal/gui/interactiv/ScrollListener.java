@@ -1,4 +1,4 @@
-package com.segvek.terminal.interactiv;
+package com.segvek.terminal.gui.interactiv;
 
 public interface ScrollListener{
     /**

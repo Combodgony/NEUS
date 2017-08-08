@@ -1,4 +1,4 @@
-package com.segvek.terminal.interactiv;
+package com.segvek.terminal.gui.interactiv;
 
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DependencyAdmission;

@@ -6,6 +6,7 @@
 package com.segvek.terminal.gui;
 
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
+import com.segvek.terminal.dao.mysql.ClientMysqlDAO;
 import java.awt.event.KeyEvent;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -83,6 +84,7 @@ public class MainFrame extends javax.swing.JFrame{
         insptumentPanel.setRequestFocusEnabled(false);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/savePasive.png"))); // NOI18N
+        jButton1.setEnabled(false);
         jButton1.setFocusable(false);
 
         javax.swing.GroupLayout insptumentPanelLayout = new javax.swing.GroupLayout(insptumentPanel);
@@ -270,7 +272,7 @@ public class MainFrame extends javax.swing.JFrame{
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {

@@ -5,7 +5,7 @@
  */
 package com.segvek.terminal.gui;
 
-import com.segvek.terminal.interactiv.InteractivGrafic;
+import com.segvek.terminal.gui.interactiv.InteractivGrafic;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DependencyAdmission;
 import com.segvek.terminal.model.DrainLocation;

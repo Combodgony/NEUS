@@ -6,7 +6,11 @@
 package com.segvek.terminal.gui;
 
 import com.segvek.terminal.model.Client;
+import com.segvek.terminal.service.ClientService;
+import com.segvek.terminal.service.ServiceException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
 import javax.swing.JTextField;
@@ -22,12 +26,17 @@ public class PanelClientList extends javax.swing.JPanel {
     PanelClientListControl control;
     
     public PanelClientList() {
-        initComponents();
-         control = new PanelClientListControl();
-         control.setListClients(jList2);
-         control.setClientName(jTextField1);
-         control.setClientAdress(jTextField2);
-         control.init();
+        try {
+            initComponents();
+            control = new PanelClientListControl();
+            control.setListClients(jList2);
+            control.setClientName(jTextField1);
+            control.setClientAdress(jTextField2);
+            control.init();
+        } catch (Exception ex) {
+            Logger.getLogger(PanelClientList.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(-1);
+        }
     }
 
     /**
@@ -131,10 +140,16 @@ class PanelClientListControl{
     
     
     //logic element
+    private ClientService service;
     private Client activClient=null;
+
+    public PanelClientListControl() {
+        service=new ClientService();
+    }
     
     
-    void init() {
+    
+    void init() throws ServiceException {
         CleintListModel<Client> clm = new CleintListModel<>();
         listClients.setModel(clm);
         listClients.addListSelectionListener(new ListSelectionListener() {
@@ -145,10 +160,9 @@ class PanelClientListControl{
                 clientAdress.setText(activClient.getAdress());
             }
         });
-        clm.addElement(new Client(1L, "Днипро", "Адресс ООО Днипро"));
-        clm.addElement(new Client(1L, "Ингул", "Адресс ООО Ингул"));
-        clm.addElement(new Client(1L, "Зоря", "Адресс ООО Зоря"));
-        clm.addElement(new Client(1L, "Буг", "Адресс ООО Буг"));
+        for(Client c:service.getAllClients()){
+            clm.addElement(c);
+        }
     }
     
     
