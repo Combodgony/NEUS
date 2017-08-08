@@ -1,18 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.segvek.terminal.model;
 
-/**
- *
- * @author valeriy.lipin
- */
+import java.util.List;
+
+
 public class Client {
     private Long id;
     private String name;
     private String adress;
+    
+    private List<Contract> contracts;
 
     public Client(Long id, String name, String adress) {
         this.id = id;
@@ -44,6 +40,15 @@ public class Client {
         this.adress = adress;
     }
 
+    public List<Contract> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(List<Contract> contracts) {
+        this.contracts = contracts;
+    }
+    
+    
     @Override
     public String toString() {
         return name;

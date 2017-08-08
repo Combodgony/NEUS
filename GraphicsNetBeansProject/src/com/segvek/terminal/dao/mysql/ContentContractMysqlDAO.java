@@ -1,11 +1,14 @@
 package com.segvek.terminal.dao.mysql;
 
-import com.segvek.terminal.model.lazy.ClientLazy;
 import com.mysql.jdbc.PreparedStatement;
-import com.segvek.terminal.dao.ClientDAO;
+import com.segvek.terminal.dao.ContentContractDAO;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.db.ConnectionManager;
+import com.segvek.terminal.model.Cargo;
 import com.segvek.terminal.model.Client;
+import com.segvek.terminal.model.ContentContract;
+import com.segvek.terminal.model.Contract;
+import com.segvek.terminal.model.lazy.ClientLazy;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,25 +17,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+public class ContentContractMysqlDAO implements ContentContractDAO {
 
-public class ClientMysqlDAO implements ClientDAO{
-    
     @Override
-    public List<Client> getAll() throws DAOException {   
-        List<Client> list = new ArrayList<Client>();
+    public List<ContentContract> getContentByContract(Contract c) throws DAOException {
+        List<ContentContract> list = new ArrayList<>();
 
         Connection connection = null;
         PreparedStatement statment = null;
         ResultSet res=null;
         try {
             connection = ConnectionManager.getInstance().instanceConnection();
-            String request="SELECT * FROM client";
+            String request="SELECT con.volume, c.id, c.name FROM contentcontract con INNER JOIN cargo c ON con.idCargo=c.id WHERE idContract=?";
             statment = (PreparedStatement) connection.prepareStatement(request);
+            statment.setLong(1, c.getId());
             res = statment.executeQuery();
             while(res.next()){
-                ClientLazy c = new ClientLazy(res.getLong("id"), res.getString("name"), res.getString("adress"));
-                c.setContractDAO(new ContractMysqlDAO());
-                list.add(c);
+                ContentContract cc = new ContentContract(new Cargo(res.getLong("id"), res.getString("name")), c, res.getInt("volume"));
+                list.add(cc);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,6 +66,5 @@ public class ClientMysqlDAO implements ClientDAO{
         }
         return list;
     }
-    
     
 }

@@ -6,6 +6,8 @@
 package com.segvek.terminal.gui;
 
 import com.segvek.terminal.model.Client;
+import com.segvek.terminal.model.ContentContract;
+import com.segvek.terminal.model.Contract;
 import com.segvek.terminal.service.ClientService;
 import com.segvek.terminal.service.ServiceException;
 import java.util.ArrayList;
@@ -13,9 +15,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
 import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -32,6 +36,8 @@ public class PanelClientList extends javax.swing.JPanel {
             control.setListClients(jList2);
             control.setClientName(jTextField1);
             control.setClientAdress(jTextField2);
+            control.setContractList(jTable1);
+            control.setContentContractList(jTable2);
             control.init();
         } catch (Exception ex) {
             Logger.getLogger(PanelClientList.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,6 +62,12 @@ public class PanelClientList extends javax.swing.JPanel {
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(51, 51, 51));
 
@@ -76,6 +88,60 @@ public class PanelClientList extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(204, 204, 204));
         jLabel2.setText("Адресс:");
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Номер", "Дата начала", "Дата окончания"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Договора с клиентом");
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Груз", "Колличество"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTable2);
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Содержание договора");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -83,12 +149,27 @@ public class PanelClientList extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
-                    .addComponent(jTextField2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1)
+                            .addComponent(jTextField2)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(247, 247, 247)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -102,7 +183,15 @@ public class PanelClientList extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(363, Short.MAX_VALUE))
+                .addGap(7, 7, 7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
         jSplitPane1.setRightComponent(jPanel1);
@@ -111,7 +200,7 @@ public class PanelClientList extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,14 +208,24 @@ public class PanelClientList extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        control.showContractInfo();
+    }//GEN-LAST:event_jTable1MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JList<Client> jList2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
@@ -137,6 +236,8 @@ class PanelClientListControl{
     private JList<Client> listClients;
     private JTextField clientName;
     private JTextField clientAdress;
+    private JTable contractList;
+    private JTable contentContractList;
     
     
     //logic element
@@ -149,15 +250,14 @@ class PanelClientListControl{
     
     
     
-    void init() throws ServiceException {
+    public void init() throws ServiceException {
         CleintListModel<Client> clm = new CleintListModel<>();
         listClients.setModel(clm);
         listClients.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 activClient=listClients.getSelectedValue();
-                clientName.setText(activClient.getName());
-                clientAdress.setText(activClient.getAdress());
+                showClientInfo();
             }
         });
         for(Client c:service.getAllClients()){
@@ -165,6 +265,31 @@ class PanelClientListControl{
         }
     }
     
+    
+    private void showClientInfo(){
+        clientName.setText(activClient.getName());
+        clientAdress.setText(activClient.getAdress());
+        DefaultTableModel dtm = (DefaultTableModel) contractList.getModel();
+        dtm.setRowCount(0);
+        for(Contract c:activClient.getContracts()){
+            dtm.addRow(new Object[]{c,c.getBeginDate(),c.getEndDate()});
+        }
+        DefaultTableModel dtmContent = (DefaultTableModel) contentContractList.getModel();
+        dtmContent.setRowCount(0);
+    };
+    
+    void showContractInfo() {
+        int row = contractList.getSelectedRow();
+        if(row<0)
+            return;
+        Contract contract = (Contract) contractList.getValueAt(row, 0);
+        
+        DefaultTableModel dtm = (DefaultTableModel) contentContractList.getModel();
+        dtm.setRowCount(0);
+        for(ContentContract cc:contract.getContent()){
+            dtm.addRow(new Object[]{cc.getCargo().getName(),cc.getVolume()});
+        }
+    }
     
     public void setListClients(JList<Client> listClients) {
         this.listClients = listClients;
@@ -176,6 +301,14 @@ class PanelClientListControl{
 
     public void setClientAdress(JTextField clientAdress) {
         this.clientAdress = clientAdress;
+    }
+
+    public void setContractList(JTable contractList) {
+        this.contractList = contractList;
+    }
+
+    public void setContentContractList(JTable contentContractList) {
+        this.contentContractList = contentContractList;
     }
 
     

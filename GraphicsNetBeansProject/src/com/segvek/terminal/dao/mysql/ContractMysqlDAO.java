@@ -1,11 +1,13 @@
+
 package com.segvek.terminal.dao.mysql;
 
-import com.segvek.terminal.model.lazy.ClientLazy;
 import com.mysql.jdbc.PreparedStatement;
-import com.segvek.terminal.dao.ClientDAO;
+import com.segvek.terminal.dao.ContractDAO;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.db.ConnectionManager;
 import com.segvek.terminal.model.Client;
+import com.segvek.terminal.model.Contract;
+import com.segvek.terminal.model.lazy.ContractLazy;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,25 +16,28 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+public class ContractMysqlDAO implements ContractDAO{
 
-public class ClientMysqlDAO implements ClientDAO{
-    
     @Override
-    public List<Client> getAll() throws DAOException {   
-        List<Client> list = new ArrayList<Client>();
+    public List<Contract> getContractsByClient(Client c) throws DAOException {
+        List<Contract> list = new ArrayList<Contract>();
 
         Connection connection = null;
         PreparedStatement statment = null;
         ResultSet res=null;
         try {
             connection = ConnectionManager.getInstance().instanceConnection();
-            String request="SELECT * FROM client";
+            String request="SELECT * FROM contract WHERE idClient=?";
             statment = (PreparedStatement) connection.prepareStatement(request);
+            statment.setLong(1, c.getId());
             res = statment.executeQuery();
             while(res.next()){
-                ClientLazy c = new ClientLazy(res.getLong("id"), res.getString("name"), res.getString("adress"));
-                c.setContractDAO(new ContractMysqlDAO());
-                list.add(c);
+                ContractLazy conrtact = new ContractLazy(res.getLong("id")
+                        , res.getString("number")
+                        , res.getDate("beginDate")
+                        , res.getDate("endDate"), c);
+                conrtact.setContentContractDAO(new ContentContractMysqlDAO());
+                list.add(conrtact);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -64,6 +69,5 @@ public class ClientMysqlDAO implements ClientDAO{
         }
         return list;
     }
-    
     
 }
