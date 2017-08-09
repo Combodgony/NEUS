@@ -9,7 +9,7 @@ package com.segvek.terminal.gui.tab;
  *
  * @author valeriy.lipin
  */
-public class PanelCcontractList extends javax.swing.JPanel {
+public class PanelCcontractList extends Tab{
 
     /**
      * Creates new form PanelCcontractList
@@ -83,4 +83,9 @@ public class PanelCcontractList extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public boolean isCanBeAdd() {
+        return true;
+    }
 }

@@ -5,10 +5,8 @@ import com.segvek.terminal.dao.ContentContractDAO;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.db.ConnectionManager;
 import com.segvek.terminal.model.Cargo;
-import com.segvek.terminal.model.Client;
 import com.segvek.terminal.model.ContentContract;
 import com.segvek.terminal.model.Contract;
-import com.segvek.terminal.model.lazy.ClientLazy;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -65,6 +63,42 @@ public class ContentContractMysqlDAO implements ContentContractDAO {
             }
         }
         return list;
+    }
+
+    @Override
+    public void saveContentContract(ContentContract cc) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statment = null;
+        try {
+            connection = ConnectionManager.getInstance().instanceConnection();
+            String request="INSERT INTO contentcontract (idContract,idCargo,volume) VALUES (?,?,?);";
+            statment = (PreparedStatement) connection.prepareStatement(request);
+            statment.setLong(1, cc.getContract().getId());
+            statment.setLong(2, cc.getCargo().getId());
+            statment.setInt(3, cc.getVolume());
+            statment.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException();
+        }finally{
+            try {
+                if(statment!=null)
+                    statment.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                throw new DAOException();
+            }finally{
+                if(connection!=null){
+                    try {
+                        connection.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new DAOException();
+                    }
+                }
+            }
+        }
+        
     }
     
 }

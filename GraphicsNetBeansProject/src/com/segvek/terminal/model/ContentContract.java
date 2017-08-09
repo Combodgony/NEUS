@@ -35,6 +35,11 @@ public class ContentContract {
     public void setContract(Contract contract) {
         this.contract = contract;
     }
+
+    @Override
+    public String toString() {
+        return cargo.getName();
+    }
     
     
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.segvek.terminal.gui;
 
 import com.segvek.terminal.gui.tab.PanelClientList;
@@ -11,6 +6,8 @@ import com.segvek.terminal.gui.tab.PanelHello;
 import com.segvek.terminal.gui.tab.PanelCcontractList;
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 import com.segvek.terminal.gui.tab.CloseableTabComponent;
+import com.segvek.terminal.gui.tab.PanelContract;
+import com.segvek.terminal.gui.tab.Tab;
 import java.awt.event.KeyEvent;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -20,20 +17,42 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-/**
- *
- * @author Panas
- */
+
 public class MainFrame extends javax.swing.JFrame{
+    private static MainFrame instance;
+    public static MainFrame getInstance(){
+        return instance;
+    }
     
-    PanelHello helloPanel;
-    PanelInteractivEditor interactivEditorPanel;
-    PanelCcontractList contractListPanel;
-    PanelClientList clientListPanel;
+    public void addPanelTab(String title,JPanel p){
+        int tabIndex = jTabbedPane1.getTabCount();
+        jTabbedPane1.insertTab(title, null, p, null, tabIndex);
+        jTabbedPane1.setTabComponentAt(tabIndex, new CloseableTabComponent(jTabbedPane1, title));
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (jTabbedPane1.getTabCount() > 1) {
+                    jTabbedPane1.setSelectedIndex(jTabbedPane1.getTabCount() - 1);
+                }
+            }
+        });
+    }
+    public void initInstrumentPanel(){
+        Tab tab = (Tab) jTabbedPane1.getSelectedComponent();
+        btnSave.setEnabled(tab.isNeedSave());
+        btnAdd.setEnabled(tab.isCanBeAdd());
+    }
+    
+    
+    private PanelHello helloPanel;
+    private PanelInteractivEditor interactivEditorPanel;
+    private PanelCcontractList contractListPanel;
+    private PanelClientList clientListPanel;
        
     
     
-    public MainFrame() {
+    private MainFrame() {
+        instance=this;
         initComponents();
         helloPanel=new PanelHello();
         interactivEditorPanel = new PanelInteractivEditor();
@@ -56,8 +75,8 @@ public class MainFrame extends javax.swing.JFrame{
         jLabel1 = new javax.swing.JLabel();
         popupMenu1 = new java.awt.PopupMenu();
         insptumentPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         contentPanel = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         statusPanel = new javax.swing.JPanel();
@@ -89,23 +108,28 @@ public class MainFrame extends javax.swing.JFrame{
         insptumentPanel.setPreferredSize(new java.awt.Dimension(800, 50));
         insptumentPanel.setRequestFocusEnabled(false);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/savePasive.png"))); // NOI18N
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton1.setEnabled(false);
-        jButton1.setFocusable(false);
-        jButton1.setMaximumSize(new java.awt.Dimension(25, 25));
-        jButton1.setMinimumSize(new java.awt.Dimension(25, 25));
-        jButton1.setPreferredSize(new java.awt.Dimension(25, 25));
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/plus.png"))); // NOI18N
-        jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jButton3.setFocusable(false);
-        jButton3.setMaximumSize(new java.awt.Dimension(25, 25));
-        jButton3.setMinimumSize(new java.awt.Dimension(25, 25));
-        jButton3.setPreferredSize(new java.awt.Dimension(25, 25));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/saveActive.png"))); // NOI18N
+        btnSave.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnSave.setEnabled(false);
+        btnSave.setFocusable(false);
+        btnSave.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnSave.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnSave.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/plus.png"))); // NOI18N
+        btnAdd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAdd.setFocusable(false);
+        btnAdd.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnAdd.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnAdd.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
             }
         });
 
@@ -115,9 +139,9 @@ public class MainFrame extends javax.swing.JFrame{
             insptumentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(insptumentPanelLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         insptumentPanelLayout.setVerticalGroup(
@@ -125,14 +149,24 @@ public class MainFrame extends javax.swing.JFrame{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, insptumentPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(insptumentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19))
         );
 
         contentPanel.setBackground(new java.awt.Color(51, 51, 51));
 
         jTabbedPane1.setFocusable(false);
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
@@ -251,49 +285,37 @@ public class MainFrame extends javax.swing.JFrame{
         }
     }//GEN-LAST:event_interactivRedactorMouseReleased
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        int tabIndex = jTabbedPane1.getTabCount();
-        String tabTitle = "Tab " + (Math.random()*100) + "  ";
-        jTabbedPane1.insertTab(tabTitle, null, new JPanel(), null, tabIndex);
-        jTabbedPane1.setTabComponentAt(tabIndex, new CloseableTabComponent(jTabbedPane1, tabTitle));
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (jTabbedPane1.getTabCount() > 1) {
-                    jTabbedPane1.setSelectedIndex(jTabbedPane1.getTabCount() - 1);
-                }
-            }
-        });
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        if(jTabbedPane1.getSelectedComponent()==clientListPanel)
+            addPanelTab("Клиент (Новый) ", new Tab());
+        if(jTabbedPane1.getSelectedComponent()==contractListPanel)
+            addPanelTab("Договор (Новый) ", new PanelContract());
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        initInstrumentPanel();
+    }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        Tab tab = (Tab) jTabbedPane1.getSelectedComponent();
+        if(tab.getClass().equals(PanelContract.class)){
+            tab.save();
+            CloseableTabComponent c = (CloseableTabComponent) jTabbedPane1.getTabComponentAt(jTabbedPane1.getSelectedIndex());
+            StringBuilder sb= new StringBuilder();
+            sb.append(tab.getName()).append("  ");
+            c.setTile(sb.toString());
+            initInstrumentPanel();
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
   
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        
+    public static void main(String args[]) {  
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -312,11 +334,11 @@ public class MainFrame extends javax.swing.JFrame{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnSave;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JPanel insptumentPanel;
     private javax.swing.JCheckBoxMenuItem interactivRedactor;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu4;

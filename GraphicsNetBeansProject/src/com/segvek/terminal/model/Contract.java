@@ -1,5 +1,7 @@
 package com.segvek.terminal.model;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +74,18 @@ public class Contract {
 
     public void setContent(List<ContentContract> content) {
         this.content = content;
+    }
+
+    public void addContentElement(ContentContract cc) {
+        if(content==null)
+            content=new ArrayList<>();
+        content.add(cc);
+    }
+
+    public void deleteElementContract(ContentContract cc) {
+        if(content!=null){
+            content.remove(cc);
+        }
     }
     
     

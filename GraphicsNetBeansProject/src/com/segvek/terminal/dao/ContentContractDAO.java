@@ -8,4 +8,6 @@ import java.util.List;
 public interface ContentContractDAO {
     
     List<ContentContract> getContentByContract(Contract c) throws DAOException;
+
+    void saveContentContract(ContentContract cc) throws DAOException;
 }

@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -53,9 +54,19 @@ public class CloseableTabComponent extends JPanel {
                 int tabIndex = getTabIndex();
                 if (tabIndex >= 0) {
                     // remove the tab from the tabbed pane
-                    tabbedPane.removeTabAt(tabIndex);
+                    Tab tab = (Tab) tabbedPane.getComponentAt(tabIndex);
+                    if(tab.isNeedSave()){
+                        if (JOptionPane.showConfirmDialog(null, "Вы хотите выйти не сохранив изменения?","Предупреждение",
+                                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            tabbedPane.removeTabAt(tabIndex);
+                        }else{
+                            return;
+                        }
+                            
+                    }else{
+                        tabbedPane.removeTabAt(tabIndex);
+                    }
                 }
-                // the tab we removed maybe the selected tab so we have to select another one
                 if ((tabbedPane.getTabCount() > 1) && (tabbedPane.getSelectedIndex() == tabbedPane.getTabCount() - 1)) {
                     tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
                 }
@@ -134,5 +145,10 @@ public class CloseableTabComponent extends JPanel {
             return prefSize;
         }
         
+    }
+    
+    public void setTile(String title){
+        titleLabel.setText(title);
+        repaint();
     }
 }

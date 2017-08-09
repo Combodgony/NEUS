@@ -10,5 +10,12 @@ package com.segvek.terminal.service;
  * @author valeriy.lipin
  */
 public class ServiceException extends Exception{
+
+    public ServiceException() {
+    }
+
+    public ServiceException(String message) {
+        super(message);
+    }
     
 }

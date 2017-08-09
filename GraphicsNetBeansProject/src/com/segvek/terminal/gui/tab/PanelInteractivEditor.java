@@ -24,7 +24,7 @@ import javax.swing.SpinnerDateModel;
  *
  * @author Panas
  */
-public class PanelInteractivEditor extends javax.swing.JPanel {
+public class PanelInteractivEditor extends Tab{
     JSpinner.DateEditor timeEditor, timeEditor1;
     
     private boolean editableData=false;
@@ -380,4 +380,5 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
     private javax.swing.JSpinner timeSpinner;
     private javax.swing.JSpinner timeSpinner1;
     // End of variables declaration//GEN-END:variables
+
 }

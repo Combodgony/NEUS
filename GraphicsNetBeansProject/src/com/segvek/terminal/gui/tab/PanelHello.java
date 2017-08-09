@@ -5,14 +5,12 @@
  */
 package com.segvek.terminal.gui.tab;
 
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 /**
  *
  * @author Panas
  */
-public class PanelHello extends JPanel {
+public class PanelHello extends Tab{
 
     public PanelHello() {
         initComponents();
@@ -179,4 +177,5 @@ public class PanelHello extends JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
 }
