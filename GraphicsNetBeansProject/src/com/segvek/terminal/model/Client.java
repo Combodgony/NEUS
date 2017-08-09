@@ -53,6 +53,12 @@ public class Client {
     public String toString() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Client && this.id==((Client)obj).getId(); 
+    }
+    
     
     
 }

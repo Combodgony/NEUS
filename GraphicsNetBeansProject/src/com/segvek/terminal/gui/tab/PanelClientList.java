@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.segvek.terminal.gui.tab;
 
 import com.segvek.terminal.model.Client;
@@ -21,14 +16,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author valeriy.lipin
- */
-public class PanelClientList extends Tab{
+
+public class PanelClientList extends Tab {
 
     PanelClientListControl control;
-    
+
     public PanelClientList() {
         try {
             initComponents();
@@ -39,11 +31,11 @@ public class PanelClientList extends Tab{
             control.setContractList(jTable1);
             control.setContentContractList(jTable2);
             control.init();
-        } catch (Exception ex) {
+        } catch (ServiceException ex) {
             Logger.getLogger(PanelClientList.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(-1);
         }
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -232,76 +224,76 @@ public class PanelClientList extends Tab{
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 
- 
     @Override
     public boolean isCanBeAdd() {
         return true;
     }
 }
 
-class PanelClientListControl{
+class PanelClientListControl implements ListSelectionListener {
+
     //form elements 
     private JList<Client> listClients;
     private JTextField clientName;
     private JTextField clientAdress;
     private JTable contractList;
     private JTable contentContractList;
-    
-    
+
     //logic element
     private ClientService service;
-    private Client activClient=null;
+    private Client activClient = null;
 
     public PanelClientListControl() {
-        service=new ClientService();
+        service = new ClientService();
     }
-    
-    
-    
+
     public void init() throws ServiceException {
         CleintListModel<Client> clm = new CleintListModel<>();
         listClients.setModel(clm);
-        listClients.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                activClient=listClients.getSelectedValue();
-                showClientInfo();
-            }
-        });
-        for(Client c:service.getAllClients()){
+        listClients.removeListSelectionListener(this);
+        listClients.addListSelectionListener(this);
+        initListClients();
+
+    }
+
+    void initListClients() throws ServiceException {
+        CleintListModel<Client> clm = (CleintListModel<Client>) listClients.getModel();
+        for (Client c : service.getAllClients()) {
             clm.addElement(c);
         }
     }
-    
-    
-    private void showClientInfo(){
+
+    private void showClientInfo() {
         clientName.setText(activClient.getName());
         clientAdress.setText(activClient.getAdress());
         DefaultTableModel dtm = (DefaultTableModel) contractList.getModel();
         dtm.setRowCount(0);
-        for(Contract c:activClient.getContracts()){
-            dtm.addRow(new Object[]{c,c.getBeginDate(),c.getEndDate()});
+        for (Contract c : activClient.getContracts()) {
+            dtm.addRow(new Object[]{c, c.getBeginDate(), c.getEndDate()});
         }
         DefaultTableModel dtmContent = (DefaultTableModel) contentContractList.getModel();
         dtmContent.setRowCount(0);
-    };
+    }
+
+    ;
     
     void showContractInfo() {
         int row = contractList.getSelectedRow();
-        if(row<0)
+        if (row < 0) {
             return;
+        }
         Contract contract = (Contract) contractList.getValueAt(row, 0);
-        
+
         DefaultTableModel dtm = (DefaultTableModel) contentContractList.getModel();
         dtm.setRowCount(0);
-        for(ContentContract cc:contract.getContent()){
-            dtm.addRow(new Object[]{cc.getCargo().getName(),cc.getVolume()});
+        for (ContentContract cc : contract.getContent()) {
+            dtm.addRow(new Object[]{cc.getCargo().getName(), cc.getVolume()});
         }
     }
-    
+
     public void setListClients(JList<Client> listClients) {
         this.listClients = listClients;
-    }    
+    }
 
     public void setClientName(JTextField clientName) {
         this.clientName = clientName;
@@ -319,12 +311,24 @@ class PanelClientListControl{
         this.contentContractList = contentContractList;
     }
 
-    
-    
-    private static final class CleintListModel<Client> extends AbstractListModel<Client>{
-        
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        activClient = listClients.getSelectedValue();
+        if (activClient != null) {
+            showClientInfo();
+        } else {
+            try {
+                initListClients();
+            } catch (ServiceException ex) {
+                Logger.getLogger(PanelClientListControl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private static final class CleintListModel<Client> extends AbstractListModel<Client> {
+
         ArrayList<Client> clients = new ArrayList<>();
-        
+
         @Override
         public int getSize() {
             return clients.size();
@@ -334,9 +338,9 @@ class PanelClientListControl{
         public Client getElementAt(int index) {
             return clients.get(index);
         }
-            
-        public void addElement(Client c){
-                clients.add(c);
+
+        public void addElement(Client c) {
+            clients.add(c);
         }
     }
 }

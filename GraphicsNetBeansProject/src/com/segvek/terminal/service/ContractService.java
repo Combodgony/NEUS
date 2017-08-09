@@ -7,6 +7,7 @@ import com.segvek.terminal.dao.mysql.ContentContractMysqlDAO;
 import com.segvek.terminal.dao.mysql.ContractMysqlDAO;
 import com.segvek.terminal.model.ContentContract;
 import com.segvek.terminal.model.Contract;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +22,7 @@ public class ContractService {
     }
     
     
-    public void saveContract(Contract contract) throws ServiceException{
+    public void saveContract(Contract contract) throws ServiceException {
         if(contract.getNumber()==null){
             throw  new ServiceException("Для сохранения введите номер контракта!");
         }
@@ -42,6 +43,15 @@ public class ContractService {
         } catch (DAOException ex) {
             Logger.getLogger(ContractService.class.getName()).log(Level.SEVERE, null, ex);
             throw  new ServiceException("Не удалось сохранить договор!\n"+ex.getMessage());
+        }
+    }
+
+    public List<Contract> getAllContract() throws ServiceException{
+        try {
+            return cdao.getAllContract();
+        } catch (DAOException ex) {
+            Logger.getLogger(ContractService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServiceException("Не удалось получить список договоров.");
         }
     }
 }

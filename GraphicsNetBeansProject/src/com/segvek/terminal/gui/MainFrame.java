@@ -41,6 +41,7 @@ public class MainFrame extends javax.swing.JFrame{
         Tab tab = (Tab) jTabbedPane1.getSelectedComponent();
         btnSave.setEnabled(tab.isNeedSave());
         btnAdd.setEnabled(tab.isCanBeAdd());
+        btnEdit.setEnabled(tab.isCanBeEdit());
     }
     
     
@@ -77,6 +78,7 @@ public class MainFrame extends javax.swing.JFrame{
         insptumentPanel = new javax.swing.JPanel();
         btnSave = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
         contentPanel = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         statusPanel = new javax.swing.JPanel();
@@ -133,6 +135,18 @@ public class MainFrame extends javax.swing.JFrame{
             }
         });
 
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/edit.png"))); // NOI18N
+        btnEdit.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnEdit.setFocusable(false);
+        btnEdit.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnEdit.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnEdit.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout insptumentPanelLayout = new javax.swing.GroupLayout(insptumentPanel);
         insptumentPanel.setLayout(insptumentPanelLayout);
         insptumentPanelLayout.setHorizontalGroup(
@@ -142,6 +156,8 @@ public class MainFrame extends javax.swing.JFrame{
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         insptumentPanelLayout.setVerticalGroup(
@@ -149,9 +165,10 @@ public class MainFrame extends javax.swing.JFrame{
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, insptumentPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(insptumentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+                .addGap(17, 17, 17))
         );
 
         contentPanel.setBackground(new java.awt.Color(51, 51, 51));
@@ -298,19 +315,33 @@ public class MainFrame extends javax.swing.JFrame{
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         initInstrumentPanel();
+        Tab tab = (Tab) jTabbedPane1.getSelectedComponent();
+        tab.init();
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         Tab tab = (Tab) jTabbedPane1.getSelectedComponent();
-        if(tab.getClass().equals(PanelContract.class)){
-            tab.save();
-            CloseableTabComponent c = (CloseableTabComponent) jTabbedPane1.getTabComponentAt(jTabbedPane1.getSelectedIndex());
+        tab.save();
+        CloseableTabComponent c = (CloseableTabComponent) jTabbedPane1.getTabComponentAt(jTabbedPane1.getSelectedIndex());
+        if(c!=null){
             StringBuilder sb= new StringBuilder();
             sb.append(tab.getName()).append("  ");
             c.setTile(sb.toString());
-            initInstrumentPanel();
         }
+        initInstrumentPanel();
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        Tab tab = (Tab) jTabbedPane1.getSelectedComponent();
+        tab.edit();
+        CloseableTabComponent c = (CloseableTabComponent) jTabbedPane1.getTabComponentAt(jTabbedPane1.getSelectedIndex());
+        if(c!=null){
+            StringBuilder sb= new StringBuilder();
+            sb.append(tab.getName()).append("  ");
+            c.setTile(sb.toString());
+        }
+        initInstrumentPanel();
+    }//GEN-LAST:event_btnEditActionPerformed
   
     /**
      * @param args the command line arguments
@@ -335,6 +366,7 @@ public class MainFrame extends javax.swing.JFrame{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnSave;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JPanel insptumentPanel;

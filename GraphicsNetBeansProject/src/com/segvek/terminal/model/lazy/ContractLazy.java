@@ -1,7 +1,10 @@
 package com.segvek.terminal.model.lazy;
 
+import com.segvek.terminal.dao.ClientDAO;
 import com.segvek.terminal.dao.ContentContractDAO;
 import com.segvek.terminal.dao.DAOException;
+import com.segvek.terminal.dao.mysql.ClientMysqlDAO;
+import com.segvek.terminal.dao.mysql.ContentContractMysqlDAO;
 import com.segvek.terminal.model.*;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +14,8 @@ import java.util.logging.Logger;
 
 public class ContractLazy extends Contract{
     
-    private ContentContractDAO contentContractDAO;
+    private ContentContractDAO contentContractDAO = new ContentContractMysqlDAO();
+    private ClientDAO clientDAO = new ClientMysqlDAO();
     
     public ContractLazy(Long id, String number, Date beginDate, Date endDate, Client client) {
         super(id, number, beginDate, endDate, client);
@@ -30,12 +34,18 @@ public class ContractLazy extends Contract{
         }
         return list;
     }
-    
-    
 
-    public void setContentContractDAO(ContentContractDAO contentContractDAO) {
-        this.contentContractDAO = contentContractDAO;
+    @Override
+    public Client getClient() {
+        Client client = super.getClient();
+        if(client==null){
+            try {
+                client=clientDAO.getClientByContract(this);
+                setClient(client);
+            } catch (DAOException ex) {
+                Logger.getLogger(ContractLazy.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return client;
     }
-    
-    
 }

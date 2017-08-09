@@ -17,4 +17,12 @@ public class Tab extends JPanel{
     public String getName(){
         return "";
     }
+    
+    public void init(){}
+
+    public boolean isCanBeEdit() {
+        return false;
+    }
+    
+    public void edit(){}
 }

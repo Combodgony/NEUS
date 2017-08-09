@@ -8,12 +8,16 @@ import com.segvek.terminal.model.Contract;
 import com.segvek.terminal.service.ClientService;
 import com.segvek.terminal.service.ContractService;
 import com.segvek.terminal.service.ServiceException;
+import datechooser.beans.DateChooserCombo;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelContract extends Tab{
@@ -25,7 +29,21 @@ public class PanelContract extends Tab{
         control = new PanelContractControl();
         control.setTableContentContract(jTable1);
         control.setClients(jComboBox1);
+        control.setNumberField(jTextField1);
+        control.setBeginDateField(dateChooserCombo1);
+        control.setEndDateField(dateChooserCombo2);
         
+        control.init();
+    }
+
+    PanelContract(Contract c) {
+        initComponents();
+        control = new PanelContractControl(c);
+        control.setTableContentContract(jTable1);
+        control.setClients(jComboBox1);
+        control.setNumberField(jTextField1);
+        control.setBeginDateField(dateChooserCombo1);
+        control.setEndDateField(dateChooserCombo2);
         control.init();
     }
 
@@ -85,7 +103,7 @@ public class PanelContract extends Tab{
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Содержание договора", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 102))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Содержание договора", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(102, 102, 102))); // NOI18N
         jPanel1.setOpaque(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -273,19 +291,40 @@ public class PanelContract extends Tab{
 
 class PanelContractControl{
     //form elements
+    private JTextField numberField;
+    private DateChooserCombo beginDateField;
+    private DateChooserCombo endDateField;
     private JTable tableContentContract; 
     private JComboBox<Client> clients;
     
     //logic elements
     private Contract contract;
     boolean save=true;
+    boolean init=true;
 
     public PanelContractControl() {
         contract=new Contract(-1L, null, new Date(), new Date(), null);
     }
+
+    PanelContractControl(Contract c) {
+        contract=c;
+    }
     void init() {
         initComboClients();
+        if(contract.getId()!=-1L){
+            initTableContentContract();
+            clients.setSelectedItem(contract.getClient());
+            numberField.setText(contract.getNumber());
+            GregorianCalendar beginCalendar = new GregorianCalendar();
+            beginCalendar.setTime(contract.getBeginDate());
+            beginDateField.setSelectedDate(beginCalendar);
+            GregorianCalendar endCalendar = new GregorianCalendar();
+            endCalendar.setTime(contract.getEndDate());
+            endDateField.setSelectedDate(endCalendar);
+        }
+        init=false;
     }
+
     private void initTableContentContract() {
         DefaultTableModel dtm = (DefaultTableModel) tableContentContract.getModel();
         dtm.setRowCount(0);
@@ -353,6 +392,20 @@ class PanelContractControl{
         contract.setEndDate(time);
         editPanel();
     }
+
+    public void setNumberField(JTextField numberField) {
+        this.numberField = numberField;
+    }
+
+    public void setBeginDateField(DateChooserCombo beginDateField) {
+        this.beginDateField = beginDateField;
+    }
+
+    public void setEndDateField(DateChooserCombo endDateField) {
+        this.endDateField = endDateField;
+    }
+    
+    
    
     boolean isNeedSave() {
         return !save;
@@ -373,14 +426,14 @@ class PanelContractControl{
         if(contract.getId()==-1L)
             return "Договор (Новый)";
         else
-            return "Договор №"+contract.getId();
+            return "Договор №"+contract.getNumber();
     }
 
     private void editPanel(){
-        save=false;
-        MainFrame.getInstance().initInstrumentPanel();
+        if(!init){
+            save=false;
+            MainFrame.getInstance().initInstrumentPanel();
+        }
     }
-
-    
 
 }

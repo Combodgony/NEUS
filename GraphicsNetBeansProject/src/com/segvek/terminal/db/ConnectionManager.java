@@ -37,7 +37,6 @@ public class ConnectionManager {
     private ConnectionManager() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Драйвер подключен");
         } catch (ClassNotFoundException ex) {
             System.out.println("error Драйвер не подключен");
             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);

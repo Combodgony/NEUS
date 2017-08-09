@@ -6,6 +6,9 @@ import java.util.List;
 
 
 public interface ContractDAO {
-    List<Contract> getContractsByClient(Client c) throws DAOException;  
+    List<Contract> getContractsByClient(Client c) throws DAOException; 
+    List<Contract> getAllContract() throws DAOException;
     void saveContract(Contract contract) throws DAOException;
+
+    
 }
