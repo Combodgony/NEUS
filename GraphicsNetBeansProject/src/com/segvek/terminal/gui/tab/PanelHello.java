@@ -3,21 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.segvek.terminal.gui;
+package com.segvek.terminal.gui.tab;
+
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  *
  * @author Panas
  */
-public class PanelHello extends javax.swing.JPanel {
+public class PanelHello extends JPanel {
 
-    /**
-     * Creates new form PanelHello
-     */
     public PanelHello() {
         initComponents();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

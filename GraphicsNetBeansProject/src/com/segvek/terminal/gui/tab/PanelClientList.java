@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.segvek.terminal.gui;
+package com.segvek.terminal.gui.tab;
 
 import com.segvek.terminal.model.Client;
 import com.segvek.terminal.model.ContentContract;
@@ -70,6 +70,8 @@ public class PanelClientList extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(51, 51, 51));
+
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(23, 150));
 
         jList2.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList2.setFocusable(false);

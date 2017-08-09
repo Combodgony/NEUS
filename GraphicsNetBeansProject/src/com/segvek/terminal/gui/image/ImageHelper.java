@@ -2,7 +2,7 @@
  * Copyright 2012 MH-Software-Entwicklung. All rights reserved.
  * Use is subject to license terms.
  */
-package com.jtattoo.samples.icons;
+package com.segvek.terminal.gui.image;
 
 import java.awt.Toolkit;
 import java.net.URL;
