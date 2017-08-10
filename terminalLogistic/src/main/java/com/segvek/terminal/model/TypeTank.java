@@ -1,16 +1,19 @@
 package com.segvek.terminal.model;
 
 
-public class TypeTank {
-    private Long id;
+public class TypeTank extends MainModel{
     private int time;
     private int vMax;
+    private TypeEstakada typeEstakada;
 
-    public TypeTank(Long id, int time, int vMax) {
-        this.id = id;
+    public TypeTank(Long id, int time, int vMax, TypeEstakada typeEstakada) {
+        super(id);
         this.time = time;
         this.vMax = vMax;
+        this.typeEstakada = typeEstakada;
     }
+
+    
 
     public int getvMax() {
         return vMax;
@@ -20,14 +23,6 @@ public class TypeTank {
         this.vMax = vMax;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public int getTime() {
         return time;
     }
@@ -35,5 +30,15 @@ public class TypeTank {
     public void setTime(int time) {
         this.time = time;
     }
+
+    public TypeEstakada getTypeEstakada() {
+        return typeEstakada;
+    }
+
+    public void setTypeEstakada(TypeEstakada typeEstakada) {
+        this.typeEstakada = typeEstakada;
+    }
+    
+    
    
 }

@@ -3,20 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.segvek.terminal.gui;
+package com.segvek.terminal.gui.tab;
 
-import com.segvek.terminal.interactiv.InteractivGrafic;
+import com.segvek.terminal.gui.interactiv.InteractivGrafic;
 import com.segvek.terminal.model.Admission;
-import com.segvek.terminal.model.DependencyAdmission;
-import com.segvek.terminal.model.DrainLocation;
 import com.segvek.terminal.model.Estakada;
-import com.segvek.terminal.model.Tank;
-import com.segvek.terminal.model.TypeEstakada;
-import com.segvek.terminal.model.TypeTank;
+import com.segvek.terminal.service.AdmissionService;
+import com.segvek.terminal.service.EstacadService;
+import com.segvek.terminal.service.ServiceException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 
@@ -24,7 +26,7 @@ import javax.swing.SpinnerDateModel;
  *
  * @author Panas
  */
-public class PanelInteractivEditor extends javax.swing.JPanel {
+public class PanelInteractivEditor extends Tab{
     JSpinner.DateEditor timeEditor, timeEditor1;
     
     private boolean editableData=false;
@@ -44,63 +46,48 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         gi.init();
     }
 
-       private void initData(){
-        TypeEstakada t1=new TypeEstakada(1L,"Авто");
-        TypeEstakada t2=new TypeEstakada(2L,"ж/д");
-        ArrayList<Estakada> estakads = new ArrayList<>();
-        
-        ArrayList<DrainLocation> dll1 = new ArrayList<>();
-        Estakada e1 = new Estakada(1L, t1, "1",dll1); 
-        dll1.add(new DrainLocation(1L, 1,e1));
-        dll1.add(new DrainLocation(2L, 2,e1));
-        dll1.add(new DrainLocation(3L, 3,e1));
-        dll1.add(new DrainLocation(4L, 4,e1));
-        estakads.add(e1);
-        
-        ArrayList<DrainLocation> dll3 = new ArrayList<>();
-        Estakada e3 = new Estakada(3L, t2, "1",dll3);
-        dll3.add(new DrainLocation(9L, 1,e3));
-        dll3.add(new DrainLocation(10L, 2,e3));
-        estakads.add(e3);
+    private void initData(){
+        List<Estakada> estakads = null;
+        List<Admission> admissions = new ArrayList<>();
+        try {
+            estakads = new EstacadService().getAllEstacad();
+            admissions = new AdmissionService().getAllAdmission();
+            
+        } catch (ServiceException ex) {
+            Logger.getLogger(PanelInteractivEditor.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(contentPanel, "Не удалось загрузить данные для интерактивного режима.");
+            return;
+        }
+        gi.setEstakads(estakads);
+        gi.setAdmissions(admissions);
+//        TypeTank tt1 = new TypeTank(1L, 50, 30);
+//        TypeTank tt2 = new TypeTank(2L, 70, 60);
         
         
-        ArrayList<DrainLocation> dll2 = new ArrayList<>();
-        Estakada e2 = new Estakada(2L, t1, "2",dll2);
-        dll2.add(new DrainLocation(5L, 1,e2));
-        dll2.add(new DrainLocation(6L, 2,e2));
-        dll2.add(new DrainLocation(7L, 3,e2));
-        dll2.add(new DrainLocation(8L, 4,e2));
-        estakads.add(e2);
-        
-        
-        TypeTank tt1 = new TypeTank(1L, 50, 30);
-        TypeTank tt2 = new TypeTank(2L, 70, 60);
-        ArrayList<Admission> admissions = new ArrayList<>();
-        
-        Tank ta1 = new Tank(1L, "AB 4573 BK", tt1);
-        Tank ta2 = new Tank(1L, "AX 4825 PO", tt1);
-        Tank ta3 = new Tank(1L, "KE 2953 TW", tt1);
-        
-        Admission a1 = new Admission(1L,ta1, new Date(117,7,3,6,20), null,null, new DrainLocation(6L, 2,e2));
-        Admission a2 = new Admission(2L,ta2, new Date(117,7,3,15,20), new Date(117,7,3,9,10), new Date(117,7,3,11,10),new DrainLocation(3L, 3,e1),"Виконано");
-        Admission a3 = new Admission(3L,ta3, new Date(117,7,3,8,20), null,null, new DrainLocation(6L, 2,e2));       
-        
-        admissions.add(a1);
-        admissions.add(a2);
-        admissions.add(a3);
+//        Tank ta1 = new Tank(1L, "AB 4573 BK", tt1);
+//        Tank ta2 = new Tank(1L, "AX 4825 PO", tt1);
+//        Tank ta3 = new Tank(1L, "KE 2953 TW", tt1);
+//        
+//        Admission a1 = new Admission(1L,ta1, new Date(117,7,3,6,20), null,null, new DrainLocation(6L, 2,e2));
+//        Admission a2 = new Admission(2L,ta2, new Date(117,7,3,15,20), new Date(117,7,3,9,10), new Date(117,7,3,11,10),new DrainLocation(3L, 3,e1),"Виконано");
+//        Admission a3 = new Admission(3L,ta3, new Date(117,7,3,8,20), null,null, new DrainLocation(6L, 2,e2));       
+//        
+//        admissions.add(a1);
+//        admissions.add(a2);
+//        admissions.add(a3);
         
         
         
-        ArrayList<Admission> indepa1 = new ArrayList<>();
-        indepa1.add(a3);
-        a1.setIndepented(indepa1);
+//        ArrayList<Admission> indepa1 = new ArrayList<>();
+//        indepa1.add(a3);
+//        a1.setIndepented(indepa1);
+//        
+//        ArrayList<Admission> depa3 = new ArrayList<>();
+//        depa3.add(a1);
+//        a3.setDepend(depa3);
         
-        ArrayList<Admission> depa3 = new ArrayList<>();
-        depa3.add(a1);
-        a3.setDepend(depa3);
-        
-        ArrayList<DependencyAdmission> das = new ArrayList<>();
-        das.add(new DependencyAdmission(a1, a3));
+//        ArrayList<DependencyAdmission> das = new ArrayList<>();
+//        das.add(new DependencyAdmission(a1, a3));
         
         
         Calendar c = new GregorianCalendar();
@@ -108,9 +95,9 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         c.add(Calendar.DATE, 1);
         gi.setEnd(c.getTime());
         contentPanel.setSize(500, 500);
-        gi.setDependencyAdmissions(das);
-        gi.setAdmissions(admissions);
-        gi.setEstakads(estakads);
+//        gi.setDependencyAdmissions(das);
+        gi.init();
+        
     }
 
     /**
@@ -219,7 +206,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
                 .addComponent(timeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jCheckBox1)
                 .addContainerGap())
         );
@@ -257,7 +244,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,8 +272,8 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 884, Short.MAX_VALUE)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 884, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 889, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,4 +359,5 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
     private javax.swing.JSpinner timeSpinner;
     private javax.swing.JSpinner timeSpinner1;
     // End of variables declaration//GEN-END:variables
+
 }

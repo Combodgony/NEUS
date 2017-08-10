@@ -5,6 +5,8 @@
  */
 package com.segvek.terminal.gui.tab;
 
+import com.segvek.terminal.gui.image.ImageHelper;
+
 
 /**
  *
@@ -41,7 +43,7 @@ public class PanelHello extends Tab{
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/nuk_name.jpg"))); // NOI18N
+        jLabel2.setIcon(ImageHelper.loadImage("nuk_name.jpg"));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);

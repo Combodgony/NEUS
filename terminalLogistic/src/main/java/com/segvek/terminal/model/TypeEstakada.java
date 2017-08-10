@@ -1,21 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.segvek.terminal.model;
 
 /**
  *
  * @author Panas
  */
-public class TypeEstakada {
+public class TypeEstakada extends MainModel{
     
-    private Long id;
     private String name;
 
     public TypeEstakada(Long id, String name) {
-        this.id = id;
+        super(id);
         this.name = name;
     }
 
@@ -26,14 +20,4 @@ public class TypeEstakada {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-       
 }

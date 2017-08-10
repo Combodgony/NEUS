@@ -2,6 +2,7 @@ package com.segvek.terminal.gui.tab;
 
 import com.segvek.terminal.gui.DialogAddContractContent;
 import com.segvek.terminal.gui.MainFrame;
+import com.segvek.terminal.gui.image.ImageHelper;
 import com.segvek.terminal.model.Client;
 import com.segvek.terminal.model.ContentContract;
 import com.segvek.terminal.model.Contract;
@@ -153,7 +154,8 @@ public class PanelContract extends Tab {
         });
         jScrollPane1.setViewportView(tableContentContract);
 
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/plus.png"))); // NOI18N
+        btnAdd.setIcon(ImageHelper.loadImage("plus.png")
+        );
         btnAdd.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnAdd.setFocusable(false);
         btnAdd.setMaximumSize(new java.awt.Dimension(25, 25));
@@ -165,7 +167,7 @@ public class PanelContract extends Tab {
             }
         });
 
-        btnDel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/delete.png"))); // NOI18N
+        btnDel.setIcon(ImageHelper.loadImage("delete.png"));
         btnDel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnDel.setFocusable(false);
         btnDel.setMaximumSize(new java.awt.Dimension(25, 25));
@@ -213,7 +215,7 @@ public class PanelContract extends Tab {
         ));
         jScrollPane2.setViewportView(tablePlanAdmission);
 
-        btnAdd1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/plus.png"))); // NOI18N
+        btnAdd1.setIcon(ImageHelper.loadImage("plus.png"));
         btnAdd1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnAdd1.setFocusable(false);
         btnAdd1.setMaximumSize(new java.awt.Dimension(25, 25));
@@ -225,7 +227,7 @@ public class PanelContract extends Tab {
             }
         });
 
-        btnDel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/delete.png"))); // NOI18N
+        btnDel1.setIcon(ImageHelper.loadImage("delete.png"));
         btnDel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnDel1.setFocusable(false);
         btnDel1.setMaximumSize(new java.awt.Dimension(25, 25));

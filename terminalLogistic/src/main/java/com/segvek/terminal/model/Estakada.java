@@ -1,16 +1,14 @@
 package com.segvek.terminal.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Estakada {
-    private Long id;
+public class Estakada extends MainModel{
     private TypeEstakada typeEstakada;
     private String name; 
     private List<DrainLocation> drainLocations;
 
     public Estakada(Long id, TypeEstakada typeEstakada, String name, List<DrainLocation> drainLocations) {
-        this.id = id;
+        super(id);
         this.typeEstakada = typeEstakada;
         this.name = name;
         this.drainLocations = drainLocations;
@@ -24,14 +22,6 @@ public class Estakada {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public TypeEstakada getTypeEstakada() {

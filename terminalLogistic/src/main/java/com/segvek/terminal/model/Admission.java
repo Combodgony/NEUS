@@ -1,58 +1,49 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.segvek.terminal.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/**
- *
- * @author Panas
- */
-public class Admission {
+public class Admission extends MainModel{
     
-    private Long id;
+    private Contract contract;
     private Tank tank;
-    private Date begin;
+    private int volume;
+    private Date planBegin;
+    private StationaryStorage storage;
+    private DrainLocation drainLocation;
     private Date factBegin;
     private Date factEnd;  
-    private DrainLocation drainLocation;
-    private String status="План";
+    private boolean plan=true;
     
     private ArrayList<Admission> indepented = new ArrayList<>();
     private ArrayList<Admission> depend = new ArrayList<>();
 
-    public Admission(Long id,Tank tank, Date begin, Date factBegin, Date factEnd, DrainLocation drainLocation) {
-        this.id=id;
+    public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd) {
+        super(id);
+        this.contract = contract;
         this.tank = tank;
-        this.begin = begin;
-        this.factBegin=factBegin;
-        this.factEnd = factEnd;
+        this.volume = volume;
+        this.planBegin = planBegin;
+        this.storage = storage;
         this.drainLocation = drainLocation;
+        this.factBegin = factBegin;
+        this.factEnd = factEnd;
     }
 
-    public Admission(Long id,Tank tank, Date begin, Date factBegin, Date factEnd, DrainLocation drainLocation, String status) {
-        this.id=id;
+    public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, boolean plan) {
+        super(id);
+        this.contract = contract;
         this.tank = tank;
-        this.begin = begin;
-        this.factBegin=factBegin;
-        this.factEnd = factEnd;
+        this.volume = volume;
+        this.planBegin = planBegin;
+        this.storage = storage;
         this.drainLocation = drainLocation;
-        this.status = status;
+        this.factBegin = factBegin;
+        this.factEnd = factEnd;
+        this.plan = plan;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
 
     public DrainLocation getDrainLocation() {
         return drainLocation;
@@ -71,21 +62,20 @@ public class Admission {
     }
 
     public Date getBegin() {
-        return begin;
+        return planBegin;
     }
 
     public void setBegin(Date begin) {
-        this.begin = begin;
+        this.planBegin = begin;
     }
 
   
-
-    public String getStatus() {
-        return status;
+    public boolean isPlan(){
+        return plan;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(boolean plan) {
+        this.plan = plan;
     }
 
     public ArrayList<Admission> getIndepented() {
@@ -104,12 +94,6 @@ public class Admission {
         this.depend = depend;
     }
     
-    
-    @Override
-    public int hashCode() {
-        return id.intValue(); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public boolean addTime(int TypeTime, int time) {
         boolean result=true;
         Date now = new Date();
@@ -118,7 +102,7 @@ public class Admission {
         c.add(TypeTime, time);
         if(time<0 && c.getTime().getTime()<now.getTime())
             return false;
-        begin =c.getTime();
+        planBegin =c.getTime();
         if(time>0){           
             c.add(GregorianCalendar.MINUTE, tank.getTypeTank().getTime());
             for(Admission a:indepented){
@@ -130,7 +114,7 @@ public class Admission {
             for(Admission a:depend){
                 c.setTime(a.getBegin());
                 c.add(GregorianCalendar.MINUTE, a.getTank().getTypeTank().getTime());
-                if(begin.getTime()<c.getTime().getTime()){
+                if(planBegin.getTime()<c.getTime().getTime()){
                     result &=a.addTime(TypeTime, time);
                 }
             }
@@ -139,7 +123,7 @@ public class Admission {
         if(!result){
             c.setTime(getBegin());
             c.add(TypeTime, -time);
-            begin =c.getTime();
+            planBegin =c.getTime();
         }
             
         return result;
@@ -160,6 +144,45 @@ public class Admission {
     public void setFactEnd(Date factEnd) {
         this.factEnd = factEnd;
     }
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
+
+    public Date getPlanBegin() {
+        return planBegin;
+    }
+
+    public void setPlanBegin(Date planBegin) {
+        this.planBegin = planBegin;
+    }
+
+    public StationaryStorage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(StationaryStorage storage) {
+        this.storage = storage;
+    }
+
+    @Override
+    public String toString() {
+        return "Admission{" + "contract=" + contract + ", tank=" + tank + ", volume=" + volume + ", planBegin=" + planBegin + ", storage=" + storage + ", drainLocation=" + drainLocation + ", factBegin=" + factBegin + ", factEnd=" + factEnd + ", plan=" + plan + '}';
+    }
+    
+    
     
     
 }
