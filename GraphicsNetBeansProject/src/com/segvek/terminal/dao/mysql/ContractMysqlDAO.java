@@ -4,8 +4,10 @@ import com.mysql.jdbc.PreparedStatement;
 import com.segvek.terminal.dao.ContractDAO;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.db.ConnectionManager;
+import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.Client;
 import com.segvek.terminal.model.Contract;
+import com.segvek.terminal.model.lazy.AdmissionLazy;
 import com.segvek.terminal.model.lazy.ContractLazy;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -213,6 +215,59 @@ public class ContractMysqlDAO implements ContractDAO {
                 }
             }
         }
+    }
+
+    @Override
+    public Contract getContractByAdmission(Admission admission) throws DAOException {
+        Contract conrtact = null;
+
+        Connection connection = null;
+        PreparedStatement statment = null;
+        ResultSet res = null;
+        try {
+            connection = ConnectionManager.getInstance().instanceConnection();
+            String request = "SELECT c.* FROM admission a INNER JOIN contract c ON c.id=a.`idContract` WHERE a.id=?;";
+            statment = (PreparedStatement) connection.prepareStatement(request);
+            statment.setLong(1, admission.getId());
+            res = statment.executeQuery();
+            while (res.next()) {
+                conrtact = new ContractLazy(res.getLong("id"),
+                         res.getString("number"),
+                         res.getDate("beginDate"),
+                         res.getDate("endDate"), null);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException();
+        } finally {
+            try {
+                if (res != null) {
+                    res.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                throw new DAOException();
+            } finally {
+                try {
+                    if (statment != null) {
+                        statment.close();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new DAOException();
+                } finally {
+                    if (connection != null) {
+                        try {
+                            connection.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                            throw new DAOException();
+                        }
+                    }
+                }
+            }
+        }
+        return conrtact;
     }
 
 }

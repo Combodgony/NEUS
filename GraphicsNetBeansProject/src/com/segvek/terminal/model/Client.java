@@ -3,25 +3,16 @@ package com.segvek.terminal.model;
 import java.util.List;
 
 
-public class Client {
-    private Long id;
+public class Client extends MainModel{
     private String name;
     private String adress;
     
     private List<Contract> contracts;
 
     public Client(Long id, String name, String adress) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.adress = adress;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -53,12 +44,5 @@ public class Client {
     public String toString() {
         return name;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this.id==((Client)obj).getId(); 
-    }
-    
-    
     
 }

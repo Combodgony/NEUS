@@ -1,17 +1,15 @@
 package com.segvek.terminal.model;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 
-public class Contract {
+public class Contract extends MainModel{
 
     public static Contract newInstance() {
        return new Contract(-1L, null, null, null, null);
     }
-    private Long id;
     private String number;
     private Date beginDate;
     private Date endDate;
@@ -20,7 +18,7 @@ public class Contract {
     private List<ContentContract> content;
 
     public Contract(Long id, String number, Date beginDate, Date endDate, Client client) {
-        this.id = id;
+        super(id);
         this.number = number;
         this.beginDate = beginDate;
         this.endDate = endDate;
@@ -33,14 +31,6 @@ public class Contract {
 
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNumber() {
@@ -95,18 +85,5 @@ public class Contract {
     public boolean isNew() {
         return id==-1;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Contract && ((Contract)obj).getId()==id;
-    }
-
-    @Override
-    public int hashCode() {
-        return id.intValue();
-    }
-    
-    
-    
     
 }

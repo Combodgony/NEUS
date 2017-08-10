@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -208,12 +209,12 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         timeZona.resize(beginTimeZona, endTimeZona);
     } 
 
-    public void setEstakads(ArrayList<Estakada> estakads) {
-        this.estakads=estakads;
+    public void setEstakads(List<Estakada> estakads) {
+        this.estakads=(ArrayList<Estakada>) estakads;
     }
 
-    public void setAdmissions(ArrayList<Admission> admissions) {
-        this.admissions=admissions;
+    public void setAdmissions(List<Admission> admissions) {
+        this.admissions=(ArrayList<Admission>) admissions;
     }
 
     public Content getContent() {

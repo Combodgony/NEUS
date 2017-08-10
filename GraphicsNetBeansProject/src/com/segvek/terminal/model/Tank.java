@@ -1,13 +1,12 @@
 package com.segvek.terminal.model;
 
 
-public class Tank {
-    private Long id;
+public class Tank extends MainModel{
     private String number;
     private TypeTank typeTank;
 
     public Tank(Long id, String number, TypeTank typeTank) {
-        this.id = id;
+        super(id);
         this.number = number;
         this.typeTank = typeTank;
     }
@@ -18,14 +17,6 @@ public class Tank {
 
     public void setTypeTank(TypeTank typeTank) {
         this.typeTank = typeTank;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNumber() {

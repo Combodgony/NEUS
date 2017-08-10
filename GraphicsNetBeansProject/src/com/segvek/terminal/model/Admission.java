@@ -5,49 +5,45 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class Admission {
+public class Admission extends MainModel{
     
-    private Long id;
     private Contract contract;
     private Tank tank;
     private int volume;
     private Date planBegin;
+    private StationaryStorage storage;
     private DrainLocation drainLocation;
     private Date factBegin;
     private Date factEnd;  
-    
-    private String status="План";
+    private boolean plan=true;
     
     private ArrayList<Admission> indepented = new ArrayList<>();
     private ArrayList<Admission> depend = new ArrayList<>();
 
-    public Admission(Long id,Tank tank, Date planBegin, Date factBegin, Date factEnd, DrainLocation drainLocation) {
-        this.id=id;
+    public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd) {
+        super(id);
+        this.contract = contract;
         this.tank = tank;
+        this.volume = volume;
         this.planBegin = planBegin;
-        this.factBegin=factBegin;
-        this.factEnd = factEnd;
+        this.storage = storage;
         this.drainLocation = drainLocation;
+        this.factBegin = factBegin;
+        this.factEnd = factEnd;
     }
 
-    public Admission(Long id,Tank tank, Date begin, Date factBegin, Date factEnd, DrainLocation drainLocation, String status) {
-        this.id=id;
+    public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, boolean plan) {
+        super(id);
+        this.contract = contract;
         this.tank = tank;
-        this.planBegin = begin;
-        this.factBegin=factBegin;
-        this.factEnd = factEnd;
+        this.volume = volume;
+        this.planBegin = planBegin;
+        this.storage = storage;
         this.drainLocation = drainLocation;
-        this.status = status;
+        this.factBegin = factBegin;
+        this.factEnd = factEnd;
+        this.plan = plan;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
 
     public DrainLocation getDrainLocation() {
         return drainLocation;
@@ -74,13 +70,12 @@ public class Admission {
     }
 
   
-
-    public String getStatus() {
-        return status;
+    public boolean isPlan(){
+        return plan;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(boolean plan) {
+        this.plan = plan;
     }
 
     public ArrayList<Admission> getIndepented() {
@@ -99,12 +94,6 @@ public class Admission {
         this.depend = depend;
     }
     
-    
-    @Override
-    public int hashCode() {
-        return id.intValue(); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public boolean addTime(int TypeTime, int time) {
         boolean result=true;
         Date now = new Date();
@@ -155,6 +144,45 @@ public class Admission {
     public void setFactEnd(Date factEnd) {
         this.factEnd = factEnd;
     }
+
+    public Contract getContract() {
+        return contract;
+    }
+
+    public void setContract(Contract contract) {
+        this.contract = contract;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
+
+    public Date getPlanBegin() {
+        return planBegin;
+    }
+
+    public void setPlanBegin(Date planBegin) {
+        this.planBegin = planBegin;
+    }
+
+    public StationaryStorage getStorage() {
+        return storage;
+    }
+
+    public void setStorage(StationaryStorage storage) {
+        this.storage = storage;
+    }
+
+    @Override
+    public String toString() {
+        return "Admission{" + "contract=" + contract + ", tank=" + tank + ", volume=" + volume + ", planBegin=" + planBegin + ", storage=" + storage + ", drainLocation=" + drainLocation + ", factBegin=" + factBegin + ", factEnd=" + factEnd + ", plan=" + plan + '}';
+    }
+    
+    
     
     
 }

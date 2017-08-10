@@ -1,12 +1,11 @@
 package com.segvek.terminal.model;
 
 
-public class Cargo {
-    private Long id;
+public class Cargo extends MainModel{
     private String name;
 
     public Cargo(Long id, String name) {
-        this.id = id;
+        super(id);
         this.name = name;
     }
 
@@ -16,14 +15,6 @@ public class Cargo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     @Override

@@ -98,9 +98,9 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
                 for(Admission a:admissions){
                     if(estakads.get(i).getDrainLocations().get(j).getId()==a.getDrainLocation().getId()){
                         int addMinBegin=0;
-                        if(a.getStatus().equals("План"))
+                        if(a.isPlan()){
                             addMinBegin =(int)((a.getBegin().getTime()-begin.getTime())/60000);
-                        else
+                        }else
                             addMinBegin =(int)((a.getFactBegin().getTime()-begin.getTime())/60000);
                         Point t = new Point((int)(addMinBegin*weidthMinut), y+1);
                         posAdmission.put(a, t);
@@ -157,7 +157,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
             p.y-=biasY;
             int colMin=0;
             
-            if(a.getStatus().equals("План")){
+            if(a.isPlan()){
                 c.setTime(a.getBegin());
                 c.add(GregorianCalendar.MINUTE, a.getTank().getTypeTank().getTime());
                 if(c.getTime().getTime()<now.getTime())
@@ -236,7 +236,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     }
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(editable && activAdmission!=null && activAdmission.getStatus().equals("План") && !showInfoBlock){
+        if(editable && activAdmission!=null && activAdmission.isPlan() && !showInfoBlock){
             int sx = e.getX()-pressPoint.x;
             if(activAdmission.addTime(GregorianCalendar.SECOND, (int)((sx*60)/weidthMinut)))
                 pressPoint=e.getPoint();
@@ -297,7 +297,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
                         if(a.getDrainLocation().getId()==estakads.get(i).getDrainLocations().get(j).getId()){
                             int addMinBegin;
                             int colMin;
-                            if(a.getStatus().equals("План")){
+                            if(a.isPlan()){
                                 addMinBegin=(int)((a.getBegin().getTime()-begin.getTime())/60000);
                                 colMin = a.getTank().getTypeTank().getTime();
                             }else{
