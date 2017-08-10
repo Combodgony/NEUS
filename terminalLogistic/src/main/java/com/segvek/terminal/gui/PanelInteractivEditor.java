@@ -128,7 +128,6 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         dateChooserCombo2 = new datechooser.beans.DateChooserCombo();
         timeSpinner1 = new JSpinner( new SpinnerDateModel() );
-        jButton1 = new javax.swing.JButton();
         dateChooserCombo3 = new datechooser.beans.DateChooserCombo();
         jCheckBox1 = new javax.swing.JCheckBox();
         jSlider1 = new javax.swing.JSlider();
@@ -175,9 +174,6 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
             }
         });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/packageinstalledupdated.png"))); // NOI18N
-        jButton1.setFocusable(false);
-
         dateChooserCombo3.addCommitListener(new datechooser.events.CommitListener() {
             public void onCommit(datechooser.events.CommitEvent evt) {
                 dateChooserCombo3OnCommit(evt);
@@ -221,11 +217,9 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
                 .addComponent(dateChooserCombo2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(timeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(52, 52, 52)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
                 .addComponent(jCheckBox1)
                 .addContainerGap())
         );
@@ -244,8 +238,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(dateChooserCombo3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(timeSpinner1, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(timeSpinner1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
                                     .addComponent(jSlider1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                     .addComponent(dateChooserCombo2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(timeSpinner, javax.swing.GroupLayout.Alignment.LEADING))
@@ -264,7 +257,7 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -369,7 +362,6 @@ public class PanelInteractivEditor extends javax.swing.JPanel {
     private javax.swing.JPanel contentPanel;
     private datechooser.beans.DateChooserCombo dateChooserCombo2;
     private datechooser.beans.DateChooserCombo dateChooserCombo3;
-    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

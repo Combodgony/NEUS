@@ -82,7 +82,7 @@ public class MainFrame extends javax.swing.JFrame{
         insptumentPanel.setPreferredSize(new java.awt.Dimension(800, 50));
         insptumentPanel.setRequestFocusEnabled(false);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/segvek/terminal/gui/image/savePasive.png"))); // NOI18N
+        jButton1.setText("save");
         jButton1.setFocusable(false);
 
         javax.swing.GroupLayout insptumentPanelLayout = new javax.swing.GroupLayout(insptumentPanel);
@@ -91,7 +91,7 @@ public class MainFrame extends javax.swing.JFrame{
             insptumentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(insptumentPanelLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         insptumentPanelLayout.setVerticalGroup(
