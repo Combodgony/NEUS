@@ -1,35 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.segvek.terminal.model;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-/**
- *
- * @author Panas
- */
 public class Admission {
     
     private Long id;
+    private Contract contract;
     private Tank tank;
-    private Date begin;
+    private int volume;
+    private Date planBegin;
+    private DrainLocation drainLocation;
     private Date factBegin;
     private Date factEnd;  
-    private DrainLocation drainLocation;
+    
     private String status="План";
     
     private ArrayList<Admission> indepented = new ArrayList<>();
     private ArrayList<Admission> depend = new ArrayList<>();
 
-    public Admission(Long id,Tank tank, Date begin, Date factBegin, Date factEnd, DrainLocation drainLocation) {
+    public Admission(Long id,Tank tank, Date planBegin, Date factBegin, Date factEnd, DrainLocation drainLocation) {
         this.id=id;
         this.tank = tank;
-        this.begin = begin;
+        this.planBegin = planBegin;
         this.factBegin=factBegin;
         this.factEnd = factEnd;
         this.drainLocation = drainLocation;
@@ -38,7 +33,7 @@ public class Admission {
     public Admission(Long id,Tank tank, Date begin, Date factBegin, Date factEnd, DrainLocation drainLocation, String status) {
         this.id=id;
         this.tank = tank;
-        this.begin = begin;
+        this.planBegin = begin;
         this.factBegin=factBegin;
         this.factEnd = factEnd;
         this.drainLocation = drainLocation;
@@ -71,11 +66,11 @@ public class Admission {
     }
 
     public Date getBegin() {
-        return begin;
+        return planBegin;
     }
 
     public void setBegin(Date begin) {
-        this.begin = begin;
+        this.planBegin = begin;
     }
 
   
@@ -118,7 +113,7 @@ public class Admission {
         c.add(TypeTime, time);
         if(time<0 && c.getTime().getTime()<now.getTime())
             return false;
-        begin =c.getTime();
+        planBegin =c.getTime();
         if(time>0){           
             c.add(GregorianCalendar.MINUTE, tank.getTypeTank().getTime());
             for(Admission a:indepented){
@@ -130,7 +125,7 @@ public class Admission {
             for(Admission a:depend){
                 c.setTime(a.getBegin());
                 c.add(GregorianCalendar.MINUTE, a.getTank().getTypeTank().getTime());
-                if(begin.getTime()<c.getTime().getTime()){
+                if(planBegin.getTime()<c.getTime().getTime()){
                     result &=a.addTime(TypeTime, time);
                 }
             }
@@ -139,7 +134,7 @@ public class Admission {
         if(!result){
             c.setTime(getBegin());
             c.add(TypeTime, -time);
-            begin =c.getTime();
+            planBegin =c.getTime();
         }
             
         return result;

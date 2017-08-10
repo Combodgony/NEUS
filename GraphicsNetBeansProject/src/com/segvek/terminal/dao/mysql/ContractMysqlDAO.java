@@ -1,4 +1,3 @@
-
 package com.segvek.terminal.dao.mysql;
 
 import com.mysql.jdbc.PreparedStatement;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ContractMysqlDAO implements ContractDAO{
+public class ContractMysqlDAO implements ContractDAO {
 
     @Override
     public List<Contract> getContractsByClient(Client c) throws DAOException {
@@ -24,45 +23,48 @@ public class ContractMysqlDAO implements ContractDAO{
 
         Connection connection = null;
         PreparedStatement statment = null;
-        ResultSet res=null;
+        ResultSet res = null;
         try {
             connection = ConnectionManager.getInstance().instanceConnection();
-            String request="SELECT * FROM contract WHERE idClient=?";
+            String request = "SELECT * FROM contract WHERE idClient=?";
             statment = (PreparedStatement) connection.prepareStatement(request);
             statment.setLong(1, c.getId());
             res = statment.executeQuery();
-            while(res.next()){
-                ContractLazy conrtact = new ContractLazy(res.getLong("id")
-                        , res.getString("number")
-                        , res.getDate("beginDate")
-                        , res.getDate("endDate"), c);
+            while (res.next()) {
+                ContractLazy conrtact = new ContractLazy(res.getLong("id"),
+                         res.getString("number"),
+                         res.getDate("beginDate"),
+                         res.getDate("endDate"), c);
                 list.add(conrtact);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException();
-        }finally{
+        } finally {
             try {
-                if(res!=null)
+                if (res != null) {
                     res.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                 throw new DAOException();
-            }finally{
+            } finally {
                 try {
-                    if(statment!=null)
+                    if (statment != null) {
                         statment.close();
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                     throw new DAOException();
-                }finally{
-                    if(connection!=null)
+                } finally {
+                    if (connection != null) {
                         try {
                             connection.close();
                         } catch (SQLException ex) {
                             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                             throw new DAOException();
                         }
+                    }
                 }
             }
         }
@@ -70,14 +72,14 @@ public class ContractMysqlDAO implements ContractDAO{
     }
 
     @Override
-    public void saveContract(Contract contract) throws DAOException {
+    public void addContract(Contract contract) throws DAOException {
         Connection connection = null;
         PreparedStatement statment = null;
         PreparedStatement statmentid = null;
-        ResultSet res=null;
+        ResultSet res = null;
         try {
             connection = ConnectionManager.getInstance().instanceConnection();
-            String request="INSERT INTO contract(idClient,number,beginDate,endDate) VALUES (?,?,?,?)";
+            String request = "INSERT INTO contract(idClient,number,beginDate,endDate) VALUES (?,?,?,?)";
             statment = (PreparedStatement) connection.prepareStatement(request);
             statment.setLong(1, contract.getClient().getId());
             statment.setString(2, contract.getNumber());
@@ -86,34 +88,37 @@ public class ContractMysqlDAO implements ContractDAO{
             statment.executeUpdate();
             statmentid = (PreparedStatement) connection.prepareStatement("SELECT LAST_INSERT_ID() \"id\";");
             res = statmentid.executeQuery();
-            if(res.next()){
+            if (res.next()) {
                 contract.setId(res.getLong("id"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException();
-        }finally{
+        } finally {
             try {
-                if(res!=null)
+                if (res != null) {
                     res.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                 throw new DAOException();
-            }finally{
+            } finally {
                 try {
-                    if(statment!=null)
+                    if (statment != null) {
                         statment.close();
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                     throw new DAOException();
-                }finally{
-                    if(connection!=null)
+                } finally {
+                    if (connection != null) {
                         try {
                             connection.close();
                         } catch (SQLException ex) {
                             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                             throw new DAOException();
                         }
+                    }
                 }
             }
         }
@@ -125,48 +130,89 @@ public class ContractMysqlDAO implements ContractDAO{
 
         Connection connection = null;
         PreparedStatement statment = null;
-        ResultSet res=null;
+        ResultSet res = null;
         try {
             connection = ConnectionManager.getInstance().instanceConnection();
-            String request="SELECT * FROM contract";
+            String request = "SELECT * FROM contract";
             statment = (PreparedStatement) connection.prepareStatement(request);
             res = statment.executeQuery();
-            while(res.next()){
-                ContractLazy conrtact = new ContractLazy(res.getLong("id")
-                        , res.getString("number")
-                        , res.getDate("beginDate")
-                        , res.getDate("endDate"), null);
+            while (res.next()) {
+                ContractLazy conrtact = new ContractLazy(res.getLong("id"),
+                         res.getString("number"),
+                         res.getDate("beginDate"),
+                         res.getDate("endDate"), null);
                 list.add(conrtact);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException();
-        }finally{
+        } finally {
             try {
-                if(res!=null)
+                if (res != null) {
                     res.close();
+                }
             } catch (SQLException ex) {
                 Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                 throw new DAOException();
-            }finally{
+            } finally {
                 try {
-                    if(statment!=null)
+                    if (statment != null) {
                         statment.close();
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                     throw new DAOException();
-                }finally{
-                    if(connection!=null)
+                } finally {
+                    if (connection != null) {
                         try {
                             connection.close();
                         } catch (SQLException ex) {
                             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                             throw new DAOException();
                         }
+                    }
                 }
             }
         }
         return list;
     }
-    
+
+    @Override
+    public void updateContract(Contract contract) throws DAOException {
+        Connection connection = null;
+        PreparedStatement statment = null;
+        try {
+            connection = ConnectionManager.getInstance().instanceConnection();
+            String request = "UPDATE contract SET `idClient`=?, `number`=?, `beginDate`=?, `endDate`=? WHERE id=?;";
+            statment = (PreparedStatement) connection.prepareStatement(request);
+            statment.setLong(1, contract.getClient().getId());
+            statment.setString(2, contract.getNumber());
+            statment.setDate(3, new java.sql.Date(contract.getBeginDate().getTime()));
+            statment.setDate(4, new java.sql.Date(contract.getEndDate().getTime()));
+            statment.setLong(5, contract.getId());
+            statment.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException();
+        } finally {
+            try {
+                if (statment != null) {
+                    statment.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                throw new DAOException();
+            } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new DAOException();
+                    }
+                }
+            }
+        }
+    }
+
 }

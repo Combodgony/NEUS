@@ -9,6 +9,7 @@ import com.segvek.terminal.dao.mysql.ClientMysqlDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,14 +25,19 @@ public class ConnectionManager {
     }
     
     
-    private String url = "jdbc:mysql://localhost:3306/terminal?zeroDateTimeBehavior=convertToNull";
+    private String url = "jdbc:mysql://localhost:3306/terminal";
     private String name = "root";
     private String password = "";
     
     
     
     public Connection instanceConnection() throws SQLException{
-        return (com.mysql.jdbc.Connection) DriverManager.getConnection(url, name, password);
+        Properties properties=new Properties();
+        properties.setProperty("user",name);
+        properties.setProperty("password",password);
+        properties.setProperty("useUnicode","true");
+        properties.setProperty("characterEncoding","UTF-8");
+        return(DriverManager.getConnection(url,	properties));
     }
     
     private ConnectionManager() {

@@ -7,6 +7,10 @@ import java.util.List;
 
 
 public class Contract {
+
+    public static Contract newInstance() {
+       return new Contract(-1L, null, null, null, null);
+    }
     private Long id;
     private String number;
     private Date beginDate;
@@ -87,6 +91,21 @@ public class Contract {
             content.remove(cc);
         }
     }
+
+    public boolean isNew() {
+        return id==-1;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Contract && ((Contract)obj).getId()==id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+    
     
     
     

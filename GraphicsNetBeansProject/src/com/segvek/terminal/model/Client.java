@@ -56,7 +56,7 @@ public class Client {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Client && this.id==((Client)obj).getId(); 
+        return this.id==((Client)obj).getId(); 
     }
     
     

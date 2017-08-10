@@ -36,9 +36,13 @@ public class ContractService {
             throw  new ServiceException("Договор не содержит перевозок!\nДля сохранения добавте минимум одну единицу груза!");
         }
         try {
-            cdao.saveContract(contract);
-            for(ContentContract cc:contract.getContent()){
-                ccdao.saveContentContract(cc);
+            if(contract.isNew()){
+                cdao.addContract(contract);
+                for(ContentContract cc:contract.getContent()){
+                    ccdao.saveContentContract(cc);
+                }
+            }else{
+                cdao.updateContract(contract);
             }
         } catch (DAOException ex) {
             Logger.getLogger(ContractService.class.getName()).log(Level.SEVERE, null, ex);
