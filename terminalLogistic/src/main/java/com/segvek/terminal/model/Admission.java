@@ -167,7 +167,7 @@ public class Admission extends MainModel{
 
     @Override
     public String toString() {
-        return "Admission{" + "contract=" + contract + ", tank=" + tank + ", volume=" + volume + ", planBegin=" + planBegin + ", storage=" + storage + ", drainLocation=" + drainLocation + ", factBegin=" + factBegin + ", factEnd=" + factEnd + ", plan=" + plan + '}';
+        return id.toString();
     }
     
     

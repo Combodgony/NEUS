@@ -3,11 +3,13 @@ package com.segvek.terminal.gui;
 import com.segvek.terminal.gui.tab.PanelClientList;
 import com.segvek.terminal.gui.tab.PanelInteractivEditor;
 import com.segvek.terminal.gui.tab.PanelHello;
-import com.segvek.terminal.gui.tab.PanelCcontractList;
+import com.segvek.terminal.gui.tab.PanelContractList;
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 import com.segvek.terminal.Loader;
 import com.segvek.terminal.gui.image.ImageHelper;
 import com.segvek.terminal.gui.tab.CloseableTabComponent;
+import com.segvek.terminal.gui.tab.PanelAdmission;
+import com.segvek.terminal.gui.tab.PanelAdmissionList;
 import com.segvek.terminal.gui.tab.PanelContract;
 import com.segvek.terminal.gui.tab.Tab;
 import java.awt.event.KeyEvent;
@@ -49,9 +51,9 @@ public class MainFrame extends javax.swing.JFrame{
     
     private PanelHello helloPanel;
     private PanelInteractivEditor interactivEditorPanel;
-    private PanelCcontractList contractListPanel;
+    private PanelContractList contractListPanel;
     private PanelClientList clientListPanel;
-       
+    private PanelAdmissionList admissionListPanel;   
     
     
     private MainFrame() {
@@ -59,8 +61,9 @@ public class MainFrame extends javax.swing.JFrame{
         initComponents();
         helloPanel=new PanelHello();
         interactivEditorPanel = new PanelInteractivEditor();
-        contractListPanel=new PanelCcontractList();
+        contractListPanel=new PanelContractList();
         clientListPanel= new PanelClientList();
+        admissionListPanel = new PanelAdmissionList();
         
         jTabbedPane1.addTab("Приветствие", helloPanel);
         jTabbedPane1.setTabComponentAt(0, new CloseableTabComponent(jTabbedPane1, "Приветствие"));
@@ -69,6 +72,7 @@ public class MainFrame extends javax.swing.JFrame{
         jTabbedPane1.addTab("Интерактивный редактор", interactivEditorPanel);
         jTabbedPane1.addTab("Договора", contractListPanel);
         jTabbedPane1.addTab("Клиенты", clientListPanel);
+        jTabbedPane1.addTab("План завоза", admissionListPanel);
     }
     
     @SuppressWarnings("unchecked")
@@ -309,6 +313,8 @@ public class MainFrame extends javax.swing.JFrame{
             addPanelTab("Клиент (Новый) ", new Tab());
         if(jTabbedPane1.getSelectedComponent()==contractListPanel)
             addPanelTab("Договор (Новый) ", new PanelContract());
+        if(jTabbedPane1.getSelectedComponent()==admissionListPanel)
+            addPanelTab("Завоз (Новый) ", new PanelAdmission());
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
