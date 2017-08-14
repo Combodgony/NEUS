@@ -5,7 +5,7 @@ import com.segvek.terminal.model.Contract;
 import java.util.List;
 
 
-public interface ContentContractDAO {
+public interface ContentContractDAO  extends DAO{
     
     List<ContentContract> getContentByContract(Contract c) throws DAOException;
 

@@ -2,6 +2,7 @@ package com.segvek.terminal.dao.mysql;
 
 import com.mysql.jdbc.PreparedStatement;
 import com.segvek.terminal.dao.ContractDAO;
+import static com.segvek.terminal.dao.DAO.DEBUG;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.Client;
@@ -10,6 +11,7 @@ import com.segvek.terminal.model.lazy.ContractLazy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,12 +26,16 @@ public class ContractMysqlDAO implements ContractDAO {
     @Override
     public List<Contract> getContractsByClient(Client c) throws DAOException {
         String request = "SELECT * FROM contract WHERE idClient=?";
+        if(DEBUG)
+            Logger.getLogger(ContractMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.query(request, new Object[]{c.getId()}, new ContractRowMapper());
     }
 
     @Override
     public void addContract(Contract contract) throws DAOException {
         String request = "INSERT INTO contract(idClient,number,beginDate,endDate) VALUES (?,?,?,?)";
+        if(DEBUG)
+            Logger.getLogger(ContractMysqlDAO.class.getName()).info(request);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(((connection) ->{
                 PreparedStatement statment = (PreparedStatement) connection.prepareStatement(request, new String[]{"id"});
@@ -46,12 +52,16 @@ public class ContractMysqlDAO implements ContractDAO {
     @Override
     public List<Contract> getAllContract() throws DAOException {
         String request = "SELECT * FROM contract";
+        if(DEBUG)
+            Logger.getLogger(ContractMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.query(request, new ContractRowMapper());
     }
 
     @Override
     public void updateContract(Contract contract) throws DAOException {
         String request = "UPDATE contract SET `idClient`=?, `number`=?, `beginDate`=?, `endDate`=? WHERE id=?;";
+        if(DEBUG)
+            Logger.getLogger(ContractMysqlDAO.class.getName()).info(request);
         jdbcTemplate.update(request, contract.getClient().getId(), contract.getNumber(),
                 new java.sql.Date(contract.getBeginDate().getTime()),
                 new java.sql.Date(contract.getEndDate().getTime()), contract.getId());
@@ -60,6 +70,8 @@ public class ContractMysqlDAO implements ContractDAO {
     @Override
     public Contract getContractByAdmission(Admission admission) throws DAOException {
         String request = "SELECT c.* FROM admission a INNER JOIN contract c ON c.id=a.`idContract` WHERE a.id=?;";
+        if(DEBUG)
+            Logger.getLogger(ContractMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.queryForObject(request, new Object[]{admission.getId()}, new ContractRowMapper());
     }
 

@@ -6,7 +6,7 @@ import com.segvek.terminal.model.Estakada;
 import java.util.List;
 
 
-public interface EstakadaDAO {
+public interface EstakadaDAO  extends DAO{
 
     public List<Estakada> getAllEstacads() throws DAOException;
 

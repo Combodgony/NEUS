@@ -1,5 +1,6 @@
 package com.segvek.terminal.dao.mysql;
 
+import static com.segvek.terminal.dao.DAO.DEBUG;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.dao.TypeEstakadaDAO;
 import com.segvek.terminal.model.Estakada;
@@ -7,6 +8,7 @@ import com.segvek.terminal.model.TypeEstakada;
 import com.segvek.terminal.model.TypeTank;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,12 +21,16 @@ public class TypeEstakadaMysqlDAO implements TypeEstakadaDAO{
     @Override
     public TypeEstakada getTypeEstacadaByEstakada(Estakada estakada) throws DAOException {
         String request="SELECT t.* FROM estakada e INNER JOIN typeestakada t ON t.id=e.idTypeEstakada WHERE e.id=?;";
+        if(DEBUG)
+            Logger.getLogger(TypeEstakadaMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.queryForObject(request, new Object[]{estakada.getId()} , new TypeEstakadaRowMapper());
     }
 
     @Override
     public TypeEstakada getTypeEstacadaByTypeTank(TypeTank typeTank) throws DAOException {
         String request="SELECT e.* FROM typetank t INNER JOIN typeestakada e ON e.id=t.idTypeEstakada WHERE t.id=?;";
+        if(DEBUG)
+            Logger.getLogger(TypeEstakadaMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.queryForObject(request, new Object[]{typeTank.getId()} , new TypeEstakadaRowMapper());
     }
     

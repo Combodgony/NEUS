@@ -2,12 +2,14 @@ package com.segvek.terminal.dao.mysql;
 
 import com.segvek.terminal.model.lazy.ClientLazy;
 import com.segvek.terminal.dao.ClientDAO;
+import static com.segvek.terminal.dao.DAO.DEBUG;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.model.Client;
 import com.segvek.terminal.model.Contract;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,12 +23,16 @@ public class ClientMysqlDAO implements ClientDAO{
     @Override
     public List<Client> getAll() throws DAOException { 
         String request="SELECT * FROM client";
+        if(DEBUG)
+            Logger.getLogger(ClientMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.query(request, new ClientRowMapper());
     }
 
     @Override
     public Client getClientByContract(Contract contract) throws DAOException {
         String request="SELECT cl.* FROM client cl INNER JOIN contract con ON con.`idClient`=cl.id WHERE con.id=?;";
+        if(DEBUG)
+            Logger.getLogger(ClientMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.queryForObject(request, new Object[]{contract.getId()}, new ClientRowMapper());
     }
     

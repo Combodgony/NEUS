@@ -7,7 +7,7 @@ import com.segvek.terminal.model.Estakada;
 import java.util.List;
 
 
-public interface DrainLocationDAO {
+public interface DrainLocationDAO  extends DAO{
 
     public DrainLocation getDrainLocationByAdmission(Admission admission) throws DAOException;
 

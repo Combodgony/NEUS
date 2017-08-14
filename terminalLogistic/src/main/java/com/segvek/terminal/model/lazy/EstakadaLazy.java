@@ -42,6 +42,7 @@ public class EstakadaLazy extends Estakada{
         if(list==null){
             try {
                 list=drainLocationDAO.getDrainLocationsByEstacada(this);
+                setDrainLocations(list);
             } catch (DAOException ex) {
                 Logger.getLogger(EstakadaLazy.class.getName()).log(Level.SEVERE, null, ex);
             }

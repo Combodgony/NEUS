@@ -6,7 +6,7 @@ import com.segvek.terminal.model.Contract;
 import java.util.List;
 
 
-public interface ClientDAO {
+public interface ClientDAO  extends DAO{
     List<Client> getAll() throws DAOException;
     Client getClientByContract(Contract contract) throws DAOException;
 }

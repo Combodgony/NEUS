@@ -1,4 +1,4 @@
-package com.segvek.terminal.gui.interactiv;
+package com.segvek.terminal.gui.tab.interactiv;
 
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DependencyAdmission;
@@ -13,7 +13,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
