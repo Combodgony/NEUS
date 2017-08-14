@@ -1,10 +1,9 @@
 package com.segvek.terminal.service;
 
+import com.segvek.terminal.Loader;
 import com.segvek.terminal.dao.ContentContractDAO;
 import com.segvek.terminal.dao.ContractDAO;
 import com.segvek.terminal.dao.DAOException;
-import com.segvek.terminal.dao.mysql.ContentContractMysqlDAO;
-import com.segvek.terminal.dao.mysql.ContractMysqlDAO;
 import com.segvek.terminal.model.ContentContract;
 import com.segvek.terminal.model.Contract;
 import java.util.List;
@@ -14,11 +13,11 @@ import java.util.logging.Logger;
 
 public class ContractService {
     private ContractDAO cdao;
-    ContentContractDAO ccdao;
+    private ContentContractDAO ccdao;
     
     public ContractService() {
-        cdao = new ContractMysqlDAO();
-        ccdao=new ContentContractMysqlDAO();
+        cdao = Loader.getContext().getBean("contractDAO",ContractDAO.class);
+        ccdao= Loader.getContext().getBean("contentContractDAO",ContentContractDAO.class);
     }
     
     

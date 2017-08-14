@@ -1,8 +1,8 @@
 package com.segvek.terminal.service;
 
+import com.segvek.terminal.Loader;
 import com.segvek.terminal.dao.ClientDAO;
 import com.segvek.terminal.dao.DAOException;
-import com.segvek.terminal.dao.mysql.ClientMysqlDAO;
 import com.segvek.terminal.model.Client;
 import java.util.List;
 import java.util.logging.Level;
@@ -13,7 +13,7 @@ public class ClientService {
     private ClientDAO clientDao;
 
     public ClientService() {
-        clientDao=new ClientMysqlDAO();
+        clientDao=Loader.getContext().getBean("clientDAO",ClientDAO.class);
     }
     
     public List<Client> getAllClients() throws ServiceException{

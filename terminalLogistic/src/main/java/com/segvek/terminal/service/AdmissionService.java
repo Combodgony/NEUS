@@ -1,8 +1,8 @@
 package com.segvek.terminal.service;
 
+import com.segvek.terminal.Loader;
 import com.segvek.terminal.dao.AdmissionDao;
 import com.segvek.terminal.dao.DAOException;
-import com.segvek.terminal.dao.mysql.AdmissionMysqlDao;
 import com.segvek.terminal.model.Admission;
 import java.util.List;
 import java.util.logging.Level;
@@ -11,7 +11,12 @@ import java.util.logging.Logger;
 
 public class AdmissionService {
     
-    AdmissionDao admissionDao = new AdmissionMysqlDao();
+    AdmissionDao admissionDao;
+
+    public AdmissionService() {
+        admissionDao = Loader.getContext().getBean("admissionDao", AdmissionDao.class);
+    }
+    
     
     public List<Admission> getAllAdmission() throws ServiceException{
         List<Admission> list = null;

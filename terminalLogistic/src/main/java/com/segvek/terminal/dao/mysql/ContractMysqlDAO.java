@@ -7,7 +7,6 @@ import com.segvek.terminal.db.ConnectionManager;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.Client;
 import com.segvek.terminal.model.Contract;
-import com.segvek.terminal.model.lazy.AdmissionLazy;
 import com.segvek.terminal.model.lazy.ContractLazy;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -92,7 +91,7 @@ public class ContractMysqlDAO implements ContractDAO {
             res = statmentid.executeQuery();
             if (res.next()) {
                 contract.setId(res.getLong("id"));
-            }
+            } 
         } catch (SQLException ex) {
             Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException();

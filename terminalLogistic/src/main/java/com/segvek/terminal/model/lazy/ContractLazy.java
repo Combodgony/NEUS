@@ -1,10 +1,9 @@
 package com.segvek.terminal.model.lazy;
 
+import com.segvek.terminal.Loader;
 import com.segvek.terminal.dao.ClientDAO;
 import com.segvek.terminal.dao.ContentContractDAO;
 import com.segvek.terminal.dao.DAOException;
-import com.segvek.terminal.dao.mysql.ClientMysqlDAO;
-import com.segvek.terminal.dao.mysql.ContentContractMysqlDAO;
 import com.segvek.terminal.model.*;
 import java.util.Date;
 import java.util.List;
@@ -14,11 +13,13 @@ import java.util.logging.Logger;
 
 public class ContractLazy extends Contract{
     
-    private ContentContractDAO contentContractDAO = new ContentContractMysqlDAO();
-    private ClientDAO clientDAO = new ClientMysqlDAO();
+    private ContentContractDAO contentContractDAO;
+    private ClientDAO clientDAO;
     
     public ContractLazy(Long id, String number, Date beginDate, Date endDate, Client client) {
         super(id, number, beginDate, endDate, client);
+        clientDAO=Loader.getContext().getBean("clientDAO",ClientDAO.class);
+        contentContractDAO=Loader.getContext().getBean("contentContractDAO",ContentContractDAO.class);
     }
 
     @Override

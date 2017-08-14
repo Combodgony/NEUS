@@ -9,7 +9,7 @@ import com.segvek.terminal.gui.interactiv.InteractivGrafic;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.Estakada;
 import com.segvek.terminal.service.AdmissionService;
-import com.segvek.terminal.service.EstacadService;
+import com.segvek.terminal.service.EstakadService;
 import com.segvek.terminal.service.ServiceException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +50,7 @@ public class PanelInteractivEditor extends Tab{
         List<Estakada> estakads = null;
         List<Admission> admissions = new ArrayList<>();
         try {
-            estakads = new EstacadService().getAllEstacad();
+            estakads = new EstakadService().getAllEstacad();
             admissions = new AdmissionService().getAllAdmission();
             
         } catch (ServiceException ex) {

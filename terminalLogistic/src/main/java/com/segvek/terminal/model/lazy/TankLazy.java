@@ -1,9 +1,9 @@
 
 package com.segvek.terminal.model.lazy;
 
+import com.segvek.terminal.Loader;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.dao.TypeTankDAO;
-import com.segvek.terminal.dao.mysql.TypeTankMysqlDAO;
 import com.segvek.terminal.model.Tank;
 import com.segvek.terminal.model.TypeTank;
 import java.util.logging.Level;
@@ -11,10 +11,11 @@ import java.util.logging.Logger;
 
 
 public class TankLazy extends Tank{
-    TypeTankDAO typeTankDAO = new TypeTankMysqlDAO();
+    TypeTankDAO typeTankDAO;
     
     public TankLazy(Long id, String number, TypeTank typeTank) {
         super(id, number, typeTank);
+        typeTankDAO = Loader.getContext().getBean("typeTankDAO",TypeTankDAO.class);
     }
 
     @Override

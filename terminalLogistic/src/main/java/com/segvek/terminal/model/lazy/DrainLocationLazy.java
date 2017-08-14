@@ -1,9 +1,9 @@
 
 package com.segvek.terminal.model.lazy;
 
+import com.segvek.terminal.Loader;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.dao.EstakadaDAO;
-import com.segvek.terminal.dao.mysql.EstakadMysqlDAO;
 import com.segvek.terminal.model.DrainLocation;
 import com.segvek.terminal.model.Estakada;
 import java.util.logging.Level;
@@ -12,10 +12,11 @@ import java.util.logging.Logger;
 
 
 public class DrainLocationLazy extends DrainLocation{
-    EstakadaDAO estakadaDAO = new EstakadMysqlDAO();
+    EstakadaDAO estakadaDAO;
     
     public DrainLocationLazy(Long id, String number, Estakada estakada) {
         super(id, number, estakada);
+        estakadaDAO = Loader.getContext().getBean("estakadDAO", EstakadaDAO.class);
     }
 
     @Override

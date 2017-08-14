@@ -5,6 +5,7 @@ import com.segvek.terminal.gui.tab.PanelInteractivEditor;
 import com.segvek.terminal.gui.tab.PanelHello;
 import com.segvek.terminal.gui.tab.PanelCcontractList;
 import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
+import com.segvek.terminal.Loader;
 import com.segvek.terminal.gui.image.ImageHelper;
 import com.segvek.terminal.gui.tab.CloseableTabComponent;
 import com.segvek.terminal.gui.tab.PanelContract;
@@ -347,7 +348,8 @@ public class MainFrame extends javax.swing.JFrame{
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {  
+    public static void main(String args[]) { 
+        Loader.getContext();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {

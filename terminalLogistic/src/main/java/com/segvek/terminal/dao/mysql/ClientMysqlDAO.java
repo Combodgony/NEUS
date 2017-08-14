@@ -14,9 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 
 public class ClientMysqlDAO implements ClientDAO{
+    
+//    @Autowired
+//    private JdbcTemplate jdbcTemplate;
     
     @Override
     public List<Client> getAll() throws DAOException {   
@@ -67,13 +73,13 @@ public class ClientMysqlDAO implements ClientDAO{
 
     @Override
     public Client getClientByContract(Contract contract) throws DAOException {
+        String request="SELECT cl.* FROM client cl INNER JOIN contract con ON con.`idClient`=cl.id WHERE con.id=?;";
         ClientLazy client = null;
         Connection connection = null;
         PreparedStatement statment = null;
         ResultSet res=null;
         try {
-            connection = ConnectionManager.getInstance().instanceConnection();
-            String request="SELECT cl.* FROM client cl INNER JOIN contract con ON con.`idClient`=cl.id WHERE con.id=?;";
+            connection = ConnectionManager.getInstance().instanceConnection();         
             statment = (PreparedStatement) connection.prepareStatement(request);
             statment.setLong(1, contract.getId());
             res = statment.executeQuery();
@@ -110,6 +116,14 @@ public class ClientMysqlDAO implements ClientDAO{
         }
         return client;
     }
+//    
+//    private static final class ClientRowMapper implements RowMapper<Client>{
+//        @Override
+//        public Client mapRow(ResultSet res, int i) throws SQLException {
+//            return new ClientLazy(res.getLong("id"), res.getString("name"), res.getString("adress"));
+//        }
+//        
+//    }
     
     
 }

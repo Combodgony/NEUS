@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.segvek.terminal.dao.mysql;
 
 import com.mysql.jdbc.PreparedStatement;
@@ -10,7 +5,6 @@ import com.segvek.terminal.dao.CargoDao;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.db.ConnectionManager;
 import com.segvek.terminal.model.Cargo;
-import com.segvek.terminal.model.lazy.ClientLazy;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
