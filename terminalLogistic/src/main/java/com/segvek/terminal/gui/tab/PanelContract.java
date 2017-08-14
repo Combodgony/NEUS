@@ -378,7 +378,6 @@ public class PanelContract extends Tab {
     private void clientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientsActionPerformed
         if(clients.getSelectedItem()!=null && !init){
             contract.setClient((Client) clients.getSelectedItem());
-            System.out.println(contract.getClient());
             editPanel();
         }
     }//GEN-LAST:event_clientsActionPerformed

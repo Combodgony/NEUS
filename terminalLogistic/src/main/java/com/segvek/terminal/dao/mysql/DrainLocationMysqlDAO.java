@@ -1,118 +1,41 @@
 package com.segvek.terminal.dao.mysql;
 
-import com.mysql.jdbc.PreparedStatement;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.dao.DrainLocationDAO;
-import com.segvek.terminal.db.ConnectionManager;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DrainLocation;
 import com.segvek.terminal.model.Estakada;
 import com.segvek.terminal.model.lazy.DrainLocationLazy;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 
 public class DrainLocationMysqlDAO implements DrainLocationDAO{
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    
     @Override
     public DrainLocation getDrainLocationByAdmission(Admission admission) throws DAOException {
-        DrainLocation location = null;
-        Connection connection = null;
-        PreparedStatement statment = null;
-        ResultSet res = null;
-        try {
-            connection = ConnectionManager.getInstance().instanceConnection();
-            String request = "SELECT l.* FROM admission a INNER JOIN drainlocation l ON l.id=a.idDraionLocation WHERE a.id=?;";
-            statment = (PreparedStatement) connection.prepareStatement(request);
-            statment.setLong(1, admission.getId());
-            res = statment.executeQuery();
-            while (res.next()) {
-                location = new DrainLocationLazy(res.getLong("id"),res.getString("number"), null);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException();
-        } finally {
-            try {
-                if (res != null) {
-                    res.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-                throw new DAOException();
-            } finally {
-                try {
-                    if (statment != null) {
-                        statment.close();
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    throw new DAOException();
-                } finally {
-                    if (connection != null) {
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-                            throw new DAOException();
-                        }
-                    }
-                }
-            }
-        }
-        return location;
+        String request = "SELECT l.* FROM admission a INNER JOIN drainlocation l ON l.id=a.idDraionLocation WHERE a.id=?;";
+        return jdbcTemplate.queryForObject(request, new Object[]{admission.getId()}, new DrainLocationRowMapper());
     }
 
     @Override
     public List<DrainLocation> getDrainLocationsByEstacada(Estakada estakada) throws DAOException {
-        List<DrainLocation> list=new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statment = null;
-        ResultSet res=null;
-        try {
-            connection = ConnectionManager.getInstance().instanceConnection();
-            String request="SELECT l.* FROM estakada e INNER JOIN drainlocation l ON l.idEstakada=e.id WHERE e.id=?;";
-            statment = (PreparedStatement) connection.prepareStatement(request);
-            statment.setLong(1, estakada.getId());
-            res = statment.executeQuery();
-            while(res.next()){
-                DrainLocationLazy c = new DrainLocationLazy(res.getLong("id"), res.getString("number"), estakada);
-                list.add(c);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DAOException();
-        }finally{
-            try {
-                if(res!=null)
-                    res.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-                throw new DAOException();
-            }finally{
-                try {
-                    if(statment!=null)
-                        statment.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    throw new DAOException();
-                }finally{
-                    if(connection!=null)
-                        try {
-                            connection.close();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(ClientMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-                            throw new DAOException();
-                        }
-                }
-            }
-        }
+        String request="SELECT l.* FROM estakada e INNER JOIN drainlocation l ON l.idEstakada=e.id WHERE e.id=?;";
+        List<DrainLocation> list=jdbcTemplate.query(request, new Object[]{estakada.getId()}, new DrainLocationRowMapper());
+        list.forEach((d)->d.setEstakada(estakada));
         return list;
     }
-    
+    private static final class DrainLocationRowMapper implements RowMapper<DrainLocation>{
+        @Override
+        public DrainLocation mapRow(ResultSet res, int rowNum) throws SQLException {
+            return new DrainLocationLazy(res.getLong("id"), res.getString("number"), null);
+        }
+    }
 }

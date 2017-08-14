@@ -22,7 +22,7 @@
     
     <bean id="clientDAO" class="com.segvek.terminal.dao.mysql.ClientMysqlDAO"/>
     <bean id="contractDAO" class="com.segvek.terminal.dao.mysql.ContractMysqlDAO"/>
-    <bean id="corgoDAO" class="com.segvek.terminal.dao.mysql.CargoMysqlDAO"/>
+    <bean id="cargoDAO" class="com.segvek.terminal.dao.mysql.CargoMysqlDAO"/>
     <bean id="contentContractDAO" class="com.segvek.terminal.dao.mysql.ContentContractMysqlDAO"/>
     <bean id="estakadDAO" class="com.segvek.terminal.dao.mysql.EstakadMysqlDAO"/>
     <bean id="admissionDao" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDao"/>
