@@ -261,5 +261,13 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     public void setWeidthMinut(double weidthMinut) {
         this.weidthMinut = weidthMinut;
     }
+
+    public boolean isEdited() {
+        return content.isEdited();
+    }
+    
+    public void setEdited(boolean edited){
+        content.setEdited(edited);
+    }
 }
 

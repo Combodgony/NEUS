@@ -20,18 +20,6 @@ public class Admission extends MainModel{
     private ArrayList<Admission> indepented = new ArrayList<>();
     private ArrayList<Admission> depend = new ArrayList<>();
 
-    public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd) {
-        super(id);
-        this.contract = contract;
-        this.tank = tank;
-        this.volume = volume;
-        this.planBegin = planBegin;
-        this.storage = storage;
-        this.drainLocation = drainLocation;
-        this.factBegin = factBegin;
-        this.factEnd = factEnd;
-    }
-
     public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, boolean plan) {
         super(id);
         this.contract = contract;

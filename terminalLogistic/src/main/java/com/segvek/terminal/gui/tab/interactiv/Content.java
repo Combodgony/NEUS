@@ -1,5 +1,6 @@
 package com.segvek.terminal.gui.tab.interactiv;
 
+import com.segvek.terminal.gui.MainFrame;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DependencyAdmission;
 import com.segvek.terminal.model.Estakada;
@@ -32,6 +33,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     private boolean editable;
     private boolean showInfoBlock=false;
     Point pointInfoBlock;//сомнительная переменная 
+    private boolean edited=false;
     
     
     private ArrayList<Estakada> estakads;
@@ -241,7 +243,8 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
             if(activAdmission.addTime(GregorianCalendar.SECOND, (int)((sx*60)/weidthMinut)))
                 pressPoint=e.getPoint();
             int pY = e.getY()-beginPoint.y+biasY;
-            
+            edited=true;
+            MainFrame.getInstance().initInstrumentPanel();
             //jump
             mforjump:
             for(int i=0,y=0; i<estakads.size() && jump; i++){
@@ -340,6 +343,14 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     @Override
     public void keyReleased(KeyEvent e) {
         jump=false;
+    }
+
+    boolean isEdited() {
+        return edited;
+    }
+
+    void setEdited(boolean edited) {
+        this.edited=edited;
     }
 
     
