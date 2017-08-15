@@ -40,7 +40,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     
     private ArrayList<Estakada> estakads;
     private ArrayList<Admission> admissions;
-    ArrayList<DependencyAdmission> das = new ArrayList<>();
+    private List<DependencyAdmission> das = new ArrayList<>();
     
     
     private Timer tim = new Timer(500, this);
@@ -220,8 +220,10 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         return content;
     }
 
-    public void setDependencyAdmissions(ArrayList<DependencyAdmission> das) {
-        this.das=das;
+    public void setDependencyAdmissions(List<DependencyAdmission> das) {
+        this.das= das;
+        if(content!=null)
+             content.setDependencyAdmissions(das);
     }
 
     @Override

@@ -9,4 +9,10 @@ public interface AdmissionDAO extends DAO{
 
     public void update(Admission a) throws DAOException;
 
+    public Admission getAdmissionById(Long id) throws DAOException;
+    
+    public List<Admission> getIndependedAdmissionByAdmission(Admission admission) throws DAOException;
+
+    public List<Admission> getDependAdmissionByAdmission(Admission admissiona) throws DAOException;
+
 }

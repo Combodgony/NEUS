@@ -1,9 +1,9 @@
 
 package com.segvek.terminal.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class Admission extends MainModel{
     
@@ -18,8 +18,8 @@ public class Admission extends MainModel{
     private boolean plan=true;
     private Cargo cargo;
     
-    private ArrayList<Admission> indepented = new ArrayList<>();
-    private ArrayList<Admission> depend = new ArrayList<>();
+    private List<Admission> indepented;
+    private List<Admission> depend;
 
     public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, Cargo cargo,boolean plan) {
         super(id);
@@ -68,19 +68,19 @@ public class Admission extends MainModel{
         this.plan = plan;
     }
 
-    public ArrayList<Admission> getIndepented() {
+    public List<Admission> getIndepented() {
         return indepented;
     }
 
-    public void setIndepented(ArrayList<Admission> indepented) {
+    public void setIndepented(List<Admission> indepented) {
         this.indepented = indepented;
     }
 
-    public ArrayList<Admission> getDepend() {
+    public List<Admission> getDepend() {
         return depend;
     }
 
-    public void setDepend(ArrayList<Admission> depend) {
+    public void setDepend(List<Admission> depend) {
         this.depend = depend;
     }
     
@@ -94,14 +94,14 @@ public class Admission extends MainModel{
             return false;
         planBegin =c.getTime();
         if(time>0){           
-            c.add(GregorianCalendar.MINUTE, tank.getTypeTank().getTime());
-            for(Admission a:indepented){
+            c.add(GregorianCalendar.MINUTE, getTank().getTypeTank().getTime());
+            for(Admission a:getIndepented()){
                 if(a.getBegin().getTime()<c.getTime().getTime()){
                     result &=a.addTime(TypeTime, time);
                 }
             }
         }else{
-            for(Admission a:depend){
+            for(Admission a:getDepend()){
                 c.setTime(a.getBegin());
                 c.add(GregorianCalendar.MINUTE, a.getTank().getTypeTank().getTime());
                 if(planBegin.getTime()<c.getTime().getTime()){
@@ -171,6 +171,13 @@ public class Admission extends MainModel{
     public String toString() {
         return id.toString();
     }
+
+    @Override
+    public int hashCode() {
+        return id.intValue(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     public Cargo getCargo() {
         return cargo;

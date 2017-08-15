@@ -40,5 +40,16 @@ public class DependencyService {
             throw new ServiceException("Не удалось сохранить зависимость");
         }
     }
+
+    public List<DependencyAdmission> getAllDependency() throws ServiceException {
+        List<DependencyAdmission> list = null;
+        try {
+            list = dependencyAdmissionDAO.getAllDependencyAdmissions();
+        } catch (DAOException ex) {
+            Logger.getLogger(DependencyService.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServiceException();
+        }
+        return list;
+    }
     
 }

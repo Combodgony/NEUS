@@ -1,15 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.segvek.terminal.gui.tab;
 
 import com.segvek.terminal.gui.MainFrame;
 import com.segvek.terminal.gui.tab.interactiv.InteractivGrafic;
 import com.segvek.terminal.model.Admission;
+import com.segvek.terminal.model.DependencyAdmission;
 import com.segvek.terminal.model.Estakada;
 import com.segvek.terminal.service.AdmissionService;
+import com.segvek.terminal.service.DependencyService;
 import com.segvek.terminal.service.EstakadService;
 import com.segvek.terminal.service.ServiceException;
 import java.util.Calendar;
@@ -26,47 +23,53 @@ import javax.swing.SpinnerDateModel;
  *
  * @author Panas
  */
-public class PanelInteractivEditor extends Tab{
+public class PanelInteractivEditor extends Tab {
+
     JSpinner.DateEditor timeEditor, timeEditor1;
-    
+
     private AdmissionService admissionService;
     private EstakadService estakadService;
-    
-    private boolean editableData=false;
-    private double weidthMinute=2;
-    
+    private DependencyService dependencyService;
+
+    private boolean editableData = false;
+    private double weidthMinute = 2;
+
     private List<Admission> admissions;
-    private List<Estakada> estakads = null;
-    
+    private List<Estakada> estakads;
+    private List<DependencyAdmission> dependencyAdmissions;
+
     InteractivGrafic gi;
+
     public PanelInteractivEditor() {
         admissionService = new AdmissionService();
         estakadService = new EstakadService();
+        dependencyService = new DependencyService();
         initComponents();
-        gi=(InteractivGrafic)contentPanel;
+        gi = (InteractivGrafic) contentPanel;
         gi.setWeidthMinut(weidthMinute);
         Calendar c = new GregorianCalendar();
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.add(Calendar.DATE, 1);
         dateChooserCombo2.setSelectedDate(c);
-        
+
         initData();
         gi.init();
     }
 
-    private void initData(){
-        
-        
+    private void initData() {
+
         try {
             estakads = estakadService.getAllEstacad();
             admissions = admissionService.getAllAdmission();
+            dependencyAdmissions=dependencyService.getAllDependency();
         } catch (ServiceException ex) {
             Logger.getLogger(PanelInteractivEditor.class.getName())
                     .log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(contentPanel, "Не удалось загрузить данные для интерактивного режима.");
             return;
         }
+        gi.setDependencyAdmissions(dependencyAdmissions);
         gi.setEstakads(estakads);
         gi.setAdmissions(admissions);
         Calendar c = new GregorianCalendar();
@@ -75,7 +78,7 @@ public class PanelInteractivEditor extends Tab{
         gi.setEnd(c.getTime());
         contentPanel.setSize(500, 500);
         gi.init();
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -258,7 +261,7 @@ public class PanelInteractivEditor extends Tab{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jSplitPane1ComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jSplitPane1ComponentResized
-        jSplitPane1.setDividerLocation(jSplitPane1.getWidth()-200);
+        jSplitPane1.setDividerLocation(jSplitPane1.getWidth() - 200);
     }//GEN-LAST:event_jSplitPane1ComponentResized
 
     private void dateChooserCombo3OnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dateChooserCombo3OnCommit
@@ -272,11 +275,11 @@ public class PanelInteractivEditor extends Tab{
     }//GEN-LAST:event_dateChooserCombo3OnCommit
 
     private void timeSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinnerStateChanged
-        Date date = (Date) timeSpinner.getValue();  
+        Date date = (Date) timeSpinner.getValue();
         Calendar c = new GregorianCalendar();
         c.setTime(gi.getStart());
-        c.set(Calendar.HOUR_OF_DAY,date.getHours());
-        c.set(Calendar.MINUTE,date.getMinutes());
+        c.set(Calendar.HOUR_OF_DAY, date.getHours());
+        c.set(Calendar.MINUTE, date.getMinutes());
         gi.setStart(c.getTime());
         gi.init();
         gi.repaint();
@@ -284,7 +287,7 @@ public class PanelInteractivEditor extends Tab{
 
     private void dateChooserCombo2OnCommit(datechooser.events.CommitEvent evt) {//GEN-FIRST:event_dateChooserCombo2OnCommit
         Calendar enddate = (Calendar) dateChooserCombo2.getSelectedDate().clone();
-        Date date = (Date) timeSpinner1.getValue();  
+        Date date = (Date) timeSpinner1.getValue();
         enddate.set(Calendar.HOUR_OF_DAY, date.getHours());
         enddate.set(Calendar.MINUTE, date.getMinutes());
         gi.setEnd(enddate.getTime());
@@ -293,25 +296,25 @@ public class PanelInteractivEditor extends Tab{
     }//GEN-LAST:event_dateChooserCombo2OnCommit
 
     private void timeSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinner1StateChanged
-        Date date = (Date) timeSpinner1.getValue();  
+        Date date = (Date) timeSpinner1.getValue();
         Calendar c = new GregorianCalendar();
         c.setTime(gi.getEnd());
-        c.set(Calendar.HOUR_OF_DAY,date.getHours());
-        c.set(Calendar.MINUTE,date.getMinutes());
+        c.set(Calendar.HOUR_OF_DAY, date.getHours());
+        c.set(Calendar.MINUTE, date.getMinutes());
         gi.setEnd(c.getTime());
         gi.init();
         gi.repaint();
     }//GEN-LAST:event_timeSpinner1StateChanged
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
-        weidthMinute=jSlider1.getValue()/10.0;
+        weidthMinute = jSlider1.getValue() / 10.0;
         gi.setWeidthMinut(weidthMinute);
         gi.init();
         gi.repaint();
     }//GEN-LAST:event_jSlider1StateChanged
 
     private void jCheckBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseClicked
-        editableData=jCheckBox1.isSelected();
+        editableData = jCheckBox1.isSelected();
         gi.setEditable(editableData);
         gi.init();
         gi.repaint();
@@ -319,14 +322,14 @@ public class PanelInteractivEditor extends Tab{
 
     @Override
     public boolean isNeedSave() {
-        return ((InteractivGrafic)contentPanel).isEdited();
+        return ((InteractivGrafic) contentPanel).isEdited();
     }
 
     @Override
     public void save() {
         try {
             admissionService.saveAllAdmissions(admissions);
-            ((InteractivGrafic)contentPanel).setEdited(false);
+            ((InteractivGrafic) contentPanel).setEdited(false);
             MainFrame.getInstance().initInstrumentPanel();
         } catch (ServiceException ex) {
             JOptionPane.showMessageDialog(contentPanel, "Не удлось сохранить завоз, для испрвления ошибки обратитесь к администратору!");
@@ -334,9 +337,6 @@ public class PanelInteractivEditor extends Tab{
         }
     }
 
-    
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contentPanel;

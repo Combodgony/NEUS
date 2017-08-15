@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JPanel;
 
@@ -39,7 +40,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     private ArrayList<Estakada> estakads;
     private ArrayList<Admission> admissions;
     private Map<Admission,Point> posAdmission; //point - upper-left point 
-    private ArrayList<DependencyAdmission> das = new ArrayList<>();
+    private List<DependencyAdmission> das = new ArrayList<>();
     private Admission activAdmission=null;
     
     
@@ -52,7 +53,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     private boolean jump = false;
     public Content( JPanel ig, Point beginPoint,               Point endPoint,  int heigthLine, int indent
                     ,ArrayList<Estakada> estakads,   double weidthMinut,  Date begin,     Date end
-                    ,ArrayList<Admission> admissions,int frequencyTime,ArrayList<DependencyAdmission> das) {
+                    ,ArrayList<Admission> admissions,int frequencyTime,List<DependencyAdmission> das) {
         this.das=das;
         this.ig=ig;
         this.admissions=admissions;
@@ -351,6 +352,11 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
 
     void setEdited(boolean edited) {
         this.edited=edited;
+    }
+
+    void setDependencyAdmissions(List<DependencyAdmission> das) {
+        this.das=das;
+        clacPositionAdmission();
     }
 
     

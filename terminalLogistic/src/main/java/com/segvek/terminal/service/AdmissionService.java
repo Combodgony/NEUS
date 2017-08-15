@@ -13,7 +13,7 @@ public class AdmissionService {
     AdmissionDAO admissionDao;
 
     public AdmissionService() {
-        admissionDao = Loader.getContext().getBean("admissionDao", AdmissionDAO.class);
+        admissionDao = Loader.getContext().getBean("admissionDAO", AdmissionDAO.class);
     }
 
     public List<Admission> getAllAdmission() throws ServiceException {

@@ -28,9 +28,12 @@
     
     <bean id="contentContractDAO" class="com.segvek.terminal.dao.mysql.ContentContractMysqlDAO"/>
     <bean id="estakadDAO" class="com.segvek.terminal.dao.mysql.EstakadMysqlDAO"/>
-    <bean id="admissionDao" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDAO"/>
+    <bean id="admissionDAO" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDAO"/>
     <bean id="typeEstakadaDAO" class="com.segvek.terminal.dao.mysql.TypeEstakadaMysqlDAO"/>
     <bean id="typeTankDAO" class="com.segvek.terminal.dao.mysql.TypeTankMysqlDAO"/>
+    <bean id="dependencyAdmissionDAO" class="com.segvek.terminal.dao.mysql.DependencyAdmissionMysqlDAO">
+        <constructor-arg name="admissionDAO" ref="admissionDAO"/>
+    </bean>
     
     
     <bean id="tankMysqlDAO" class="com.segvek.terminal.dao.mysql.TankMysqlDAO"/>
@@ -51,6 +54,6 @@
         <constructor-arg name="drainLocationDAO" ref="drainLocationMysqlDAO"/>
     </bean>
     
-    <bean id="dependencyAdmissionDAO" class="com.segvek.terminal.dao.mysql.DependencyAdmissionMysqlDAO"/>
+    
     
 </beans>
