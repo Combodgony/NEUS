@@ -28,7 +28,7 @@
     
     <bean id="contentContractDAO" class="com.segvek.terminal.dao.mysql.ContentContractMysqlDAO"/>
     <bean id="estakadDAO" class="com.segvek.terminal.dao.mysql.EstakadMysqlDAO"/>
-    <bean id="admissionDao" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDAO"/>
+    <bean id="admissionDao" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDao"/>
     <bean id="typeEstakadaDAO" class="com.segvek.terminal.dao.mysql.TypeEstakadaMysqlDAO"/>
     <bean id="typeTankDAO" class="com.segvek.terminal.dao.mysql.TypeTankMysqlDAO"/>
     

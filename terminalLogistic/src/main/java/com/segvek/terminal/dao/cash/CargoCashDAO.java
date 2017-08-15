@@ -1,7 +1,6 @@
 
 package com.segvek.terminal.dao.cash;
 
-import com.segvek.terminal.dao.CargoDAO;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.Cargo;
@@ -9,10 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.segvek.terminal.dao.CargoDao;
 
 
-public class CargoCashDAO implements CargoDAO{
-    private CargoDAO cargoDAO;
+public class CargoCashDAO implements CargoDao{
+    private CargoDao cargoDAO;
 
     private List<Cargo> list;
     
@@ -22,7 +22,7 @@ public class CargoCashDAO implements CargoDAO{
     
     
     
-    public CargoCashDAO(CargoDAO cargoDAO) throws DAOException {
+    public CargoCashDAO(CargoDao cargoDAO) throws DAOException {
         this.cargoDAO = cargoDAO;
         list=new ArrayList<>();
         admissionMap=new HashMap<>();

@@ -6,14 +6,14 @@ import com.segvek.terminal.model.Cargo;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.segvek.terminal.dao.CargoDAO;
+import com.segvek.terminal.dao.CargoDao;
 
 
 public class CargoService {
-    CargoDAO cargoDao;
+    CargoDao cargoDao;
 
     public CargoService() {
-        cargoDao = Loader.getContext().getBean("cargoDAO",CargoDAO.class);
+        cargoDao = Loader.getContext().getBean("cargoDAO",CargoDao.class);
     }
     
     public List<Cargo> getAllCargo() throws ServiceException{

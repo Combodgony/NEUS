@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import com.segvek.terminal.dao.CargoDAO;
+import com.segvek.terminal.dao.CargoDao;
 
-public class CargoMysqlDAO implements CargoDAO{
+public class CargoMysqlDAO implements CargoDao{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

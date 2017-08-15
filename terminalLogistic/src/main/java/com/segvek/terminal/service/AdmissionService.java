@@ -6,14 +6,14 @@ import com.segvek.terminal.model.Admission;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.segvek.terminal.dao.AdmissionDAO;
+import com.segvek.terminal.dao.AdmissionDao;
 
 public class AdmissionService {
 
-    AdmissionDAO admissionDao;
+    AdmissionDao admissionDao;
 
     public AdmissionService() {
-        admissionDao = Loader.getContext().getBean("admissionDao", AdmissionDAO.class);
+        admissionDao = Loader.getContext().getBean("admissionDao", AdmissionDao.class);
     }
 
     public List<Admission> getAllAdmission() throws ServiceException {

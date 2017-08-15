@@ -1,6 +1,5 @@
 package com.segvek.terminal.dao.mysql;
 
-import com.segvek.terminal.dao.AdmissionDao;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.lazy.AdmissionLazy;
@@ -12,7 +11,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.transaction.annotation.Transactional;
+import com.segvek.terminal.dao.AdmissionDao;
 
 
 public class AdmissionMysqlDao implements AdmissionDao{
@@ -44,7 +43,7 @@ public class AdmissionMysqlDao implements AdmissionDao{
         public Admission mapRow(ResultSet res, int rowNum) throws SQLException {
             return new AdmissionLazy(res.getLong("id"), null, null
                         , res.getInt("volume"), res.getTimestamp("planBeginDate"), null, null
-                        , res.getTimestamp("factBeginDate"), res.getTimestamp("factEndDate"), res.getBoolean("plan"));
+                        , res.getTimestamp("factBeginDate"), res.getTimestamp("factEndDate"), null, res.getBoolean("plan"));
         }
     }
 }
