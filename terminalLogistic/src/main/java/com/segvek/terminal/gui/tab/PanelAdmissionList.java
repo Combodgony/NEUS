@@ -26,7 +26,7 @@ public class PanelAdmissionList extends Tab {
             DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
             dtm.setRowCount(0);
             for(Admission a:list){
-                dtm.addRow(new Object[]{a,a.getContract().getNumber(),null,a.getTank().getNumber(),a.getVolume(),a.getBegin(),a.getDrainLocation().getNumber()
+                dtm.addRow(new Object[]{a,a.getContract().getNumber(),a.getCargo(),a.getTank().getNumber(),a.getVolume(),a.getBegin(),a.getDrainLocation().getNumber()
                 ,a.getFactBegin(),a.getFactEnd(),null});
             }
         } catch (ServiceException ex) {
@@ -76,10 +76,7 @@ public class PanelAdmissionList extends Tab {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Номер", "Договор", "Груз", "Цистерна", "Объём ", "Дата (план)", "Место слива", "Дата начала (факт)", "Дата окончания (факт)", "Накопитель"

@@ -1,19 +1,19 @@
 package com.segvek.terminal.service;
 
 import com.segvek.terminal.Loader;
-import com.segvek.terminal.dao.CargoDao;
 import com.segvek.terminal.dao.DAOException;
 import com.segvek.terminal.model.Cargo;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.segvek.terminal.dao.CargoDAO;
 
 
 public class CargoService {
-    CargoDao cargoDao;
+    CargoDAO cargoDao;
 
     public CargoService() {
-        cargoDao = Loader.getContext().getBean("cargoDAO",CargoDao.class);
+        cargoDao = Loader.getContext().getBean("cargoDAO",CargoDAO.class);
     }
     
     public List<Cargo> getAllCargo() throws ServiceException{

@@ -1,0 +1,1 @@
+java -XX:+UseG1GC -jar target\terminal-1.0.jar 

@@ -16,11 +16,12 @@ public class Admission extends MainModel{
     private Date factBegin;
     private Date factEnd;  
     private boolean plan=true;
+    private Cargo cargo;
     
     private ArrayList<Admission> indepented = new ArrayList<>();
     private ArrayList<Admission> depend = new ArrayList<>();
 
-    public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, boolean plan) {
+    public Admission(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, Cargo cargo,boolean plan) {
         super(id);
         this.contract = contract;
         this.tank = tank;
@@ -30,6 +31,7 @@ public class Admission extends MainModel{
         this.drainLocation = drainLocation;
         this.factBegin = factBegin;
         this.factEnd = factEnd;
+        this.cargo=cargo;
         this.plan = plan;
     }
 
@@ -169,6 +171,15 @@ public class Admission extends MainModel{
     public String toString() {
         return id.toString();
     }
+
+    public Cargo getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(Cargo cargo) {
+        this.cargo = cargo;
+    }
+    
     
     
     

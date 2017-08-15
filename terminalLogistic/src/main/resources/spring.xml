@@ -25,13 +25,31 @@
     </bean>
     
     <bean id="clientDAO" class="com.segvek.terminal.dao.mysql.ClientMysqlDAO"/>
-    <bean id="contractDAO" class="com.segvek.terminal.dao.mysql.ContractMysqlDAO"/>
-    <bean id="cargoDAO" class="com.segvek.terminal.dao.mysql.CargoMysqlDAO"/>
+    
     <bean id="contentContractDAO" class="com.segvek.terminal.dao.mysql.ContentContractMysqlDAO"/>
     <bean id="estakadDAO" class="com.segvek.terminal.dao.mysql.EstakadMysqlDAO"/>
-    <bean id="admissionDao" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDao"/>
+    <bean id="admissionDao" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDAO"/>
     <bean id="typeEstakadaDAO" class="com.segvek.terminal.dao.mysql.TypeEstakadaMysqlDAO"/>
     <bean id="typeTankDAO" class="com.segvek.terminal.dao.mysql.TypeTankMysqlDAO"/>
-    <bean id="drainLocationDAO" class="com.segvek.terminal.dao.mysql.DrainLocationMysqlDAO"/>
-    <bean id="tankDAO" class="com.segvek.terminal.dao.mysql.TankMysqlDAO"/>
+    
+    
+    <bean id="tankMysqlDAO" class="com.segvek.terminal.dao.mysql.TankMysqlDAO"/>
+    <bean id="cargoMysqlDAO" class="com.segvek.terminal.dao.mysql.CargoMysqlDAO"/>
+    <bean id="contractMysqlDAO" class="com.segvek.terminal.dao.mysql.ContractMysqlDAO"/>
+    <bean id="drainLocationMysqlDAO" class="com.segvek.terminal.dao.mysql.DrainLocationMysqlDAO"/>
+    
+    <bean id="cargoDAO" class="com.segvek.terminal.dao.cash.CargoCashDAO">
+        <constructor-arg name="cargoDAO" ref="cargoMysqlDAO"/>
+    </bean>
+    <bean id="tankDAO" class="com.segvek.terminal.dao.cash.TankCashDAO">
+        <constructor-arg name="tankDAO" ref="tankMysqlDAO"/>
+    </bean>
+    <bean id="contractDAO" class="com.segvek.terminal.dao.cash.ContractCashDAO">
+        <constructor-arg name="contractDAO" ref="contractMysqlDAO"/>
+    </bean>
+    <bean id="drainLocationDAO" class="com.segvek.terminal.dao.cash.DrainLocationCashDAO">
+        <constructor-arg name="drainLocationDAO" ref="drainLocationMysqlDAO"/>
+    </bean>
+    
+    
 </beans>
