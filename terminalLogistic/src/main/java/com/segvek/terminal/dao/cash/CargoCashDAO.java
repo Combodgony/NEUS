@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.segvek.terminal.dao.CargoDao;
+import com.segvek.terminal.dao.CargoDAO;
 
 
-public class CargoCashDAO implements CargoDao{
-    private CargoDao cargoDAO;
+public class CargoCashDAO implements CargoDAO{
+    private CargoDAO cargoDAO;
 
     private List<Cargo> list;
     
@@ -22,7 +22,7 @@ public class CargoCashDAO implements CargoDao{
     
     
     
-    public CargoCashDAO(CargoDao cargoDAO) throws DAOException {
+    public CargoCashDAO(CargoDAO cargoDAO) throws DAOException {
         this.cargoDAO = cargoDAO;
         list=new ArrayList<>();
         admissionMap=new HashMap<>();

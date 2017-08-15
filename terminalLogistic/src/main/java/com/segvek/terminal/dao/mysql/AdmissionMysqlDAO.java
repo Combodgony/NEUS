@@ -11,10 +11,10 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import com.segvek.terminal.dao.AdmissionDao;
+import com.segvek.terminal.dao.AdmissionDAO;
 
 
-public class AdmissionMysqlDao implements AdmissionDao{
+public class AdmissionMysqlDAO implements AdmissionDAO{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -23,7 +23,7 @@ public class AdmissionMysqlDao implements AdmissionDao{
     public List<Admission> getAllAdmission() throws DAOException {
         String request="SELECT * FROM admission";
         if(DEBUG)
-            Logger.getLogger(AdmissionMysqlDao.class.getName()).info(request);
+            Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.query(request, new AdmissionRowMapper());
     }
 
@@ -32,7 +32,7 @@ public class AdmissionMysqlDao implements AdmissionDao{
         String request="UPDATE admission SET `idContract`=?, `idCargo`=?, `idDraionLocation`=?, `idTank`=?, volume=?, "
                 + "`factBeginDate`=?,`factEndDate`=?, `idStationaryStorage`=?,`planBeginDate`=?, plan=? WHERE id=?;";
         if(DEBUG)
-            Logger.getLogger(AdmissionMysqlDao.class.getName()).info(request);
+            Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
         jdbcTemplate.update(request,new Object[]{a.getContract().getId(),null,a.getDrainLocation().getId(),a.getTank().getId(),a.getVolume()
                 ,a.getFactBegin(),a.getFactEnd(),null,a.getBegin(),a.isPlan(),a.getId()},
                 new int[]{Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.INTEGER,Types.TIMESTAMP,Types.TIMESTAMP,Types.INTEGER,Types.TIMESTAMP,Types.TINYINT,Types.INTEGER});

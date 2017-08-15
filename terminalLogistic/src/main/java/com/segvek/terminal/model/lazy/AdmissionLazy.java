@@ -15,21 +15,21 @@ import com.segvek.terminal.model.Tank;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.segvek.terminal.dao.CargoDao;
+import com.segvek.terminal.dao.CargoDAO;
 
 public class AdmissionLazy extends Admission{
     
     private ContractDAO contractDAO;
     private TankDAO tankDAO;
     private DrainLocationDAO drainLocationDAO;
-    private CargoDao cargoDao;
+    private CargoDAO cargoDao;
     
     public AdmissionLazy(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, Cargo cargo,boolean plan) {
         super(id, contract, tank, volume, planBegin, storage, drainLocation, factBegin, factEnd,cargo, plan);
         contractDAO = Loader.getContext().getBean("contractDAO", ContractDAO.class);
         drainLocationDAO = Loader.getContext().getBean("drainLocationDAO", DrainLocationDAO.class);
         tankDAO = Loader.getContext().getBean("tankDAO", TankDAO.class);
-        cargoDao = Loader.getContext().getBean("cargoDAO", CargoDao.class);
+        cargoDao = Loader.getContext().getBean("cargoDAO", CargoDAO.class);
     }
 
     @Override
