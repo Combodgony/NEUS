@@ -51,5 +51,6 @@
         <constructor-arg name="drainLocationDAO" ref="drainLocationMysqlDAO"/>
     </bean>
     
+    <bean id="dependencyAdmissionDAO" class="com.segvek.terminal.dao.mysql.DependencyAdmissionMysqlDAO"/>
     
 </beans>

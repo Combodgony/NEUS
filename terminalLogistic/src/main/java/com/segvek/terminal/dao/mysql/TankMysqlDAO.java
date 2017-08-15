@@ -8,6 +8,7 @@ import com.segvek.terminal.model.Tank;
 import com.segvek.terminal.model.lazy.TankLazy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +25,14 @@ public class TankMysqlDAO implements TankDAO{
         if(DEBUG)
             Logger.getLogger(TankMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.queryForObject(request, new Object[]{admission.getId()}, new TankRowMapper());
+    }
+
+    @Override
+    public List<Tank> getAllTank() throws DAOException {
+        String request = "SELECT * FROM tank;";
+        if(DEBUG)
+            Logger.getLogger(TankMysqlDAO.class.getName()).info(request);
+        return jdbcTemplate.query(request, new TankRowMapper());
     }
     
     private static final class TankRowMapper implements RowMapper<Tank>{

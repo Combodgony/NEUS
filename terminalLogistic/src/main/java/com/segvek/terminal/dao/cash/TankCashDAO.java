@@ -16,11 +16,17 @@ public class TankCashDAO implements TankDAO{
 
     private List<Tank> list;
     private Map<Long,Tank> admissinMap;
+    private boolean al=false;
     
     public TankCashDAO(TankDAO tankDAO) {
         this.tankDAO = tankDAO;
         list=new ArrayList<>();
         admissinMap=new HashMap<>();
+    }
+    
+    @Override
+    public List<Tank> getAllTank() throws DAOException {
+        return tankDAO.getAllTank();
     }
     
     @Override
@@ -42,6 +48,8 @@ public class TankCashDAO implements TankDAO{
         return t;
     }
     
+    
+    
     private Tank getFromCash(Long id){
         for(Tank t:list){
             if(t.getId()==id)
@@ -49,5 +57,4 @@ public class TankCashDAO implements TankDAO{
         }
         return null;
     }
-    
 }
