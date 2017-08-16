@@ -86,6 +86,7 @@ public class AdmissionCashDAO implements AdmissionDAO{
     @Override
     public void addDependencyAdmission(DependencyAdmission dependencyAdmission) throws DAOException {
         admissionDAO.addDependencyAdmission(dependencyAdmission);
+        
     }
 
     @Override

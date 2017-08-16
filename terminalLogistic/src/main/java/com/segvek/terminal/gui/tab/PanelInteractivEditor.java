@@ -4,6 +4,8 @@ import com.segvek.terminal.gui.DialogAddAdmissionDependency;
 import com.segvek.terminal.gui.MainFrame;
 import com.segvek.terminal.gui.image.ImageHelper;
 import com.segvek.terminal.gui.tab.interactiv.InteractivGrafic;
+import com.segvek.terminal.gui.tab.interactiv.InteractivGraficListener;
+import com.segvek.terminal.gui.tab.interactiv.InteractiveGraficException;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DependencyAdmission;
 import com.segvek.terminal.model.Estakada;
@@ -55,16 +57,27 @@ public class PanelInteractivEditor extends Tab {
         c.add(Calendar.DATE, 1);
         dateChooserCombo2.setSelectedDate(c);
 
+        
+        
+        try {
+            gi.addInteractiveGraficListener(new InteractivGraficListener() {
+                @Override
+                public void selected(Admission admission) {
+                    interactiveGraficAelectedAdmission(admission);
+                }
+            });
+        } catch (InteractiveGraficException ex) {
+            Logger.getLogger(PanelInteractivEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         initData();
-        gi.init();
     }
 
     private void initData() {
-
         try {
             estakads = estakadService.getAllEstacad();
             admissions = admissionService.getAllAdmission();
-            dependencyAdmissions=dependencyService.getAllDependency();
+            dependencyAdmissions = dependencyService.getAllDependency();
         } catch (ServiceException ex) {
             Logger.getLogger(PanelInteractivEditor.class.getName())
                     .log(Level.SEVERE, null, ex);
@@ -343,9 +356,14 @@ public class PanelInteractivEditor extends Tab {
     private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
         DialogAddAdmissionDependency d = new DialogAddAdmissionDependency(MainFrame.getInstance(), true);
         if (d.showDialog()) {
-            repaint();
+            initData();
+            gi.repaint();
         }
     }//GEN-LAST:event_btnAdd2ActionPerformed
+
+    private void interactiveGraficAelectedAdmission(Admission admission) {
+        MainFrame.getInstance().addPanelTab("Завоз №"+admission.getId(), new PanelAdmission(admission));
+    }
 
     @Override
     public boolean isNeedSave() {

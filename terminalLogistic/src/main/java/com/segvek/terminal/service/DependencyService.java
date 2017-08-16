@@ -35,6 +35,12 @@ public class DependencyService {
     public void save(DependencyAdmission dependencyAdmission) throws ServiceException{
         try {
             admissionDAO.addDependencyAdmission(dependencyAdmission);
+            if(dependencyAdmission.getAdmission().getIndepented()!=null){
+                dependencyAdmission.getAdmission().getIndepented().add(dependencyAdmission.getIndependet());
+            }
+            if(dependencyAdmission.getIndependet().getDepend()!=null){
+                dependencyAdmission.getIndependet().getDepend().add(dependencyAdmission.getAdmission());
+            }
         } catch (DAOException ex) {
             Logger.getLogger(DependencyService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServiceException("Не удалось сохранить зависимость");

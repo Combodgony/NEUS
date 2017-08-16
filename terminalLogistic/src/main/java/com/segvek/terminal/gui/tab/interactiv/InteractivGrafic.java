@@ -15,12 +15,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
-public class InteractivGrafic extends JPanel implements MouseListener,ComponentListener,ActionListener{
+public class InteractivGrafic extends JPanel implements MouseListener,ComponentListener,ActionListener,InteractiveGraficSubject{
     private int heigthContent=0; //calc variable
     private int weidthContent=0; //calc variable
 
@@ -52,6 +53,8 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     private LeftZona lz;
     private TimeZona timeZona;
     private Content content;
+    
+    private List<InteractivGraficListener> listeners = new LinkedList<>();
     
     private boolean editable=false;
 
@@ -105,7 +108,7 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
         Point beginContent = new Point(weigthLeftZona,heightTimeZone);
         Point endContent = new Point(getWidth()-(verticalScrollVisible?weigthScroll:0)
                 ,getHeight()-(horizontalScrollVisible?weigthScroll:0));
-        content = new Content(this,beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,60,das);
+        content = new Content(this,beginContent, endContent, heigthLine, indent, estakads,weidthMinut,start,end,admissions,60,das,listeners);
         content.setEditable(editable);
         
         Point beginTimeZona = new Point(weigthLeftZona,0);
@@ -270,6 +273,16 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     
     public void setEdited(boolean edited){
         content.setEdited(edited);
+    }
+
+    @Override
+    public void addInteractiveGraficListener(InteractivGraficListener listener) throws InteractiveGraficException{
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeInteractiveGraficListener(InteractivGraficListener listener) throws InteractiveGraficException{
+        listeners.remove(listener);
     }
 }
 

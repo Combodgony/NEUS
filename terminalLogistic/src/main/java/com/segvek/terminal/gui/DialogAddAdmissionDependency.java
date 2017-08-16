@@ -26,8 +26,8 @@ public class DialogAddAdmissionDependency extends javax.swing.JDialog {
     public DialogAddAdmissionDependency(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        AutoCompleteDecorator.decorate(jComboBox1, new AdmissinToStringConvert());
-        AutoCompleteDecorator.decorate(jComboBox2, new AdmissinToStringConvert());
+//        AutoCompleteDecorator.decorate(jComboBox1, new AdmissinToStringConvert());
+//        AutoCompleteDecorator.decorate(jComboBox2, new AdmissinToStringConvert());
 
         
         jComboBox1.setRenderer(new AdmissinListCellRenderer());

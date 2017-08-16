@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JPanel;
@@ -35,6 +36,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     private boolean showInfoBlock=false;
     Point pointInfoBlock;//сомнительная переменная 
     private boolean edited=false;
+    private List<InteractivGraficListener> listeners;
     
     
     private ArrayList<Estakada> estakads;
@@ -53,7 +55,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     private boolean jump = false;
     public Content( JPanel ig, Point beginPoint,               Point endPoint,  int heigthLine, int indent
                     ,ArrayList<Estakada> estakads,   double weidthMinut,  Date begin,     Date end
-                    ,ArrayList<Admission> admissions,int frequencyTime,List<DependencyAdmission> das) {
+                    ,ArrayList<Admission> admissions,int frequencyTime,List<DependencyAdmission> das,List<InteractivGraficListener> listeners) {
         this.das=das;
         this.ig=ig;
         this.admissions=admissions;
@@ -66,6 +68,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
         this.estakads=estakads;
         this.heigthLine=heigthLine;
         this.indent=indent;
+        this.listeners=listeners;
         init();
         clacPositionAdmission();
     }
@@ -230,12 +233,20 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
 
     
     Point pressPoint=null;
-    public void mouseClicked(MouseEvent e) {}
+    
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void keyTyped(KeyEvent e) {}  
     public void mouseReleased(MouseEvent e) {
         showInfoBlock=false;
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(activAdmission!=null){
+            for(InteractivGraficListener l:listeners){
+                l.selected(activAdmission);
+            }
+        }
     }
     @Override
     public void mouseDragged(MouseEvent e) {
