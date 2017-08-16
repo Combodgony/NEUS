@@ -39,8 +39,8 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     private List<InteractivGraficListener> listeners;
     
     
-    private ArrayList<Estakada> estakads;
-    private ArrayList<Admission> admissions;
+    private List<Estakada> estakads;
+    private List<Admission> admissions;
     private Map<Admission,Point> posAdmission; //point - upper-left point 
     private List<DependencyAdmission> das = new ArrayList<>();
     private Admission activAdmission=null;
@@ -54,8 +54,8 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
     
     private boolean jump = false;
     public Content( JPanel ig, Point beginPoint,               Point endPoint,  int heigthLine, int indent
-                    ,ArrayList<Estakada> estakads,   double weidthMinut,  Date begin,     Date end
-                    ,ArrayList<Admission> admissions,int frequencyTime,List<DependencyAdmission> das,List<InteractivGraficListener> listeners) {
+                    ,List<Estakada> estakads,   double weidthMinut,  Date begin,     Date end
+                    ,List<Admission> admissions,int frequencyTime,List<DependencyAdmission> das,List<InteractivGraficListener> listeners) {
         this.das=das;
         this.ig=ig;
         this.admissions=admissions;
@@ -102,7 +102,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
         for(int i=0,y=indent+heigthLine; i<estakads.size(); i++,y+=indent+heigthLine){
             for(int j=0; j<estakads.get(i).getDrainLocations().size(); j++){ 
                 for(Admission a:admissions){
-                    if(estakads.get(i).getDrainLocations().get(j).getId()==a.getDrainLocation().getId()){
+                    if(estakads.get(i).getDrainLocations().get(j).getId().equals(a.getDrainLocation().getId())){
                         int addMinBegin=0;
                         if(a.isPlan()){
                             addMinBegin =(int)((a.getBegin().getTime()-begin.getTime())/60000);
@@ -180,7 +180,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
                 g.setColor(Color.BLACK);
                 g.drawString(a.getTank().getNumber(), p.x+5, p.y+heigthLine-5);
             }
-            if(activAdmission!=null && activAdmission.getId()==a.getId() /*&& a.getStatus().equals("План")*/){
+            if(activAdmission!=null && activAdmission.getId().equals(a.getId()) /*&& a.getStatus().equals("План")*/){
                 g.setColor(Color.WHITE);
                 g.drawRoundRect(p.x+2, p.y+2, (int)(colMin*weidthMinut)-4, heigthLine-4,10, 10);
             }
@@ -264,8 +264,8 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
                 for(int j=0; j<estakads.get(i).getDrainLocations().size(); j++){
                     int y1=y+heigthLine;
                     if(pY>y && pY<y1){
-                        if(activAdmission.getDrainLocation().getId()!=estakads.get(i).getDrainLocations().get(j).getId() &&
-                          estakads.get(i).getTypeEstakada().getId()==activAdmission.getDrainLocation().getEstakada().getTypeEstakada().getId()){
+                        if(!activAdmission.getDrainLocation().getId().equals(estakads.get(i).getDrainLocations().get(j).getId()) &&
+                          estakads.get(i).getTypeEstakada().getId().equals(activAdmission.getDrainLocation().getEstakada().getTypeEstakada().getId())){
                             activAdmission.setDrainLocation(estakads.get(i).getDrainLocations().get(j));
                             break mforjump;
                         }
@@ -309,7 +309,7 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
                 int y1=y+heigthLine;
                 if(pY>y && pY<y1){
                     for(Admission a :admissions){
-                        if(a.getDrainLocation().getId()==estakads.get(i).getDrainLocations().get(j).getId()){
+                        if(a.getDrainLocation().getId().equals(estakads.get(i).getDrainLocations().get(j).getId())){
                             int addMinBegin;
                             int colMin;
                             if(a.isPlan()){

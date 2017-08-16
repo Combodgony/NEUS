@@ -57,7 +57,7 @@ public class CargoCashDAO implements CargoDAO{
     
     private Cargo getFromCash(Long id){
         for(Cargo c:list){
-            if(c.getId()==id)
+            if(c.getId().equals(id))
                 return c;
         }
         return null;

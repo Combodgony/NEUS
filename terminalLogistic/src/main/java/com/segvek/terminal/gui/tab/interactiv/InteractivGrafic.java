@@ -39,8 +39,8 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     private int indent=10;
     
     
-    private ArrayList<Estakada> estakads;
-    private ArrayList<Admission> admissions;
+    private List<Estakada> estakads;
+    private List<Admission> admissions;
     private List<DependencyAdmission> das = new ArrayList<>();
     
     
@@ -67,11 +67,11 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     }
 
     public void setStartDate(Date start) {
-        this.start = start;
+        this.start = (Date) start.clone();
     }
 
     public void setEnd(Date end) {
-        this.end = end;
+        this.end = (Date) end.clone();
     }    
     
     public void init(){ 
@@ -212,11 +212,11 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     } 
 
     public void setEstakads(List<Estakada> estakads) {
-        this.estakads=(ArrayList<Estakada>) estakads;
+        this.estakads= estakads;
     }
 
     public void setAdmissions(List<Admission> admissions) {
-        this.admissions=(ArrayList<Admission>) admissions;
+        this.admissions=admissions;
     }
 
     public Content getContent() {
@@ -240,15 +240,15 @@ public class InteractivGrafic extends JPanel implements MouseListener,ComponentL
     }
 
     public void setStart(Date start) {
-        this.start = start;
+        this.start = (Date) start.clone();
     }
 
     public Date getStart() {
-        return start;
+        return (Date) start.clone();
     }
 
     public Date getEnd() {
-        return end;
+        return (Date) end.clone();
     }
 
     public boolean isEditable() {

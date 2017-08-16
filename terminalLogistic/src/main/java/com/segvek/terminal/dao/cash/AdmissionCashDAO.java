@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -77,7 +78,7 @@ public class AdmissionCashDAO implements AdmissionDAO{
         Iterator<Admission> iter = set.iterator();
         while(iter.hasNext()){
             Admission a = iter.next();
-            if(a.getId()==id)
+            if(a.getId().equals(id))
                 return a;
         }
         return null;

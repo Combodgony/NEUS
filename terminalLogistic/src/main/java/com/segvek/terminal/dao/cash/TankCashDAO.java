@@ -16,7 +16,6 @@ public class TankCashDAO implements TankDAO{
 
     private List<Tank> list;
     private Map<Long,Tank> admissinMap;
-    private boolean al=false;
     
     public TankCashDAO(TankDAO tankDAO) {
         this.tankDAO = tankDAO;
@@ -52,7 +51,7 @@ public class TankCashDAO implements TankDAO{
     
     private Tank getFromCash(Long id){
         for(Tank t:list){
-            if(t.getId()==id)
+            if(t.getId().equals(id))
                 return t;
         }
         return null;

@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 class LeftZona implements ScrollListener{
     private int weidth, heigth;
@@ -19,7 +20,7 @@ class LeftZona implements ScrollListener{
     private int indent;
     private int bias=0;
     
-    private ArrayList<Estakada> estakads;
+    private List<Estakada> estakads;
     
     
     private Point begin;
@@ -28,7 +29,7 @@ class LeftZona implements ScrollListener{
 
     private BufferedImage image;
     
-    public LeftZona(Point begin, Point end,int heigthLine, int indent,ArrayList<Estakada> estakads) {
+    public LeftZona(Point begin, Point end,int heigthLine, int indent,List<Estakada> estakads) {
         this.begin = begin;
         this.end = end;
         this.estakads=estakads;

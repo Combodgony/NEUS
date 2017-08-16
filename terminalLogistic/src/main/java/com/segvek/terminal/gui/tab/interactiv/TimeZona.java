@@ -13,6 +13,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 class TimeZona implements ScrollListener{
     private int weidth, heigth;
@@ -114,4 +115,53 @@ class TimeZona implements ScrollListener{
         createImage();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TimeZona other = (TimeZona) obj;
+        if (this.weidth != other.weidth) {
+            return false;
+        }
+        if (this.heigth != other.heigth) {
+            return false;
+        }
+        if (this.bias != other.bias) {
+            return false;
+        }
+        if (this.k != other.k) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.weidthMinut) != Double.doubleToLongBits(other.weidthMinut)) {
+            return false;
+        }
+        if (this.frequencyTime != other.frequencyTime) {
+            return false;
+        }
+        if (!Objects.equals(this.beginPoint, other.beginPoint)) {
+            return false;
+        }
+        if (!Objects.equals(this.endPoint, other.endPoint)) {
+            return false;
+        }
+        if (!Objects.equals(this.begin, other.begin)) {
+            return false;
+        }
+        if (!Objects.equals(this.end, other.end)) {
+            return false;
+        }
+        if (!Objects.equals(this.image, other.image)) {
+            return false;
+        }
+        return true;
+    }
+
+    
 }

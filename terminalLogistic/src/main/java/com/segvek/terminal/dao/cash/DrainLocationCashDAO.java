@@ -51,7 +51,7 @@ public class DrainLocationCashDAO implements DrainLocationDAO {
 
     private DrainLocation getFromCash(Long id) {
         for (DrainLocation l : list) {
-            if (l.getId() == id) {
+            if (l.getId().equals(id)) {
                 return l;
             }
         }

@@ -72,7 +72,7 @@ public class ContractCashDAO implements ContractDAO{
     
     private Contract getFromCash(Long id){
         for(Contract c:list)
-            if(c.getId()==id)
+            if(c.getId().equals(id))
                 return c;
         return null;
     }
