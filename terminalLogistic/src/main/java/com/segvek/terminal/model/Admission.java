@@ -108,14 +108,12 @@ public class Admission extends MainModel{
                     result &=a.addTime(TypeTime, time);
                 }
             }
-            
         } 
         if(!result){
             c.setTime(getBegin());
             c.add(TypeTime, -time);
             planBegin =c.getTime();
         }
-            
         return result;
     }
 
@@ -171,12 +169,6 @@ public class Admission extends MainModel{
     public String toString() {
         return id.toString();
     }
-
-    @Override
-    public int hashCode() {
-        return id.intValue(); //To change body of generated methods, choose Tools | Templates.
-    }
-    
     
 
     public Cargo getCargo() {

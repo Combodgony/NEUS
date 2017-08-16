@@ -1,8 +1,8 @@
 package com.segvek.terminal.service;
 
 import com.segvek.terminal.Loader;
+import com.segvek.terminal.dao.AdmissionDAO;
 import com.segvek.terminal.dao.DAOException;
-import com.segvek.terminal.dao.DependencyAdmissionDAO;
 import com.segvek.terminal.dao.TankDAO;
 import com.segvek.terminal.model.DependencyAdmission;
 import com.segvek.terminal.model.Tank;
@@ -13,11 +13,11 @@ import java.util.logging.Logger;
 
 public class DependencyService {
     private TankDAO tankDAO;
-    private DependencyAdmissionDAO dependencyAdmissionDAO;
+    private AdmissionDAO admissionDAO;
 
     public DependencyService() {
         tankDAO = Loader.getContext().getBean("tankDAO", TankDAO.class);
-        dependencyAdmissionDAO = Loader.getContext().getBean("dependencyAdmissionDAO", DependencyAdmissionDAO.class);
+        admissionDAO = Loader.getContext().getBean("admissionDAO", AdmissionDAO.class);
     }
     
     
@@ -34,7 +34,7 @@ public class DependencyService {
 
     public void save(DependencyAdmission dependencyAdmission) throws ServiceException{
         try {
-            dependencyAdmissionDAO.addDependencyAdmission(dependencyAdmission);
+            admissionDAO.addDependencyAdmission(dependencyAdmission);
         } catch (DAOException ex) {
             Logger.getLogger(DependencyService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServiceException("Не удалось сохранить зависимость");
@@ -44,7 +44,7 @@ public class DependencyService {
     public List<DependencyAdmission> getAllDependency() throws ServiceException {
         List<DependencyAdmission> list = null;
         try {
-            list = dependencyAdmissionDAO.getAllDependencyAdmissions();
+            list = admissionDAO.getAllDependencyAdmissions();
         } catch (DAOException ex) {
             Logger.getLogger(DependencyService.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServiceException();

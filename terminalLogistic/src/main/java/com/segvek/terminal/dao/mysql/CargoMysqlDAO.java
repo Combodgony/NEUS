@@ -28,7 +28,7 @@ public class CargoMysqlDAO implements CargoDAO{
 
     @Override
     public Cargo getCargoByAdmission(Admission admission) throws DAOException {
-        String request="SELECT * FROM admission a INNER JOIN cargo c ON c.id=a.`idCargo` WHERE a.id=?;";
+        String request="SELECT c.* FROM admission a INNER JOIN cargo c ON c.id=a.`idCargo` WHERE a.id=?;";
         if(DEBUG)
             Logger.getLogger(CargoMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.queryForObject(request, new Object[]{admission.getId()},new CargoRowMapper());

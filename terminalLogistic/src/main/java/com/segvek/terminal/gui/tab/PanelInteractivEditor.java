@@ -1,6 +1,8 @@
 package com.segvek.terminal.gui.tab;
 
+import com.segvek.terminal.gui.DialogAddAdmissionDependency;
 import com.segvek.terminal.gui.MainFrame;
+import com.segvek.terminal.gui.image.ImageHelper;
 import com.segvek.terminal.gui.tab.interactiv.InteractivGrafic;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DependencyAdmission;
@@ -94,6 +96,7 @@ public class PanelInteractivEditor extends Tab {
         dateChooserCombo3 = new datechooser.beans.DateChooserCombo();
         jCheckBox1 = new javax.swing.JCheckBox();
         jSlider1 = new javax.swing.JSlider();
+        btnAdd2 = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         contentPanel = new InteractivGrafic(editableData);
         jPanel2 = new javax.swing.JPanel();
@@ -163,6 +166,18 @@ public class PanelInteractivEditor extends Tab {
             }
         });
 
+        btnAdd2.setIcon(ImageHelper.loadImage("plus.png"));
+        btnAdd2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnAdd2.setFocusable(false);
+        btnAdd2.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnAdd2.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnAdd2.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnAdd2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdd2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -179,10 +194,12 @@ public class PanelInteractivEditor extends Tab {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dateChooserCombo2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
+                .addComponent(timeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox1)
                 .addContainerGap())
         );
@@ -192,8 +209,11 @@ public class PanelInteractivEditor extends Tab {
                 .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jCheckBox1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(8, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -320,6 +340,13 @@ public class PanelInteractivEditor extends Tab {
         gi.repaint();
     }//GEN-LAST:event_jCheckBox1MouseClicked
 
+    private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
+        DialogAddAdmissionDependency d = new DialogAddAdmissionDependency(MainFrame.getInstance(), true);
+        if (d.showDialog()) {
+            repaint();
+        }
+    }//GEN-LAST:event_btnAdd2ActionPerformed
+
     @Override
     public boolean isNeedSave() {
         return ((InteractivGrafic) contentPanel).isEdited();
@@ -339,6 +366,7 @@ public class PanelInteractivEditor extends Tab {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd2;
     private javax.swing.JPanel contentPanel;
     private datechooser.beans.DateChooserCombo dateChooserCombo2;
     private datechooser.beans.DateChooserCombo dateChooserCombo3;

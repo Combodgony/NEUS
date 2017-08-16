@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.segvek.terminal.dao.CargoDAO;
-import com.segvek.terminal.dao.DependencyAdmissionDAO;
 import java.util.List;
 
 public class AdmissionLazy extends Admission {
@@ -25,7 +24,6 @@ public class AdmissionLazy extends Admission {
     private TankDAO tankDAO;
     private DrainLocationDAO drainLocationDAO;
     private CargoDAO cargoDao;
-    private DependencyAdmissionDAO dependencyAdmissionDAO;
     private AdmissionDAO admissionDAO;
 
     public AdmissionLazy(Long id, Contract contract, Tank tank, int volume, Date planBegin, StationaryStorage storage, DrainLocation drainLocation, Date factBegin, Date factEnd, Cargo cargo, boolean plan) {
@@ -34,7 +32,6 @@ public class AdmissionLazy extends Admission {
         drainLocationDAO = Loader.getContext().getBean("drainLocationDAO", DrainLocationDAO.class);
         tankDAO = Loader.getContext().getBean("tankDAO", TankDAO.class);
         cargoDao = Loader.getContext().getBean("cargoDAO", CargoDAO.class);
-        dependencyAdmissionDAO = Loader.getContext().getBean("dependencyAdmissionDAO", DependencyAdmissionDAO.class);
         admissionDAO = Loader.getContext().getBean("admissionDAO", AdmissionDAO.class);
     }
 
@@ -96,7 +93,7 @@ public class AdmissionLazy extends Admission {
 
     @Override
     public List<Admission> getIndepented() {
-        List<Admission> list = super.getDepend();
+        List<Admission> list = super.getIndepented();
         if (list == null) {
             try {
                 list = admissionDAO.getIndependedAdmissionByAdmission(this);
@@ -105,7 +102,6 @@ public class AdmissionLazy extends Admission {
                 Logger.getLogger(AdmissionLazy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        list.forEach(a->System.out.println(a));
         return list;
     }
     
@@ -115,12 +111,11 @@ public class AdmissionLazy extends Admission {
         if (list == null) {
             try {
                 list = admissionDAO.getDependAdmissionByAdmission(this);
-                setIndepented(list);
+                setDepend(list);
             } catch (DAOException ex) {
                 Logger.getLogger(AdmissionLazy.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        list.forEach(a->System.out.println(a));
         return list;
     }
     

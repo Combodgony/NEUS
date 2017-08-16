@@ -11,7 +11,7 @@
     
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/terminal?characterEncoding=UTF-8"/>
+        <property name="url" value="jdbc:mysql://localhost:4040/terminal?characterEncoding=UTF-8"/>
         <property name="username" value="root"/>
         <property name="password" value=""/>
         
@@ -28,18 +28,16 @@
     
     <bean id="contentContractDAO" class="com.segvek.terminal.dao.mysql.ContentContractMysqlDAO"/>
     <bean id="estakadDAO" class="com.segvek.terminal.dao.mysql.EstakadMysqlDAO"/>
-    <bean id="admissionDAO" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDAO"/>
+    
     <bean id="typeEstakadaDAO" class="com.segvek.terminal.dao.mysql.TypeEstakadaMysqlDAO"/>
     <bean id="typeTankDAO" class="com.segvek.terminal.dao.mysql.TypeTankMysqlDAO"/>
-    <bean id="dependencyAdmissionDAO" class="com.segvek.terminal.dao.mysql.DependencyAdmissionMysqlDAO">
-        <constructor-arg name="admissionDAO" ref="admissionDAO"/>
-    </bean>
     
     
     <bean id="tankMysqlDAO" class="com.segvek.terminal.dao.mysql.TankMysqlDAO"/>
     <bean id="cargoMysqlDAO" class="com.segvek.terminal.dao.mysql.CargoMysqlDAO"/>
     <bean id="contractMysqlDAO" class="com.segvek.terminal.dao.mysql.ContractMysqlDAO"/>
     <bean id="drainLocationMysqlDAO" class="com.segvek.terminal.dao.mysql.DrainLocationMysqlDAO"/>
+    <bean id="admissionMysqlDAO" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDAO"/>
     
     <bean id="cargoDAO" class="com.segvek.terminal.dao.cash.CargoCashDAO">
         <constructor-arg name="cargoDAO" ref="cargoMysqlDAO"/>
@@ -52,6 +50,9 @@
     </bean>
     <bean id="drainLocationDAO" class="com.segvek.terminal.dao.cash.DrainLocationCashDAO">
         <constructor-arg name="drainLocationDAO" ref="drainLocationMysqlDAO"/>
+    </bean>
+    <bean id="admissionDAO" class="com.segvek.terminal.dao.cash.AdmissionCashDAO">
+        <constructor-arg name="admissionDAO" ref="admissionMysqlDAO"/>
     </bean>
     
     
