@@ -9,12 +9,14 @@ import com.segvek.terminal.model.Contract;
 import com.segvek.terminal.model.DependencyAdmission;
 import com.segvek.terminal.model.DrainLocation;
 import com.segvek.terminal.model.Tank;
+import com.segvek.terminal.service.AdmissionService;
 import com.segvek.terminal.service.CargoService;
 import com.segvek.terminal.service.ContractService;
 import com.segvek.terminal.service.DependencyService;
 import com.segvek.terminal.service.DrainLocationService;
 import com.segvek.terminal.service.ServiceException;
 import com.segvek.terminal.service.TankService;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -34,18 +36,24 @@ public class PanelAdmission extends Tab {
     private TankService tankService = new TankService();
     private DrainLocationService drainLocationService = new DrainLocationService();
     private DependencyService dependencyService = new DependencyService();
-
+    private AdmissionService admissionService = new AdmissionService();
+    
     private Admission admission;
+    
+    private boolean save = true;
+    private boolean init = true;
 
     public PanelAdmission() {
+        admission=Admission.newInstance();
         initComponents();
         initContractComboBox();
         initCargoComboBox();
         initTankComboBox();
         initDrainLocationComboBox();
         AutoCompleteDecorator.decorate(contractComboBox);
+        init=false;
+        save=false;
     }
-
     public PanelAdmission(Admission a) {
         this.admission = a;
         initComponents();
@@ -65,6 +73,14 @@ public class PanelAdmission extends Tab {
         cargoComboBox.setSelectedItem(a.getCargo());
         tankComboBox.setSelectedItem(a.getTank());
         drainLocationComboBox.setSelectedItem(a.getDrainLocation());
+        if(!a.isPlan()){
+            jPanel2.setVisible(true);
+            jCheckBox1.setSelected(true);
+            timeSpinner1.setValue(a.getFactBegin());
+            timeSpinner2.setValue(a.getFactEnd());
+            //todo set calendar fact
+        }
+        init=false;
     }
 
     private void initDrainLocationComboBox() {
@@ -79,7 +95,6 @@ public class PanelAdmission extends Tab {
             drainLocationComboBox.addItem(dl);
         }
     }
-
     private void initTableDependencyAdmission() {
         DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
         dtm.setRowCount(0);
@@ -93,7 +108,6 @@ public class PanelAdmission extends Tab {
             JOptionPane.showMessageDialog(cargoComboBox, "Не удалось загрузить зависимости завоза");
         }
     }
-
     private void initTankComboBox() {
         tankComboBox.removeAllItems();
         List<Tank> list = null;
@@ -108,7 +122,6 @@ public class PanelAdmission extends Tab {
             tankComboBox.addItem(t);
         }
     }
-
     private void initContractComboBox() {
         contractComboBox.removeAllItems();
         List<Contract> list = null;
@@ -123,7 +136,6 @@ public class PanelAdmission extends Tab {
             contractComboBox.addItem(c);
         }
     }
-
     private void initCargoComboBox() {
         cargoComboBox.removeAllItems();
         List<Cargo> list = null;
@@ -170,10 +182,10 @@ public class PanelAdmission extends Tab {
         jCheckBox1 = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        planDateField1 = new datechooser.beans.DateChooserCombo();
+        factBeginDateField = new datechooser.beans.DateChooserCombo();
         timeSpinner1 = new JSpinner( new SpinnerDateModel() );
         jLabel12 = new javax.swing.JLabel();
-        planDateField2 = new datechooser.beans.DateChooserCombo();
+        factEndDateField = new datechooser.beans.DateChooserCombo();
         timeSpinner2 = new JSpinner( new SpinnerDateModel() );
 
         setBackground(new java.awt.Color(51, 51, 51));
@@ -188,17 +200,40 @@ public class PanelAdmission extends Tab {
 
         jLabel2.setText("Договор");
 
+        contractComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contractComboBoxActionPerformed(evt);
+            }
+        });
+
         jLabel3.setText("Плановая дата");
 
         jLabel4.setText("Цистерна");
 
         tankComboBox.setEditable(true);
+        tankComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tankComboBoxActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Объём");
 
         jLabel6.setText("Место слива");
 
         jLabel7.setText("Накопитель");
+
+        volumeField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                volumeFieldKeyReleased(evt);
+            }
+        });
+
+        drainLocationComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drainLocationComboBoxActionPerformed(evt);
+            }
+        });
 
         jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -268,11 +303,6 @@ public class PanelAdmission extends Tab {
         jCheckBox1.setBackground(new java.awt.Color(51, 51, 51));
         jCheckBox1.setText("завершено");
         jCheckBox1.setFocusable(false);
-        jCheckBox1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCheckBox1StateChanged(evt);
-            }
-        });
         jCheckBox1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jCheckBox1MouseReleased(evt);
@@ -310,19 +340,17 @@ public class PanelAdmission extends Tab {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(factEndDateField, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                    .addComponent(factBeginDateField, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(9, 9, 9)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(planDateField1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(timeSpinner1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(planDateField2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(timeSpinner2)))
+                    .addComponent(timeSpinner2)
+                    .addComponent(timeSpinner1))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -331,13 +359,13 @@ public class PanelAdmission extends Tab {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(timeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(planDateField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(factBeginDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(planDateField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(factEndDateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -388,8 +416,8 @@ public class PanelAdmission extends Tab {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(umberField)
-                            .addComponent(contractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cargoComboBox, 0, 265, Short.MAX_VALUE))
+                            .addComponent(cargoComboBox, 0, 265, Short.MAX_VALUE)
+                            .addComponent(contractComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -466,21 +494,27 @@ public class PanelAdmission extends Tab {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cargoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargoComboBoxActionPerformed
-        // TODO add your handling code here:
+        if(cargoComboBox.getSelectedItem()!=null && !init){
+            admission.setCargo((Cargo) cargoComboBox.getSelectedItem());
+            editPanel();
+        }
     }//GEN-LAST:event_cargoComboBoxActionPerformed
 
     private void timeSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinnerStateChanged
-//        Date date = (Date) timeSpinner.getValue();
-//        Calendar c = new GregorianCalendar();
-//        c.setTime(gi.getStart());
-//        c.set(Calendar.HOUR_OF_DAY,date.getHours());
-//        c.set(Calendar.MINUTE,date.getMinutes());
-//        gi.setStart(c.getTime());
-//        gi.init();
-//        gi.repaint();
+        if(!init){
+            Date date = (Date) timeSpinner.getValue();
+            Calendar c = new GregorianCalendar();
+            c.setTime(planDateField.getSelectedDate().getTime());
+            c.set(Calendar.HOUR_OF_DAY,date.getHours());
+            c.set(Calendar.MINUTE,date.getMinutes());
+            admission.setBegin(c.getTime());
+            editPanel();
+        }
+        
     }//GEN-LAST:event_timeSpinnerStateChanged
 
     private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
+        //todo добавить обработку результатов диалога
         DialogAddAdmissionDependency d = new DialogAddAdmissionDependency(MainFrame.getInstance(), true);
         if (d.showDialog()) {
             System.out.println("add admission");
@@ -493,27 +527,100 @@ public class PanelAdmission extends Tab {
     }//GEN-LAST:event_btnAdd2ActionPerformed
 
     private void timeSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinner1StateChanged
-        // TODO add your handling code here:
+        if(!init){
+            Date date = (Date) timeSpinner1.getValue();
+            Calendar c = new GregorianCalendar();
+            c.setTime(factBeginDateField.getSelectedDate().getTime());
+            c.set(Calendar.HOUR_OF_DAY,date.getHours());
+            c.set(Calendar.MINUTE,date.getMinutes());
+            admission.setFactBegin(c.getTime());
+            editPanel();
+        }
     }//GEN-LAST:event_timeSpinner1StateChanged
 
     private void timeSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinner2StateChanged
-        // TODO add your handling code here:
+        if(!init){
+            Date date = (Date) timeSpinner2.getValue();
+            Calendar c = new GregorianCalendar();
+            c.setTime(factEndDateField.getSelectedDate().getTime());
+            c.set(Calendar.HOUR_OF_DAY,date.getHours());
+            c.set(Calendar.MINUTE,date.getMinutes());
+            admission.setFactEnd(c.getTime());
+            editPanel();
+        }
     }//GEN-LAST:event_timeSpinner2StateChanged
-
-    private void jCheckBox1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCheckBox1StateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1StateChanged
 
     private void jCheckBox1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseReleased
         jPanel2.setVisible(jCheckBox1.isSelected());
+        if(!init)
+            admission.setPlan(!jCheckBox1.isSelected());
     }//GEN-LAST:event_jCheckBox1MouseReleased
 
+    private void contractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractComboBoxActionPerformed
+        if(contractComboBox.getSelectedItem()!=null && !init){
+            admission.setContract((Contract) contractComboBox.getSelectedItem());
+            editPanel();
+        }
+    }//GEN-LAST:event_contractComboBoxActionPerformed
+
+    private void tankComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tankComboBoxActionPerformed
+        if(tankComboBox.getSelectedItem()!=null && !init){
+            admission.setTank((Tank) tankComboBox.getSelectedItem());
+            editPanel();
+        }
+    }//GEN-LAST:event_tankComboBoxActionPerformed
+
+    private void volumeFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_volumeFieldKeyReleased
+        admission.setVolume(30);
+        //todo parse int value
+    }//GEN-LAST:event_volumeFieldKeyReleased
+
+    private void drainLocationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drainLocationComboBoxActionPerformed
+        if(drainLocationComboBox.getSelectedItem()!=null && !init){
+            admission.setDrainLocation((DrainLocation) drainLocationComboBox.getSelectedItem());
+            editPanel();
+        }
+    }//GEN-LAST:event_drainLocationComboBoxActionPerformed
+
+    @Override
+    public boolean isNeedSave() {
+        return !save;
+    }
+
+    private void editPanel() {
+        if (!init) {
+            save = false;
+            MainFrame.getInstance().initInstrumentPanel();
+        }
+    }
+    @Override
+    public void save() {
+        try {
+            admissionService.saveAdmission(admission);
+            save = true;
+            MainFrame.getInstance().initInstrumentPanel();
+        } catch (ServiceException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+
+    @Override
+    public String getName() {
+        if (admission.isNewInstance()) {
+            return "Завоз (Новый)";
+        } else {
+            return "Завоз №" + admission.getId();
+        }
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd2;
     private javax.swing.JComboBox<Cargo> cargoComboBox;
     private javax.swing.JComboBox<Contract> contractComboBox;
     private javax.swing.JComboBox<DrainLocation> drainLocationComboBox;
+    private datechooser.beans.DateChooserCombo factBeginDateField;
+    private datechooser.beans.DateChooserCombo factEndDateField;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JLabel jLabel1;
@@ -534,8 +641,6 @@ public class PanelAdmission extends Tab {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private datechooser.beans.DateChooserCombo planDateField;
-    private datechooser.beans.DateChooserCombo planDateField1;
-    private datechooser.beans.DateChooserCombo planDateField2;
     private javax.swing.JComboBox<Tank> tankComboBox;
     private javax.swing.JSpinner timeSpinner;
     private javax.swing.JSpinner timeSpinner1;

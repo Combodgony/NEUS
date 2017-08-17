@@ -6,6 +6,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Admission extends MainModel{
+
+    public static Admission newInstance() {
+        return new Admission(-1L, null, null, 0, null, null, null, null, null, null, true);
+    }
     
     private Contract contract;
     private Tank tank;
@@ -64,7 +68,7 @@ public class Admission extends MainModel{
         return plan;
     }
 
-    public void setStatus(boolean plan) {
+    public void setPlan(boolean plan) {
         this.plan = plan;
     }
 
@@ -182,6 +186,10 @@ public class Admission extends MainModel{
     @Override
     public int hashCode() {
         return id.intValue(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean isNewInstance() {
+        return id.equals(-1L);
     }
     
     

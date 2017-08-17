@@ -76,6 +76,12 @@ public class AdmissionCashDAO implements AdmissionDAO {
         }
         return res;
     }
+    
+    @Override
+    public void addAdmission(Admission admission) throws DAOException {
+        admissionDAO.addAdmission(admission);
+        set.add(admission);
+    }
 
     private Admission getFromCash(Long id) {
         Iterator<Admission> iter = set.iterator();
@@ -123,4 +129,6 @@ public class AdmissionCashDAO implements AdmissionDAO {
 //        }
         return admissionDAO.getDependencyAdmissionsByAdmission(admission);
     }
+
+    
 }

@@ -45,4 +45,23 @@ public class AdmissionService {
 
     }
 
+    public void saveAdmission(Admission admission) throws ServiceException{
+        if(admission.isNewInstance()){
+            try {
+                //todo добавить проверки заполнения критически важных полей
+                admissionDao.addAdmission(admission);
+            } catch (DAOException ex) {
+                Logger.getLogger(AdmissionService.class.getName()).log(Level.SEVERE, null, ex);
+                throw  new ServiceException("Не удалось сохранить новий завоз!");
+            }
+        }else{
+            try {
+                admissionDao.update(admission);
+            } catch (DAOException ex) {
+                Logger.getLogger(AdmissionService.class.getName()).log(Level.SEVERE, null, ex);
+                throw  new ServiceException("Не удалось сохранить изменения завоза!");
+            }
+        }
+    }
+
 }

@@ -96,6 +96,13 @@ public class PanelInteractivEditor extends Tab {
 
     }
 
+    @Override
+    public void init() {
+        gi.init();
+        gi.repaint();
+    }
+    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
