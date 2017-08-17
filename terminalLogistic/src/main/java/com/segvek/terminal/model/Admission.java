@@ -178,6 +178,12 @@ public class Admission extends MainModel{
     public void setCargo(Cargo cargo) {
         this.cargo = cargo;
     }
+
+    @Override
+    public int hashCode() {
+        return id.intValue(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     
     

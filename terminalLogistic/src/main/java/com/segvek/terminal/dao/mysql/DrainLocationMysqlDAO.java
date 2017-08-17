@@ -38,6 +38,14 @@ public class DrainLocationMysqlDAO implements DrainLocationDAO{
         list.forEach((d)->d.setEstakada(estakada));
         return list;
     }
+
+    @Override
+    public List<DrainLocation> getAllDrainLocation() throws DAOException {
+        String request = "SELECT * FROM drainlocation";
+        if(DEBUG)
+            Logger.getLogger(DrainLocationMysqlDAO.class.getName()).info(request);
+        return jdbcTemplate.query(request, new DrainLocationRowMapper());
+    }
     private static final class DrainLocationRowMapper implements RowMapper<DrainLocation>{
         @Override
         public DrainLocation mapRow(ResultSet res, int rowNum) throws SQLException {

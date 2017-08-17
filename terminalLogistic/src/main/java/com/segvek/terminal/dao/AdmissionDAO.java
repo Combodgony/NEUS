@@ -19,5 +19,7 @@ public interface AdmissionDAO extends DAO{
     public void addDependencyAdmission(DependencyAdmission dependencyAdmission) throws DAOException;
 
     public List<DependencyAdmission> getAllDependencyAdmissions() throws DAOException; 
+    
+    public List<DependencyAdmission> getDependencyAdmissionsByAdmission(Admission admission) throws DAOException;
 
 }

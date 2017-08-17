@@ -8,34 +8,36 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
+public class AdmissionCashDAO implements AdmissionDAO {
 
-public class AdmissionCashDAO implements AdmissionDAO{
     AdmissionDAO admissionDAO;
 
+    Set<DependencyAdmission> setdep;
+    boolean alldep = false;
+
     Set<Admission> set;
-    boolean all=false;
-    
+    boolean all = false;
+
     public AdmissionCashDAO(AdmissionDAO admissionDAO) {
         this.admissionDAO = admissionDAO;
-        set=new HashSet<>();
+        set = new HashSet<>();
+        setdep = new HashSet<>();
     }
-    
-    
+
     @Override
     public List<Admission> getAllAdmission() throws DAOException {
         List<Admission> list = new ArrayList<>();
-        if(all){
-            set.forEach(a->list.add(a));
+        if (all) {
+            set.forEach(a -> list.add(a));
             return list;
         }
         List<Admission> dbList = admissionDAO.getAllAdmission();
         set.addAll(dbList);
         list.clear();
-        set.forEach(a->list.add(a));
-        all=true;
+        set.forEach(a -> list.add(a));
+        all = true;
         return list;
     }
 
@@ -47,18 +49,19 @@ public class AdmissionCashDAO implements AdmissionDAO{
     @Override
     public Admission getAdmissionById(Long id) throws DAOException {
         Admission a = getFromCash(id);
-        if(a!=null)
+        if (a != null) {
             return a;
-        a=admissionDAO.getAdmissionById(id);
+        }
+        a = admissionDAO.getAdmissionById(id);
         set.add(a);
         return a;
     }
 
     @Override
     public List<Admission> getIndependedAdmissionByAdmission(Admission admission) throws DAOException {
-        List<Admission> list=admissionDAO.getIndependedAdmissionByAdmission(admission);
+        List<Admission> list = admissionDAO.getIndependedAdmissionByAdmission(admission);
         List<Admission> res = new ArrayList<>();
-        for(Admission a:list){
+        for (Admission a : list) {
             res.add(getAdmissionById(a.getId()));
         }
         return res;
@@ -66,20 +69,21 @@ public class AdmissionCashDAO implements AdmissionDAO{
 
     @Override
     public List<Admission> getDependAdmissionByAdmission(Admission admissiona) throws DAOException {
-        List<Admission> list=admissionDAO.getDependAdmissionByAdmission(admissiona);
+        List<Admission> list = admissionDAO.getDependAdmissionByAdmission(admissiona);
         List<Admission> res = new ArrayList<>();
-        for(Admission a:list){
+        for (Admission a : list) {
             res.add(getAdmissionById(a.getId()));
         }
         return res;
     }
-    
-    private Admission getFromCash(Long id){
+
+    private Admission getFromCash(Long id) {
         Iterator<Admission> iter = set.iterator();
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             Admission a = iter.next();
-            if(a.getId().equals(id))
+            if (a.getId().equals(id)) {
                 return a;
+            }
         }
         return null;
     }
@@ -87,16 +91,36 @@ public class AdmissionCashDAO implements AdmissionDAO{
     @Override
     public void addDependencyAdmission(DependencyAdmission dependencyAdmission) throws DAOException {
         admissionDAO.addDependencyAdmission(dependencyAdmission);
-        
+        setdep.add(dependencyAdmission);
     }
 
     @Override
     public List<DependencyAdmission> getAllDependencyAdmissions() throws DAOException {
-        List<DependencyAdmission> da =  admissionDAO.getAllDependencyAdmissions();
-        List<DependencyAdmission> res = new ArrayList<>();
-        for(DependencyAdmission d:da){
-            res.add(new DependencyAdmission(getAdmissionById(d.getAdmission().getId()), getAdmissionById(d.getIndependet().getId())));
+        List<DependencyAdmission> list;
+        if (alldep) {
+            list = new ArrayList<>();
+            setdep.forEach(d->list.add(d));
+            return list;
         }
-        return res;
+        list = admissionDAO.getAllDependencyAdmissions();
+        setdep.addAll(list);
+        list.clear();
+        setdep.forEach(e->list.add(e));
+        return list;
+    }
+
+    @Override
+    public List<DependencyAdmission> getDependencyAdmissionsByAdmission(Admission admission) throws DAOException {
+//        if (!alldep) {
+//            getAllDependencyAdmissions();
+//        }
+//        List<DependencyAdmission> list = new ArrayList<>();
+//        Iterator iter = setdep.iterator();
+//        while(iter.hasNext()){
+//            DependencyAdmission d = (DependencyAdmission) iter.next();
+//            if(d.getAdmission().equals(admission) ||d.getIndependet().equals(admission))
+//                list.add(d);
+//        }
+        return admissionDAO.getDependencyAdmissionsByAdmission(admission);
     }
 }

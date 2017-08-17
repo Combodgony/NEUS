@@ -163,8 +163,8 @@ public class PanelInteractivEditor extends Tab {
         jCheckBox1.setText("Редактирование");
         jCheckBox1.setOpaque(false);
         jCheckBox1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jCheckBox1MouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jCheckBox1MouseReleased(evt);
             }
         });
 
@@ -346,13 +346,6 @@ public class PanelInteractivEditor extends Tab {
         gi.repaint();
     }//GEN-LAST:event_jSlider1StateChanged
 
-    private void jCheckBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseClicked
-        editableData = jCheckBox1.isSelected();
-        gi.setEditable(editableData);
-        gi.init();
-        gi.repaint();
-    }//GEN-LAST:event_jCheckBox1MouseClicked
-
     private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
         DialogAddAdmissionDependency d = new DialogAddAdmissionDependency(MainFrame.getInstance(), true);
         if (d.showDialog()) {
@@ -360,6 +353,13 @@ public class PanelInteractivEditor extends Tab {
             gi.repaint();
         }
     }//GEN-LAST:event_btnAdd2ActionPerformed
+
+    private void jCheckBox1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseReleased
+        editableData = jCheckBox1.isSelected();
+        gi.setEditable(editableData);
+        gi.init();
+        gi.repaint();
+    }//GEN-LAST:event_jCheckBox1MouseReleased
 
     private void interactiveGraficAelectedAdmission(Admission admission) {
         MainFrame.getInstance().addPanelTab("Завоз №"+admission.getId(), new PanelAdmission(admission));

@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 public class DialogAddAdmissionDependency extends javax.swing.JDialog {
@@ -178,7 +177,7 @@ public class DialogAddAdmissionDependency extends javax.swing.JDialog {
         if(a2==null)
             return;
         try {
-            dependencyService.save(new DependencyAdmission(a1, a2));
+            dependencyService.save(new DependencyAdmission(-1L,a1, a2));
             res=true;
             setVisible(false);
         } catch (ServiceException ex) {

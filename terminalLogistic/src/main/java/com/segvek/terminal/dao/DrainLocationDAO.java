@@ -12,5 +12,7 @@ public interface DrainLocationDAO  extends DAO{
     public DrainLocation getDrainLocationByAdmission(Admission admission) throws DAOException;
 
     public List<DrainLocation> getDrainLocationsByEstacada(Estakada estakada) throws DAOException;
+
+    public List<DrainLocation> getAllDrainLocation() throws DAOException;
     
 }

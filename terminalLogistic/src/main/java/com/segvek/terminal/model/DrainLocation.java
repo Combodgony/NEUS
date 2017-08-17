@@ -5,6 +5,8 @@
  */
 package com.segvek.terminal.model;
 
+import java.util.Objects;
+
 
 public class DrainLocation extends MainModel{
     String number;
@@ -32,6 +34,17 @@ public class DrainLocation extends MainModel{
         this.estakada = estakada;
     }
 
+    @Override
+    public String toString() {
+        return number;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 19 * hash + Objects.hashCode(this.number)+Objects.hash(id);
+        return hash;
+    }
     
     
     

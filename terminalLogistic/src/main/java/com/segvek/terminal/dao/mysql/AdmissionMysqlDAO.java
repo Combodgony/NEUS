@@ -55,7 +55,7 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
 
     @Override
     public List<Admission> getDependAdmissionByAdmission(Admission admission) throws DAOException {
-        String request = "SELECT * FROM dependencyadmission d INNER JOIN admission a ON a.id=d.idDependent WHERE d.idIndependent=?;";
+        String request = "SELECT a.* FROM dependencyadmission d INNER JOIN admission a ON a.id=d.idDependent WHERE d.idIndependent=?;";
         if(DEBUG)
             Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.query(request, new Object[]{admission.getId()} , new AdmissionRowMapper());
@@ -64,6 +64,7 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
     
      @Override
     public void addDependencyAdmission(DependencyAdmission dependencyAdmission) throws DAOException {
+        //todo add code for getting id new row 
         String request = "INSERT INTO dependencyadmission (idDependent, idIndependent) VALUES(?,?)";
         if(DEBUG)
             Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
@@ -76,6 +77,14 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
         if(DEBUG)
             Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
         return jdbcTemplate.query(request, new DependencyAdmissionRowMapper(this));
+    }
+
+    @Override
+    public List<DependencyAdmission> getDependencyAdmissionsByAdmission(Admission admission) throws DAOException {
+        String request = "SELECT * FROM dependencyadmission WHERE `idDependent`=? OR `idIndependent`=?";
+        if(DEBUG)
+            Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
+        return jdbcTemplate.query(request, new Object[]{admission.getId(),admission.getId()},new DependencyAdmissionRowMapper(this));
     }
     
     private static final class AdmissionRowMapper implements RowMapper<Admission>{
@@ -100,7 +109,7 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
             try {
                 Admission depend = admissionDAO.getAdmissionById(rs.getLong("idDependent"));
                 Admission independed = admissionDAO.getAdmissionById(rs.getLong("idIndependent"));
-                return new DependencyAdmission(depend, independed);
+                return new DependencyAdmission(rs.getLong("id"),depend, independed);
             } catch (DAOException ex) {
                 Logger.getLogger(AdmissionMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
                 throw new SQLException(ex.getMessage());
