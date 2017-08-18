@@ -17,7 +17,7 @@ import static com.segvek.terminal.dao.DAO.DEBUG;
 import com.segvek.terminal.model.Cargo;
 import com.segvek.terminal.model.Contract;
 import com.segvek.terminal.model.DependencyAdmission;
-import java.util.logging.Level;
+import com.segvek.terminal.model.lazy.DependencyAdmissionLazy;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
@@ -52,7 +52,7 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
     }
 
     @Override
-    public List<Admission> getIndependedAdmissionByAdmission(Admission admission) throws DAOException {
+    public List<Admission> getIndependentAdmissionByAdmission(Admission admission) throws DAOException {
         String request = "SELECT a.* FROM dependencyadmission d INNER JOIN admission a ON a.id=d.`idIndependent` WHERE d.`idDependent`=?;";
         if(DEBUG)
             Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
@@ -68,30 +68,7 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
     }
     
     
-     @Override
-    public void addDependencyAdmission(DependencyAdmission dependencyAdmission) throws DAOException {
-        //todo add code for getting id new row 
-        String request = "INSERT INTO dependencyadmission (idDependent, idIndependent) VALUES(?,?)";
-        if(DEBUG)
-            Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
-        jdbcTemplate.update(request, dependencyAdmission.getAdmission().getId(), dependencyAdmission.getIndependet().getId());
-    }
 
-    @Override
-    public List<DependencyAdmission> getAllDependencyAdmissions() throws DAOException {
-        String request = "SELECT * FROM dependencyadmission";
-        if(DEBUG)
-            Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
-        return jdbcTemplate.query(request, new DependencyAdmissionRowMapper(this));
-    }
-
-    @Override
-    public List<DependencyAdmission> getDependencyAdmissionsByAdmission(Admission admission) throws DAOException {
-        String request = "SELECT * FROM dependencyadmission WHERE `idDependent`=? OR `idIndependent`=?";
-        if(DEBUG)
-            Logger.getLogger(AdmissionMysqlDAO.class.getName()).info(request);
-        return jdbcTemplate.query(request, new Object[]{admission.getId(),admission.getId()},new DependencyAdmissionRowMapper(this));
-    }
 
     @Override
     public void addAdmission(Admission admission) throws DAOException {
@@ -148,10 +125,18 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
 	return jdbcTemplate.query(request, new Object[]{contract.getId(),cargo.getId()}, new AdmissionRowMapper());
     }
 
+ 
+
     @Override
-    public void deleteDependencyAdmissionByAdmission(Admission admission) throws DAOException {
-	String requString = "DELETE FROM dependencyadmission WHERE `idDependent`=? OR `idIndependent`=?";
-	jdbcTemplate.update(requString, admission.getId(),admission.getId());
+    public Admission getDependAdmissinByDependencyAdmission(DependencyAdmission dependencyAdmission) throws DAOException {
+	String request = "SELECT a.* FROM dependencyadmission d INNER JOIN admission a ON d.idDependent = a.id WHERE d.id=?;";
+	return jdbcTemplate.queryForObject(request, new Object[]{dependencyAdmission.getId()}, new AdmissionRowMapper());
+    }
+
+    @Override
+    public Admission getIndependentAdmissinByDependencyAdmission(DependencyAdmission dependencyAdmission) throws DAOException {
+	String request = "SELECT a.* FROM dependencyadmission d INNER JOIN admission a ON d.idIndependent = a.id WHERE d.id=?;";
+	return jdbcTemplate.queryForObject(request, new Object[]{dependencyAdmission.getId()}, new AdmissionRowMapper());
     }
     
     private static final class AdmissionRowMapper implements RowMapper<Admission>{
@@ -163,25 +148,5 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
         }
     }
 
-    private static final class DependencyAdmissionRowMapper implements RowMapper<DependencyAdmission> {
-
-        AdmissionDAO admissionDAO;
-
-        public DependencyAdmissionRowMapper(AdmissionDAO admissionDAO) {
-            this.admissionDAO = admissionDAO;
-        }
-
-        @Override
-        public DependencyAdmission mapRow(ResultSet rs, int rowNum) throws SQLException {
-            try {
-                Admission depend = admissionDAO.getAdmissionById(rs.getLong("idDependent"));
-                Admission independed = admissionDAO.getAdmissionById(rs.getLong("idIndependent"));
-                return new DependencyAdmission(rs.getLong("id"),depend, independed);
-            } catch (DAOException ex) {
-                Logger.getLogger(AdmissionMysqlDAO.class.getName()).log(Level.SEVERE, null, ex);
-                throw new SQLException(ex.getMessage());
-            }
-        }
-
-    }
+   
 }

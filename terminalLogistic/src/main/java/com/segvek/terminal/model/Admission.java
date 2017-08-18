@@ -187,11 +187,33 @@ public class Admission extends MainModel {
 
     @Override
     public int hashCode() {
-	return id.intValue(); //To change body of generated methods, choose Tools | Templates.
+	return id.intValue();
     }
 
     public boolean isNewInstance() {
 	return id.equals(-1L);
+    }
+
+    public void removeIndepented(Admission independet) {
+	if (this.indepented == null) {
+	    return;
+	}
+	System.out.println("==================== in " + independet);
+	indepented.forEach(a -> System.out.println("in 1 " + a));
+
+	this.indepented.remove(independet);
+	indepented.forEach(a -> System.out.println("in 2 " + a));
+    }
+
+    public void removeDepend(Admission admission) {
+	if (depend == null) {
+	    return;
+	}
+	System.out.println("==================== dep " + admission);
+	depend.forEach(a -> System.out.println("dep 1 " + a));
+
+	this.depend.remove(admission);
+	depend.forEach(a -> System.out.println("dep 1 " + a));
     }
 
 }

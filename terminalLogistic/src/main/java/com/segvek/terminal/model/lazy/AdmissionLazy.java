@@ -96,7 +96,7 @@ public class AdmissionLazy extends Admission {
         List<Admission> list = super.getIndepented();
         if (list == null) {
             try {
-                list = admissionDAO.getIndependedAdmissionByAdmission(this);
+                list = admissionDAO.getIndependentAdmissionByAdmission(this);
                 setIndepented(list);
             } catch (DAOException ex) {
                 Logger.getLogger(AdmissionLazy.class.getName()).log(Level.SEVERE, null, ex);

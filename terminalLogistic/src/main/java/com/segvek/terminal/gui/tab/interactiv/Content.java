@@ -189,12 +189,12 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
         Graphics2D g = (Graphics2D)image.getGraphics();
         
         for(DependencyAdmission d:das){
-            Admission a = d.getAdmission();
+            Admission a = d.getDepend();
             int colMin = a.getTank().getTypeTank().getTime();
             Point p = (Point) posAdmission.get(a).clone();
             p.x-=biasX;
             p.y-=biasY;
-            Point p2 = (Point) posAdmission.get(d.getIndependet()).clone();
+            Point p2 = (Point) posAdmission.get(d.getIndependnet()).clone();
             p2.x-=biasX;
             p2.y-=biasY;
             g.setColor(new Color(118, 15, 128));

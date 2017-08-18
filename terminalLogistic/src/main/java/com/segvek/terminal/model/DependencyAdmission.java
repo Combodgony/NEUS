@@ -13,7 +13,7 @@ public class DependencyAdmission extends MainModel{
 
     
 
-    public Admission getIndependet() {
+    public Admission getIndependnet() {
         return independet;
     }
 
@@ -21,7 +21,7 @@ public class DependencyAdmission extends MainModel{
         this.independet = independet;
     }
 
-    public Admission getAdmission() {
+    public Admission getDepend() {
         return admission;
     }
 

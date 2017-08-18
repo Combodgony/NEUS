@@ -119,12 +119,12 @@ public class PanelAdmission extends Tab {
     }
 
     private void initTableDependencyAdmission() {
-	DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+	DefaultTableModel dtm = (DefaultTableModel) dependencyAdmissionTable.getModel();
 	dtm.setRowCount(0);
 	try {
 	    List<DependencyAdmission> list = dependencyService.getDependencyAdmissionsByAdmission(admission);
 	    for (DependencyAdmission d : list) {
-		dtm.addRow(new Object[]{d, d.getAdmission(), d.getAdmission().getBegin(), d.getIndependet(), d.getIndependet().getBegin()});
+		dtm.addRow(new Object[]{d, d.getDepend(), d.getDepend().getBegin(), d.getIndependnet(), d.getIndependnet().getBegin()});
 	    }
 	} catch (ServiceException ex) {
 	    Logger.getLogger(PanelAdmission.class.getName()).log(Level.SEVERE, null, ex);
@@ -197,7 +197,7 @@ public class PanelAdmission extends Tab {
         jComboBox5 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        dependencyAdmissionTable = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -213,6 +213,7 @@ public class PanelAdmission extends Tab {
         jLabel12 = new javax.swing.JLabel();
         factEndDateField = new datechooser.beans.DateChooserCombo();
         timeSpinner2 = new JSpinner( new SpinnerDateModel() );
+        btnDel = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(51, 51, 51));
 
@@ -271,7 +272,7 @@ public class PanelAdmission extends Tab {
 
         jLabel8.setText("Зависимости завозов");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        dependencyAdmissionTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -290,15 +291,17 @@ public class PanelAdmission extends Tab {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(dependencyAdmissionTable);
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 584, Short.MAX_VALUE)
+            .addGap(0, 553, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -417,6 +420,18 @@ public class PanelAdmission extends Tab {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnDel.setIcon(ImageHelper.loadImage("plus.png"));
+        btnDel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnDel.setFocusable(false);
+        btnDel.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnDel.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnDel.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnDel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -474,6 +489,8 @@ public class PanelAdmission extends Tab {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
@@ -490,7 +507,8 @@ public class PanelAdmission extends Tab {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -669,6 +687,20 @@ public class PanelAdmission extends Tab {
 	}
     }//GEN-LAST:event_factEndDateFieldOnSelectionChange
 
+    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
+        int row = dependencyAdmissionTable.getSelectedRow();
+	if(row<0)
+	    return;
+	DependencyAdmission da = (DependencyAdmission) dependencyAdmissionTable.getValueAt(row, 0);
+	try {
+	    dependencyService.deleteDependencyAdmission(da);
+	} catch (ServiceException ex) {
+	    JOptionPane.showMessageDialog(cargoComboBox, ex.getMessage());
+	    Logger.getLogger(PanelAdmission.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	initTableDependencyAdmission();
+    }//GEN-LAST:event_btnDelActionPerformed
+
     @Override
     public boolean isNeedSave() {
 	return !save;
@@ -704,8 +736,10 @@ public class PanelAdmission extends Tab {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd2;
+    private javax.swing.JButton btnDel;
     private javax.swing.JComboBox<Cargo> cargoComboBox;
     private javax.swing.JComboBox<Contract> contractComboBox;
+    private javax.swing.JTable dependencyAdmissionTable;
     private javax.swing.JComboBox<DrainLocation> drainLocationComboBox;
     private datechooser.beans.DateChooserCombo factBeginDateField;
     private datechooser.beans.DateChooserCombo factEndDateField;
@@ -727,7 +761,6 @@ public class PanelAdmission extends Tab {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
     private datechooser.beans.DateChooserCombo planDateField;
     private javax.swing.JComboBox<Tank> tankComboBox;
     private javax.swing.JSpinner timeSpinner;

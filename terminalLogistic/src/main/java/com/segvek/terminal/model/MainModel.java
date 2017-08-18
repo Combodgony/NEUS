@@ -10,7 +10,7 @@ public class MainModel {
 
     @Override
     public boolean equals(Object obj) {
-        return ((MainModel)obj).getId().equals(getId());
+        return ((MainModel)obj).getId().compareTo(getId())==0;
     }
 
     public Long getId() {

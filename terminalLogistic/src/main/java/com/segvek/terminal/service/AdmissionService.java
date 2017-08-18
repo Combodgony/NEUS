@@ -7,15 +7,18 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.segvek.terminal.dao.AdmissionDAO;
+import com.segvek.terminal.dao.DependencyAdmissionDAO;
 import com.segvek.terminal.model.Cargo;
 import com.segvek.terminal.model.Contract;
 
 public class AdmissionService {
 
     AdmissionDAO admissionDao;
+    DependencyAdmissionDAO dependencyAdmissionDAO;
 
     public AdmissionService() {
         admissionDao = Loader.getContext().getBean("admissionDAO", AdmissionDAO.class);
+	dependencyAdmissionDAO = Loader.getContext().getBean("dependencyAdmissionDAO",DependencyAdmissionDAO.class);
     }
 
     public List<Admission> getAllAdmission() throws ServiceException {
@@ -60,7 +63,7 @@ public class AdmissionService {
             try {
                 admissionDao.update(admission);
 		if(!admission.isPlan()){
-		    admissionDao.deleteDependencyAdmissionByAdmission(admission);
+		    dependencyAdmissionDAO.deleteDependencyAdmissionByAdmission(admission);
 		}
             } catch (DAOException ex) {
                 Logger.getLogger(AdmissionService.class.getName()).log(Level.SEVERE, null, ex);

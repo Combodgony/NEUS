@@ -20,15 +20,13 @@
         <constructor-arg name="dataSource" ref="dataSource"/>
     </bean>
     
-    <bean id="tjtJTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" scope="singleton">
+<!--    <bean id="tjtJTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" scope="singleton">
         <property name="dataSource" ref="dataSource" />
-    </bean>
+    </bean>-->
     
     <bean id="clientDAO" class="com.segvek.terminal.dao.mysql.ClientMysqlDAO"/>
-    
     <bean id="contentContractDAO" class="com.segvek.terminal.dao.mysql.ContentContractMysqlDAO"/>
     <bean id="estakadDAO" class="com.segvek.terminal.dao.mysql.EstakadMysqlDAO"/>
-    
     <bean id="typeEstakadaDAO" class="com.segvek.terminal.dao.mysql.TypeEstakadaMysqlDAO"/>
     <bean id="typeTankDAO" class="com.segvek.terminal.dao.mysql.TypeTankMysqlDAO"/>
     
@@ -38,6 +36,7 @@
     <bean id="contractMysqlDAO" class="com.segvek.terminal.dao.mysql.ContractMysqlDAO"/>
     <bean id="drainLocationMysqlDAO" class="com.segvek.terminal.dao.mysql.DrainLocationMysqlDAO"/>
     <bean id="admissionMysqlDAO" class="com.segvek.terminal.dao.mysql.AdmissionMysqlDAO"/>
+    <bean id="dependencyAdmissionMysqlDAO" class="com.segvek.terminal.dao.mysql.DependencyAdmissionMysqlDAO"/>
     
     <bean id="cargoDAO" class="com.segvek.terminal.dao.cash.CargoCashDAO">
         <constructor-arg name="cargoDAO" ref="cargoMysqlDAO"/>
@@ -52,6 +51,10 @@
         <constructor-arg name="drainLocationDAO" ref="drainLocationMysqlDAO"/>
     </bean>
     <bean id="admissionDAO" class="com.segvek.terminal.dao.cash.AdmissionCashDAO">
+        <constructor-arg name="admissionDAO" ref="admissionMysqlDAO"/>
+    </bean>
+    <bean id="dependencyAdmissionDAO" class="com.segvek.terminal.dao.cash.DependencyAdmissionCashDAO">
+        <constructor-arg name="dependencyAdmissionDAO" ref="dependencyAdmissionMysqlDAO"/>
         <constructor-arg name="admissionDAO" ref="admissionMysqlDAO"/>
     </bean>
     
