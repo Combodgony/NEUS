@@ -149,7 +149,6 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
         }
         if(showInfoBlock){
             showInfoBlock(activAdmission,pointInfoBlock);
-//            showInfoBlock=false;
         }
         return image.getSubimage(0,biasY, endPoint.x-beginPoint.x, endPoint.y-beginPoint.y);
     }
@@ -213,8 +212,10 @@ class Content implements ScrollListener, MouseListener,MouseMotionListener, KeyL
         g.setColor(Color.PINK);
         g.fillRoundRect(p.x-beginPoint.x, p.y-beginPoint.y, 100, 50,5,5); 
         g.setColor(Color.BLACK);
+	String id = a.getId().toString();
+        g.drawString(id, p.x-beginPoint.x+3, p.y-beginPoint.y+20);
         String nom = a.getTank().getNumber();
-        g.drawString(nom, p.x-beginPoint.x+3, p.y-beginPoint.y+20);
+        g.drawString(nom, p.x-beginPoint.x+30, p.y-beginPoint.y+20);
         String est = a.getDrainLocation().getEstakada().getTypeEstakada().getName();
         g.drawString(est, p.x-beginPoint.x+3, p.y-beginPoint.y+40);
     }

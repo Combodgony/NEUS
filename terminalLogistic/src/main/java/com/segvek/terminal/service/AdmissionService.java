@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.segvek.terminal.dao.AdmissionDAO;
+import com.segvek.terminal.model.Cargo;
+import com.segvek.terminal.model.Contract;
 
 public class AdmissionService {
 
@@ -57,6 +59,9 @@ public class AdmissionService {
         }else{
             try {
                 admissionDao.update(admission);
+		if(!admission.isPlan()){
+		    admissionDao.deleteDependencyAdmissionByAdmission(admission);
+		}
             } catch (DAOException ex) {
                 Logger.getLogger(AdmissionService.class.getName()).log(Level.SEVERE, null, ex);
                 throw  new ServiceException("Не удалось сохранить изменения завоза!");
@@ -64,4 +69,14 @@ public class AdmissionService {
         }
     }
 
+    public List<Admission> getAdmissionsByConractAndCargo(Contract contract,Cargo cargo) throws ServiceException{
+	List<Admission>  list=null;
+	try {
+	    list = admissionDao.getAdmissionsByContractAndCargo(contract, cargo);
+	} catch (DAOException ex) {
+	    Logger.getLogger(AdmissionService.class.getName()).log(Level.SEVERE, null, ex);
+	    throw  new ServiceException();
+	}
+	return list;
+    }
 }

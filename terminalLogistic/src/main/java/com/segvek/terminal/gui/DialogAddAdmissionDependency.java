@@ -3,7 +3,6 @@ package com.segvek.terminal.gui;
 import com.segvek.terminal.model.Admission;
 import com.segvek.terminal.model.DependencyAdmission;
 import com.segvek.terminal.service.AdmissionService;
-import com.segvek.terminal.service.DependencyService;
 import com.segvek.terminal.service.ServiceException;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -18,8 +17,8 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 public class DialogAddAdmissionDependency extends javax.swing.JDialog {
 
     private AdmissionService admissionService = new AdmissionService();
-    private DependencyService dependencyService = new DependencyService();
-    
+
+    private DependencyAdmission dependencyAdmission;
     private boolean res = false;
 
     public DialogAddAdmissionDependency(java.awt.Frame parent, boolean modal) {
@@ -28,7 +27,6 @@ public class DialogAddAdmissionDependency extends javax.swing.JDialog {
 //        AutoCompleteDecorator.decorate(jComboBox1, new AdmissinToStringConvert());
 //        AutoCompleteDecorator.decorate(jComboBox2, new AdmissinToStringConvert());
 
-        
         jComboBox1.setRenderer(new AdmissinListCellRenderer());
         jComboBox2.setRenderer(new AdmissinListCellRenderer());
         loadAdmissions();
@@ -53,19 +51,20 @@ public class DialogAddAdmissionDependency extends javax.swing.JDialog {
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             DefaultListCellRenderer c = (DefaultListCellRenderer) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             Admission a = (Admission) value;
-            c.setText(a.getTank().getNumber() + "   " + a.getBegin());
+            c.setText(a.getId()+"    "+a.getTank().getNumber() + "   " + a.getBegin());
             return c;
         }
     }
 
     private static final class AdmissinToStringConvert extends ObjectToStringConverter {
+
         @Override
         public String getPreferredStringForItem(Object item) {
             if (item == null) {
                 return "";
             }
             Admission a = (Admission) item;
-            return a.getTank().getNumber() + "    " + a.getBegin();
+            return a.getId()+"    "+a.getTank().getNumber() + "    " + a.getBegin();
         }
     }
 
@@ -172,17 +171,12 @@ public class DialogAddAdmissionDependency extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Admission a1 = (Admission) jComboBox1.getSelectedItem();
         Admission a2 = (Admission) jComboBox2.getSelectedItem();
-        if(a1==null)
+        if (a1 == null || a2 == null) {
             return;
-        if(a2==null)
-            return;
-        try {
-            dependencyService.save(new DependencyAdmission(-1L,a1, a2));
-            res=true;
-            setVisible(false);
-        } catch (ServiceException ex) {
-            Logger.getLogger(DialogAddAdmissionDependency.class.getName()).log(Level.SEVERE, null, ex);
         }
+        dependencyAdmission = new DependencyAdmission(-1L, a1, a2);
+        res = true;
+        setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -204,5 +198,9 @@ public class DialogAddAdmissionDependency extends javax.swing.JDialog {
         setLocation(x, y);
         setVisible(true);
         return res;
+    }
+    
+    public DependencyAdmission getResult(){
+        return dependencyAdmission;
     }
 }

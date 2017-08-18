@@ -3,65 +3,72 @@ package com.segvek.terminal.gui.tab;
 import com.segvek.terminal.gui.DialogAddContractContent;
 import com.segvek.terminal.gui.MainFrame;
 import com.segvek.terminal.gui.image.ImageHelper;
+import com.segvek.terminal.model.Admission;
+import com.segvek.terminal.model.Cargo;
 import com.segvek.terminal.model.Client;
 import com.segvek.terminal.model.ContentContract;
 import com.segvek.terminal.model.Contract;
+import com.segvek.terminal.service.AdmissionService;
 import com.segvek.terminal.service.ClientService;
 import com.segvek.terminal.service.ContractService;
 import com.segvek.terminal.service.ServiceException;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class PanelContract extends Tab {
+
     ContractService contractService = new ContractService();
     ClientService clientService = new ClientService();
-    
+    AdmissionService admissionService = new AdmissionService();
+
     private Contract contract;
     private boolean save = true;
     private boolean init = true;
 
     public PanelContract() {
-        initComponents();
-        contract = Contract.newInstance();
-        initComboClients();
-        init = false;
+	initComponents();
+	contract = Contract.newInstance();
+	initComboClients();
+	init = false;
     }
+
     public PanelContract(Contract c) {
-        initComponents();
-        contract = c;
-        initTableContentContract();
-        fieldNumber.setText(contract.getNumber());
-        GregorianCalendar beginCalendar = new GregorianCalendar();
-        beginCalendar.setTime(contract.getBeginDate());
-        beginDateField.setSelectedDate(beginCalendar);
-        GregorianCalendar endCalendar = new GregorianCalendar();
-        endCalendar.setTime(contract.getEndDate());
-        endDateField.setSelectedDate(endCalendar);
-        initComboClients();
-        clients.setSelectedItem(contract.getClient());
-        init = false;
+	initComponents();
+	contract = c;
+	initTableContentContract();
+	fieldNumber.setText(contract.getNumber());
+	GregorianCalendar beginCalendar = new GregorianCalendar();
+	beginCalendar.setTime(contract.getBeginDate());
+	beginDateField.setSelectedDate(beginCalendar);
+	GregorianCalendar endCalendar = new GregorianCalendar();
+	endCalendar.setTime(contract.getEndDate());
+	endDateField.setSelectedDate(endCalendar);
+	initComboClients();
+	clients.setSelectedItem(contract.getClient());
+	init = false;
     }
-    
+
     private void initTableContentContract() {
-        DefaultTableModel dtm = (DefaultTableModel) tableContentContract.getModel();
-        dtm.setRowCount(0);
-        for (ContentContract cc : contract.getContent()) {
-            dtm.addRow(new Object[]{cc, cc.getVolume()});
-        }
+	DefaultTableModel dtm = (DefaultTableModel) tableContentContract.getModel();
+	dtm.setRowCount(0);
+	for (ContentContract cc : contract.getContent()) {
+	    dtm.addRow(new Object[]{cc, cc.getVolume()});
+	}
     }
 
     private void initComboClients() {
-        try {
-            clients.removeAllItems();
-            for (Client c : clientService.getAllClients()) {
-                clients.addItem(c);
-            }
-        } catch (ServiceException ex) {
-            Logger.getLogger(PanelContract.class.getName()).log(Level.SEVERE, null, ex);
-        }
+	try {
+	    clients.removeAllItems();
+	    for (Client c : clientService.getAllClients()) {
+		clients.addItem(c);
+	    }
+	} catch (ServiceException ex) {
+	    Logger.getLogger(PanelContract.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -152,6 +159,11 @@ public class PanelContract extends Tab {
                 return canEdit [columnIndex];
             }
         });
+        tableContentContract.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableContentContractMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableContentContract);
 
         btnAdd.setIcon(ImageHelper.loadImage("plus.png")
@@ -210,9 +222,17 @@ public class PanelContract extends Tab {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Номер", "Цистерна", "Объём", "Дата"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tablePlanAdmission);
 
         btnAdd1.setIcon(ImageHelper.loadImage("plus.png"));
@@ -337,90 +357,111 @@ public class PanelContract extends Tab {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        DialogAddContractContent d = new DialogAddContractContent(MainFrame.getInstance(), true);
-        if (d.showDialog()) {
-            ContentContract cc = d.getResult();
-            cc.setContract(contract);
-            contract.addContentElement(cc);
-            initTableContentContract();
-        }
-        editPanel();
+	DialogAddContractContent d = new DialogAddContractContent(MainFrame.getInstance(), true);
+	if (d.showDialog()) {
+	    ContentContract cc = d.getResult();
+	    cc.setContract(contract);
+	    contract.addContentElement(cc);
+	    initTableContentContract();
+	}
+	editPanel();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
-        int rows[] = tableContentContract.getSelectedRows();
-        if (rows.length <= 0) {
-            return;
-        }
-        for (int i = 0; i < rows.length; i++) {
-            ContentContract cc = (ContentContract) tableContentContract.getValueAt(rows[i], 0);
-            contract.deleteElementContract(cc);
-        }
-        initTableContentContract();
-        editPanel();
+	int rows[] = tableContentContract.getSelectedRows();
+	if (rows.length <= 0) {
+	    return;
+	}
+	for (int i = 0; i < rows.length; i++) {
+	    ContentContract cc = (ContentContract) tableContentContract.getValueAt(rows[i], 0);
+	    contract.deleteElementContract(cc);
+	}
+	initTableContentContract();
+	editPanel();
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void fieldNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNumberKeyReleased
-        contract.setNumber(fieldNumber.getText());
-        editPanel();
+	contract.setNumber(fieldNumber.getText());
+	editPanel();
     }//GEN-LAST:event_fieldNumberKeyReleased
 
     private void beginDateFieldOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_beginDateFieldOnSelectionChange
-        contract.setBeginDate(beginDateField.getCurrent().getTime());
-        editPanel();
+	contract.setBeginDate(beginDateField.getCurrent().getTime());
+	editPanel();
     }//GEN-LAST:event_beginDateFieldOnSelectionChange
 
     private void endDateFieldOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_endDateFieldOnSelectionChange
-        contract.setEndDate(endDateField.getCurrent().getTime());
-        editPanel();
+	contract.setEndDate(endDateField.getCurrent().getTime());
+	editPanel();
     }//GEN-LAST:event_endDateFieldOnSelectionChange
 
     private void clientsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientsActionPerformed
-        if(clients.getSelectedItem()!=null && !init){
-            contract.setClient((Client) clients.getSelectedItem());
-            editPanel();
-        }
+	if (clients.getSelectedItem() != null && !init) {
+	    contract.setClient((Client) clients.getSelectedItem());
+	    editPanel();
+	}
     }//GEN-LAST:event_clientsActionPerformed
 
     private void btnAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd1ActionPerformed
-        // TODO add your handling code here:
+	int row = tableContentContract.getSelectedRow();
+	if (row < 0) {
+	    return;
+	}
+	Cargo cargo = ((ContentContract) tableContentContract.getValueAt(row, 0)).getCargo();
+	MainFrame.getInstance().addPanelTab("Завоз (Новый)", new PanelAdmission(contract, cargo));
     }//GEN-LAST:event_btnAdd1ActionPerformed
 
     private void btnDel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDel1ActionPerformed
-        // TODO add your handling code here:
+	// TODO add your handling code here:
     }//GEN-LAST:event_btnDel1ActionPerformed
 
+    private void tableContentContractMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableContentContractMouseClicked
+	int row = tableContentContract.getSelectedRow();
+	if (row < 0) {
+	    return;
+	}
+	DefaultTableModel dtm = (DefaultTableModel) tablePlanAdmission.getModel();
+	dtm.setRowCount(0);
+	try {
+	    List<Admission> list = admissionService.getAdmissionsByConractAndCargo(contract, ((ContentContract) tableContentContract.getValueAt(row, 0)).getCargo());
+	    for(Admission a:list){
+		dtm.addRow(new Object[]{a,a.getTank(),a.getVolume(),a.getBegin()});
+	    }
+	} catch (ServiceException ex) {
+	    Logger.getLogger(PanelContract.class.getName()).log(Level.SEVERE, null, ex);
+	}
+    }//GEN-LAST:event_tableContentContractMouseClicked
+
     private void editPanel() {
-        if (!init) {
-            save = false;
-            MainFrame.getInstance().initInstrumentPanel();
-        }
+	if (!init) {
+	    save = false;
+	    MainFrame.getInstance().initInstrumentPanel();
+	}
     }
-    
-    
-     @Override
+
+    @Override
     public boolean isNeedSave() {
-        return !save;
+	return !save;
     }
 
     @Override
     public void save() {
-        try {
-            contractService.saveContract(contract);
-            save = true;
-            MainFrame.getInstance().initInstrumentPanel();
-        } catch (ServiceException e) {
-            JOptionPane.showMessageDialog(clients, e.getMessage());
-        }
+	try {
+	    contractService.saveContract(contract);
+	    save = true;
+	    MainFrame.getInstance().initInstrumentPanel();
+	} catch (ServiceException e) {
+	    JOptionPane.showMessageDialog(clients, e.getMessage());
+	}
     }
 
     @Override
     public String getName() {
-        if (contract.getId() == -1L) {
-            return "Договор (Новый)";
-        } else {
-            return "Договор №" + contract.getNumber();
-        }
+	if (contract.getId() == -1L) {
+	    return "Договор (Новый)";
+	} else {
+	    return "Договор №" + contract.getNumber();
+	}
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

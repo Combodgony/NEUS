@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import com.segvek.terminal.dao.AdmissionDAO;
 import static com.segvek.terminal.dao.DAO.DEBUG;
+import com.segvek.terminal.model.Cargo;
+import com.segvek.terminal.model.Contract;
 import com.segvek.terminal.model.DependencyAdmission;
 import java.util.logging.Level;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -138,6 +140,18 @@ public class AdmissionMysqlDAO implements AdmissionDAO{
             })
         , keyHolder);
         admission.setId(keyHolder.getKey().longValue());
+    }
+
+    @Override
+    public List<Admission> getAdmissionsByContractAndCargo(Contract contract, Cargo cargo) throws DAOException {
+	String request = "SELECT * FROM admission WHERE idContract=? AND idCargo=?;";
+	return jdbcTemplate.query(request, new Object[]{contract.getId(),cargo.getId()}, new AdmissionRowMapper());
+    }
+
+    @Override
+    public void deleteDependencyAdmissionByAdmission(Admission admission) throws DAOException {
+	String requString = "DELETE FROM dependencyadmission WHERE `idDependent`=? OR `idIndependent`=?";
+	jdbcTemplate.update(requString, admission.getId(),admission.getId());
     }
     
     private static final class AdmissionRowMapper implements RowMapper<Admission>{

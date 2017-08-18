@@ -69,11 +69,25 @@ public class PanelInteractivEditor extends Tab {
         } catch (InteractiveGraficException ex) {
             Logger.getLogger(PanelInteractivEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        contentPanel.setSize(500, 500);
         initData();
     }
 
     private void initData() {
+	Date date = (Date) timeSpinner.getValue();
+        Calendar c = new GregorianCalendar();
+        c.setTime(gi.getStart());
+        c.set(Calendar.HOUR_OF_DAY, date.getHours());
+        c.set(Calendar.MINUTE, date.getMinutes());
+        gi.setStart(c.getTime());
+	
+	Date date2 = (Date) timeSpinner1.getValue();
+        Calendar c2 = new GregorianCalendar();
+        c2.setTime(gi.getEnd());
+        c2.set(Calendar.HOUR_OF_DAY, date2.getHours());
+        c2.set(Calendar.MINUTE, date2.getMinutes());
+        gi.setEnd(c2.getTime());
+	
         try {
             estakads = estakadService.getAllEstacad();
             admissions = admissionService.getAllAdmission();
@@ -87,18 +101,13 @@ public class PanelInteractivEditor extends Tab {
         gi.setDependencyAdmissions(dependencyAdmissions);
         gi.setEstakads(estakads);
         gi.setAdmissions(admissions);
-        Calendar c = new GregorianCalendar();
-        gi.setStart(c.getTime());
-        c.add(Calendar.DATE, 1);
-        gi.setEnd(c.getTime());
-        contentPanel.setSize(500, 500);
         gi.init();
 
     }
 
     @Override
     public void init() {
-        gi.init();
+        initData();
         gi.repaint();
     }
     
@@ -117,6 +126,7 @@ public class PanelInteractivEditor extends Tab {
         jCheckBox1 = new javax.swing.JCheckBox();
         jSlider1 = new javax.swing.JSlider();
         btnAdd2 = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         contentPanel = new InteractivGrafic(editableData);
         jPanel2 = new javax.swing.JPanel();
@@ -198,6 +208,18 @@ public class PanelInteractivEditor extends Tab {
             }
         });
 
+        btnUpdate.setIcon(ImageHelper.loadImage("update.png"));
+        btnUpdate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnUpdate.setFocusable(false);
+        btnUpdate.setMaximumSize(new java.awt.Dimension(25, 25));
+        btnUpdate.setMinimumSize(new java.awt.Dimension(25, 25));
+        btnUpdate.setPreferredSize(new java.awt.Dimension(25, 25));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -217,6 +239,8 @@ public class PanelInteractivEditor extends Tab {
                 .addComponent(timeSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(42, 42, 42)
                 .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -228,9 +252,6 @@ public class PanelInteractivEditor extends Tab {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jCheckBox1)
                         .addContainerGap(8, Short.MAX_VALUE))
@@ -246,7 +267,12 @@ public class PanelInteractivEditor extends Tab {
                                     .addComponent(dateChooserCombo2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(timeSpinner, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(3, 3, 3))))
+                        .addGap(3, 3, 3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         jSplitPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -356,8 +382,14 @@ public class PanelInteractivEditor extends Tab {
     private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
         DialogAddAdmissionDependency d = new DialogAddAdmissionDependency(MainFrame.getInstance(), true);
         if (d.showDialog()) {
-            initData();
-            gi.repaint();
+	    try {
+		dependencyService.save(d.getResult());
+		initData();
+		gi.repaint();
+	    } catch (ServiceException ex) {
+		Logger.getLogger(PanelInteractivEditor.class.getName()).log(Level.SEVERE, null, ex);
+		JOptionPane.showMessageDialog(contentPanel, "не удалось добавить зависимость");
+	    }
         }
     }//GEN-LAST:event_btnAdd2ActionPerformed
 
@@ -365,8 +397,13 @@ public class PanelInteractivEditor extends Tab {
         editableData = jCheckBox1.isSelected();
         gi.setEditable(editableData);
         gi.init();
-        gi.repaint();
+	gi.repaint();
     }//GEN-LAST:event_jCheckBox1MouseReleased
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        initData();
+	gi.repaint();
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void interactiveGraficAelectedAdmission(Admission admission) {
         MainFrame.getInstance().addPanelTab("Завоз №"+admission.getId(), new PanelAdmission(admission));
@@ -392,6 +429,7 @@ public class PanelInteractivEditor extends Tab {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd2;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JPanel contentPanel;
     private datechooser.beans.DateChooserCombo dateChooserCombo2;
     private datechooser.beans.DateChooserCombo dateChooserCombo3;

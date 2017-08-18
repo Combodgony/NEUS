@@ -208,6 +208,9 @@
       </AuxValues>
     </Component>
     <Component class="datechooser.beans.DateChooserCombo" name="planDateField">
+      <Events>
+        <EventHandler event="onSelectionChange" listener="datechooser.events.SelectionChangedListener" parameters="datechooser.events.SelectionChangedEvent" handler="planDateFieldOnSelectionChange"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -488,6 +491,9 @@
           </Properties>
         </Component>
         <Component class="datechooser.beans.DateChooserCombo" name="factBeginDateField">
+          <Events>
+            <EventHandler event="onSelectionChange" listener="datechooser.events.SelectionChangedListener" parameters="datechooser.events.SelectionChangedEvent" handler="factBeginDateFieldOnSelectionChange"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSpinner" name="timeSpinner1">
           <Events>
@@ -504,6 +510,9 @@
           </Properties>
         </Component>
         <Component class="datechooser.beans.DateChooserCombo" name="factEndDateField">
+          <Events>
+            <EventHandler event="onSelectionChange" listener="datechooser.events.SelectionChangedListener" parameters="datechooser.events.SelectionChangedEvent" handler="factEndDateFieldOnSelectionChange"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JSpinner" name="timeSpinner2">
           <Events>

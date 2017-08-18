@@ -37,118 +37,144 @@ public class PanelAdmission extends Tab {
     private DrainLocationService drainLocationService = new DrainLocationService();
     private DependencyService dependencyService = new DependencyService();
     private AdmissionService admissionService = new AdmissionService();
-    
+
     private Admission admission;
-    
+
     private boolean save = true;
     private boolean init = true;
 
     public PanelAdmission() {
-        admission=Admission.newInstance();
-        initComponents();
-        initContractComboBox();
-        initCargoComboBox();
-        initTankComboBox();
-        initDrainLocationComboBox();
-        AutoCompleteDecorator.decorate(contractComboBox);
-        init=false;
-        save=false;
+	admission = Admission.newInstance();
+	initComponents();
+	initContractComboBox();
+	initCargoComboBox();
+	initTankComboBox();
+	initDrainLocationComboBox();
+	AutoCompleteDecorator.decorate(contractComboBox);
+	init = false;
+	save = false;
     }
-    public PanelAdmission(Admission a) {
-        this.admission = a;
-        initComponents();
-        initContractComboBox();
-        initCargoComboBox();
-        initTankComboBox();
-        initDrainLocationComboBox();
-        initTableDependencyAdmission();
 
-        umberField.setText(a.getId().toString());
-        volumeField.setText("" + a.getVolume());
-        GregorianCalendar c = new GregorianCalendar();
-        c.setTime(a.getBegin());
-        planDateField.setSelectedDate(c);
-        timeSpinner.setValue(a.getBegin());
-        contractComboBox.setSelectedItem(a.getContract());
-        cargoComboBox.setSelectedItem(a.getCargo());
-        tankComboBox.setSelectedItem(a.getTank());
-        drainLocationComboBox.setSelectedItem(a.getDrainLocation());
-        if(!a.isPlan()){
-            jPanel2.setVisible(true);
-            jCheckBox1.setSelected(true);
-            timeSpinner1.setValue(a.getFactBegin());
-            timeSpinner2.setValue(a.getFactEnd());
-            //todo set calendar fact
-        }
-        init=false;
+    public PanelAdmission(Admission a) {
+	this.admission = a;
+	initComponents();
+	initContractComboBox();
+	initCargoComboBox();
+	initTankComboBox();
+	initDrainLocationComboBox();
+	initTableDependencyAdmission();
+
+	umberField.setText(a.getId().toString());
+	volumeField.setText("" + a.getVolume());
+	GregorianCalendar c = new GregorianCalendar();
+	c.setTime(a.getBegin());
+	planDateField.setSelectedDate(c);
+	timeSpinner.setValue(a.getBegin());
+	contractComboBox.setSelectedItem(a.getContract());
+	cargoComboBox.setSelectedItem(a.getCargo());
+	tankComboBox.setSelectedItem(a.getTank());
+	drainLocationComboBox.setSelectedItem(a.getDrainLocation());
+	if (!a.isPlan()) {
+	    jPanel2.setVisible(true);
+	    jCheckBox1.setSelected(true);
+	    timeSpinner1.setValue(a.getFactBegin());
+	    timeSpinner2.setValue(a.getFactEnd());
+	    Calendar begin = new GregorianCalendar();
+	    begin.setTime(a.getFactBegin());
+	    factBeginDateField.setSelectedDate(begin);
+	    Calendar end = new GregorianCalendar();
+	    end.setTime(a.getFactEnd());
+	    factEndDateField.setSelectedDate(end);
+	}
+	init = false;
+    }
+
+    PanelAdmission(Contract contract, Cargo cargo) {
+	admission = Admission.newInstance();
+	admission.setContract(contract);
+	admission.setCargo(cargo);
+	initComponents();
+	initContractComboBox();
+	initCargoComboBox();
+	initTankComboBox();
+	initDrainLocationComboBox();
+	AutoCompleteDecorator.decorate(contractComboBox);
+	contractComboBox.setSelectedItem(contract);
+	cargoComboBox.setSelectedItem(cargo);
+	init = false;
+	save = false;
     }
 
     private void initDrainLocationComboBox() {
-        drainLocationComboBox.removeAllItems();
-        List<DrainLocation> list = null;
-        try {
-            list = drainLocationService.getAllDrainLocation();
-        } catch (ServiceException ex) {
-            Logger.getLogger(PanelAdmission.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        for (DrainLocation dl : list) {
-            drainLocationComboBox.addItem(dl);
-        }
+	drainLocationComboBox.removeAllItems();
+	List<DrainLocation> list = null;
+	try {
+	    list = drainLocationService.getAllDrainLocation();
+	} catch (ServiceException ex) {
+	    Logger.getLogger(PanelAdmission.class.getName()).log(Level.SEVERE, null, ex);
+	}
+	for (DrainLocation dl : list) {
+	    drainLocationComboBox.addItem(dl);
+	}
     }
+
     private void initTableDependencyAdmission() {
-        DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
-        dtm.setRowCount(0);
-        try {
-            List<DependencyAdmission> list = dependencyService.getDependencyAdmissionsByAdmission(admission);
-            for (DependencyAdmission d : list) {
-                dtm.addRow(new Object[]{d,d.getAdmission(),d.getAdmission().getBegin(),d.getIndependet(),d.getIndependet().getBegin()});
-            }
-        } catch (ServiceException ex) {
-            Logger.getLogger(PanelAdmission.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(cargoComboBox, "Не удалось загрузить зависимости завоза");
-        }
+	DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+	dtm.setRowCount(0);
+	try {
+	    List<DependencyAdmission> list = dependencyService.getDependencyAdmissionsByAdmission(admission);
+	    for (DependencyAdmission d : list) {
+		dtm.addRow(new Object[]{d, d.getAdmission(), d.getAdmission().getBegin(), d.getIndependet(), d.getIndependet().getBegin()});
+	    }
+	} catch (ServiceException ex) {
+	    Logger.getLogger(PanelAdmission.class.getName()).log(Level.SEVERE, null, ex);
+	    JOptionPane.showMessageDialog(cargoComboBox, "Не удалось загрузить зависимости завоза");
+	}
     }
+
     private void initTankComboBox() {
-        tankComboBox.removeAllItems();
-        List<Tank> list = null;
-        try {
-            list = tankService.getAllTank();
+	tankComboBox.removeAllItems();
+	List<Tank> list = null;
+	try {
+	    list = tankService.getAllTank();
 
-        } catch (ServiceException ex) {
-            Logger.getLogger(PanelAdmission.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        for (Tank t : list) {
-            tankComboBox.addItem(t);
-        }
+	} catch (ServiceException ex) {
+	    Logger.getLogger(PanelAdmission.class
+		    .getName()).log(Level.SEVERE, null, ex);
+	}
+	for (Tank t : list) {
+	    tankComboBox.addItem(t);
+	}
     }
+
     private void initContractComboBox() {
-        contractComboBox.removeAllItems();
-        List<Contract> list = null;
-        try {
-            list = contractService.getAllContract();
+	contractComboBox.removeAllItems();
+	List<Contract> list = null;
+	try {
+	    list = contractService.getAllContract();
 
-        } catch (ServiceException ex) {
-            Logger.getLogger(PanelAdmission.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        for (Contract c : list) {
-            contractComboBox.addItem(c);
-        }
+	} catch (ServiceException ex) {
+	    Logger.getLogger(PanelAdmission.class
+		    .getName()).log(Level.SEVERE, null, ex);
+	}
+	for (Contract c : list) {
+	    contractComboBox.addItem(c);
+	}
     }
-    private void initCargoComboBox() {
-        cargoComboBox.removeAllItems();
-        List<Cargo> list = null;
-        try {
-            list = cargoService.getAllCargo();
 
-        } catch (ServiceException ex) {
-            Logger.getLogger(PanelAdmission.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-        for (Cargo c : list) {
-            cargoComboBox.addItem(c);
-        }
+    private void initCargoComboBox() {
+	cargoComboBox.removeAllItems();
+	List<Cargo> list = null;
+	try {
+	    list = cargoService.getAllCargo();
+
+	} catch (ServiceException ex) {
+	    Logger.getLogger(PanelAdmission.class
+		    .getName()).log(Level.SEVERE, null, ex);
+	}
+	for (Cargo c : list) {
+	    cargoComboBox.addItem(c);
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -203,6 +229,12 @@ public class PanelAdmission extends Tab {
         contractComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contractComboBoxActionPerformed(evt);
+            }
+        });
+
+        planDateField.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+                planDateFieldOnSelectionChange(evt);
             }
         });
 
@@ -314,6 +346,12 @@ public class PanelAdmission extends Tab {
 
         jLabel11.setText("Начало");
 
+        factBeginDateField.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+                factBeginDateFieldOnSelectionChange(evt);
+            }
+        });
+
         timeEditor1 = new JSpinner.DateEditor(timeSpinner1, "HH:mm");
         timeSpinner1.setEditor(timeEditor1);
         timeSpinner1.setValue(new Date());
@@ -324,6 +362,12 @@ public class PanelAdmission extends Tab {
         });
 
         jLabel12.setText("Конец");
+
+        factEndDateField.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+                factEndDateFieldOnSelectionChange(evt);
+            }
+        });
 
         timeEditor2 = new JSpinner.DateEditor(timeSpinner2, "HH:mm");
         timeSpinner2.setEditor(timeEditor2);
@@ -494,125 +538,169 @@ public class PanelAdmission extends Tab {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cargoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargoComboBoxActionPerformed
-        if(cargoComboBox.getSelectedItem()!=null && !init){
-            admission.setCargo((Cargo) cargoComboBox.getSelectedItem());
-            editPanel();
-        }
+	if (cargoComboBox.getSelectedItem() != null && !init) {
+	    admission.setCargo((Cargo) cargoComboBox.getSelectedItem());
+	    editPanel();
+	}
     }//GEN-LAST:event_cargoComboBoxActionPerformed
 
     private void timeSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinnerStateChanged
-        if(!init){
-            Date date = (Date) timeSpinner.getValue();
-            Calendar c = new GregorianCalendar();
-            c.setTime(planDateField.getSelectedDate().getTime());
-            c.set(Calendar.HOUR_OF_DAY,date.getHours());
-            c.set(Calendar.MINUTE,date.getMinutes());
-            admission.setBegin(c.getTime());
-            editPanel();
-        }
-        
+	if (!init) {
+	    Date date = (Date) timeSpinner.getValue();
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(planDateField.getSelectedDate().getTime());
+	    c.set(Calendar.HOUR_OF_DAY, date.getHours());
+	    c.set(Calendar.MINUTE, date.getMinutes());
+	    admission.setBegin(c.getTime());
+	    editPanel();
+	}
     }//GEN-LAST:event_timeSpinnerStateChanged
 
     private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
-        //todo добавить обработку результатов диалога
-        DialogAddAdmissionDependency d = new DialogAddAdmissionDependency(MainFrame.getInstance(), true);
-        if (d.showDialog()) {
-            System.out.println("add admission");
-//            ContentContract cc = d.getResult();
-//            cc.setContract(contract);
-//            contract.addContentElement(cc);
-//            initTableContentContract();
-        }
-//        editPanel();
+	//todo добавить обработку результатов диалога
+	DialogAddAdmissionDependency d = new DialogAddAdmissionDependency(MainFrame.getInstance(), true);
+	if (d.showDialog()) {
+	    try {
+		dependencyService.save(d.getResult());
+		initTableDependencyAdmission();
+	    } catch (ServiceException ex) {
+		Logger.getLogger(PanelAdmission.class.getName()).log(Level.SEVERE, null, ex);
+		JOptionPane.showMessageDialog(cargoComboBox, "Не удалось сохранить зависимость");
+	    }
+	}
     }//GEN-LAST:event_btnAdd2ActionPerformed
 
     private void timeSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinner1StateChanged
-        if(!init){
-            Date date = (Date) timeSpinner1.getValue();
-            Calendar c = new GregorianCalendar();
-            c.setTime(factBeginDateField.getSelectedDate().getTime());
-            c.set(Calendar.HOUR_OF_DAY,date.getHours());
-            c.set(Calendar.MINUTE,date.getMinutes());
-            admission.setFactBegin(c.getTime());
-            editPanel();
-        }
+	if (!init) {
+	    Date date = (Date) timeSpinner1.getValue();
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(factBeginDateField.getSelectedDate().getTime());
+	    c.set(Calendar.HOUR_OF_DAY, date.getHours());
+	    c.set(Calendar.MINUTE, date.getMinutes());
+	    admission.setFactBegin(c.getTime());
+	    editPanel();
+	}
     }//GEN-LAST:event_timeSpinner1StateChanged
 
     private void timeSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpinner2StateChanged
-        if(!init){
-            Date date = (Date) timeSpinner2.getValue();
-            Calendar c = new GregorianCalendar();
-            c.setTime(factEndDateField.getSelectedDate().getTime());
-            c.set(Calendar.HOUR_OF_DAY,date.getHours());
-            c.set(Calendar.MINUTE,date.getMinutes());
-            admission.setFactEnd(c.getTime());
-            editPanel();
-        }
+	if (!init) {
+	    Date date = (Date) timeSpinner2.getValue();
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(factEndDateField.getSelectedDate().getTime());
+	    c.set(Calendar.HOUR_OF_DAY, date.getHours());
+	    c.set(Calendar.MINUTE, date.getMinutes());
+	    admission.setFactEnd(c.getTime());
+	    editPanel();
+	}
     }//GEN-LAST:event_timeSpinner2StateChanged
 
     private void jCheckBox1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseReleased
-        jPanel2.setVisible(jCheckBox1.isSelected());
-        if(!init)
-            admission.setPlan(!jCheckBox1.isSelected());
+	jPanel2.setVisible(jCheckBox1.isSelected());
+	if (!init) {
+	    admission.setPlan(!jCheckBox1.isSelected());
+	}
     }//GEN-LAST:event_jCheckBox1MouseReleased
 
     private void contractComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractComboBoxActionPerformed
-        if(contractComboBox.getSelectedItem()!=null && !init){
-            admission.setContract((Contract) contractComboBox.getSelectedItem());
-            editPanel();
-        }
+	if (contractComboBox.getSelectedItem() != null && !init) {
+	    admission.setContract((Contract) contractComboBox.getSelectedItem());
+	    editPanel();
+	}
     }//GEN-LAST:event_contractComboBoxActionPerformed
 
     private void tankComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tankComboBoxActionPerformed
-        if(tankComboBox.getSelectedItem()!=null && !init){
-            admission.setTank((Tank) tankComboBox.getSelectedItem());
-            editPanel();
-        }
+	if (tankComboBox.getSelectedItem() != null && !init) {
+	    admission.setTank((Tank) tankComboBox.getSelectedItem());
+	    editPanel();
+	}
     }//GEN-LAST:event_tankComboBoxActionPerformed
 
     private void volumeFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_volumeFieldKeyReleased
-        admission.setVolume(30);
-        //todo parse int value
+	int volume=0;
+	try{
+	    volume = Integer.parseInt(volumeField.getText());
+	}catch(NumberFormatException e){
+	    JOptionPane.showMessageDialog(cargoComboBox, "Не верно введён объём.\nВведите целое число.");
+	    return;
+	}
+	admission.setVolume(volume);
     }//GEN-LAST:event_volumeFieldKeyReleased
 
     private void drainLocationComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drainLocationComboBoxActionPerformed
-        if(drainLocationComboBox.getSelectedItem()!=null && !init){
-            admission.setDrainLocation((DrainLocation) drainLocationComboBox.getSelectedItem());
-            editPanel();
-        }
+	if (drainLocationComboBox.getSelectedItem() != null && !init) {
+	    admission.setDrainLocation((DrainLocation) drainLocationComboBox.getSelectedItem());
+	    editPanel();
+	}
     }//GEN-LAST:event_drainLocationComboBoxActionPerformed
+
+    private void planDateFieldOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_planDateFieldOnSelectionChange
+        if (!init) {
+	    Date date = (Date) timeSpinner.getValue();
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(planDateField.getSelectedDate().getTime());
+	    c.set(Calendar.HOUR_OF_DAY, date.getHours());
+	    c.set(Calendar.MINUTE, date.getMinutes());
+	    admission.setBegin(c.getTime());
+	    editPanel();
+	}
+    }//GEN-LAST:event_planDateFieldOnSelectionChange
+
+    private void factBeginDateFieldOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_factBeginDateFieldOnSelectionChange
+        if (!init) {
+	    Date date = (Date) timeSpinner1.getValue();
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(factBeginDateField.getSelectedDate().getTime());
+	    c.set(Calendar.HOUR_OF_DAY, date.getHours());
+	    c.set(Calendar.MINUTE, date.getMinutes());
+	    admission.setFactBegin(c.getTime());
+	    editPanel();
+	}
+    }//GEN-LAST:event_factBeginDateFieldOnSelectionChange
+
+    private void factEndDateFieldOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_factEndDateFieldOnSelectionChange
+        if (!init) {
+	    Date date = (Date) timeSpinner2.getValue();
+	    Calendar c = new GregorianCalendar();
+	    c.setTime(factEndDateField.getSelectedDate().getTime());
+	    c.set(Calendar.HOUR_OF_DAY, date.getHours());
+	    c.set(Calendar.MINUTE, date.getMinutes());
+	    admission.setFactEnd(c.getTime());
+	    editPanel();
+	}
+    }//GEN-LAST:event_factEndDateFieldOnSelectionChange
 
     @Override
     public boolean isNeedSave() {
-        return !save;
+	return !save;
     }
 
     private void editPanel() {
-        if (!init) {
-            save = false;
-            MainFrame.getInstance().initInstrumentPanel();
-        }
+	if (!init) {
+	    save = false;
+	    MainFrame.getInstance().initInstrumentPanel();
+	}
     }
+
     @Override
     public void save() {
-        try {
-            admissionService.saveAdmission(admission);
-            save = true;
-            MainFrame.getInstance().initInstrumentPanel();
-        } catch (ServiceException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+	try {
+	    admissionService.saveAdmission(admission);
+	    save = true;
+	    MainFrame.getInstance().initInstrumentPanel();
+	} catch (ServiceException e) {
+	    JOptionPane.showMessageDialog(this, e.getMessage());
+	}
     }
 
     @Override
     public String getName() {
-        if (admission.isNewInstance()) {
-            return "Завоз (Новый)";
-        } else {
-            return "Завоз №" + admission.getId();
-        }
+	if (admission.isNewInstance()) {
+	    return "Завоз (Новый)";
+	} else {
+	    return "Завоз №" + admission.getId();
+	}
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd2;
